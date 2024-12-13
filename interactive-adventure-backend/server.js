@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config({path: '/workspace/interactive-adventure/security.env'});
+require('dotenv').config(); 
 
 
 const MONGO_URI = process.env.MONGO_URI
