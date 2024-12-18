@@ -1,0 +1,28 @@
+{
+  "scenes": [
+    {
+      "id": "scene1",
+      "text": "When I was growing up",
+      "image": "https://wallpapercave.com/wp/wp7135795.jpg",
+      "options": [{ "text": "Next", "nextSceneId": "scene2" }]
+    }
+  ]
+}
+
+
+
+Invoke-RestMethod -Method POST -Uri http://localhost:5000/api/stories/675ff302265b00a92dc58d9d/add-scene `
+  -Headers @{ "Content-Type" = "application/json" } `
+  -Body '{"id":"scene1","text":"When I was growing up","image":"https://wallpapercave.com/wp/wp7135795.jpg","options":[{"text":"Next","nextSceneId":"scene2"}]}'
+
+  675ff302265b00a92dc58d9d
+
+  Invoke-RestMethod -Method POST -Uri http://localhost:5000/api/stories/675ff302265b00a92dc58d9d/add-scene `
+  -Headers @{ "Content-Type" = "application/json" } `
+  -Body '{"id":"scene1","text":"When I was growing up","image":"https://wallpapercave.com/wp/wp7135795.jpg","options":[{"text":"Next","nextSceneId":"scene2"}]}'
+
+  Invoke-RestMethod -Method POST -Uri http://localhost:5000/api/stories/6762a008689e79c71a67b476/scene2/modify-scene `
+  -Headers @{ "Content-Type" = "application/json" } `
+  -Body '{"text":"Changed text","options":[{"text":"Next","nextSceneId":"scene2"}]}'
+
+  Invoke-RestMethod -Method DELETE -Uri http://localhost:5000/api/stories/6762d4799b66027d8484a762/delete-story

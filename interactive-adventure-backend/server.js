@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 // Routes
 app.use('/api/stories', storyRoutes)
 
-app.get('/api/test', (req, res) => {
+app.get('/api/test', (req, res) => { 
     res.json("I work")
 })
 

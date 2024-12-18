@@ -1,15 +1,18 @@
-const Story = require('../models/stories');
+const { default: mongoose } = require("mongoose");
+const Story = require("../models/stories");
 
 // Create a new story
 const createStory = async (req, res) => {
   try {
-    console.log("Logging...")
+    console.log("Logging...");
     const { title, author, genre } = req.body;
-    console.log(title, author, genre)
+    console.log(title, author, genre);
 
     // Validate required fields
     if (!title || !author) {
-      return res.status(400).json({ message: 'Title and author are required.' });
+      return res
+        .status(400)
+        .json({ message: "Title and author are required." });
     }
 
     // Create a new story document
@@ -19,46 +22,47 @@ const createStory = async (req, res) => {
       genre,
       createdAt: new Date(),
       updatedAt: new Date(),
-      scenes: []
+      scenes: [],
     });
 
     // Save to database
     const savedStory = await newStory.save();
-    console.log("Logging...")
+    console.log("Story created successfully.");
     res.status(201).json(savedStory);
   } catch (error) {
-    res.status(500).json({ message: 'Error creating story', error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error creating story", error: error.message });
   }
 };
 
-// Add a scene to an existing story
-const addScene = async (req, res) => {
+
+const deleteStory = async (req, res) => {
   try {
-    const { storyId } = req.params;
-    const { id, text, image, options } = req.body;
+    console.log("Request received:", req.body);
+    const {storyId} = req.params
 
-    // Validate required fields
-    if (!id || !text) {
-      return res.status(400).json({ message: 'Scene ID and text are required.' });
+    // Validate ObjectId format for storyId
+    if (!mongoose.Types.ObjectId.isValid(storyId)) {
+      console.log("Invalid story ID format:", storyId);
+      return res.status(400).json({ message: "Invalid story ID format" });
     }
 
-    // Find the story by ID
-    const story = await Story.findById(storyId);
-    if (!story) {
-      return res.status(404).json({ message: 'Story not found' });
+    //Find and delete the story
+    const deletedStory = await Story.findByIdAndDelete(storyId)
+
+    if(!deletedStory){
+      return res.status(404).json({message: "Story not found"})
     }
 
-    // Add the new scene
-    const newScene = { id, text, image, options };
-    story.scenes.push(newScene);
-    story.updatedAt = new Date();
+    res.status(200).json({message:"Story deleted successfully", deletedStory})
 
-    // Save the updated story
-    const updatedStory = await story.save();
-    res.status(200).json(updatedStory);
   } catch (error) {
-    res.status(500).json({ message: 'Error adding scene', error: error.message });
+    console.error('Error deleting story', error)
+    res.status(500).json({message: "Error deleting story", error:error.message})
   }
-};
+}
 
-module.exports = { createStory, addScene };
+
+
+module.exports = { createStory, deleteStory };
