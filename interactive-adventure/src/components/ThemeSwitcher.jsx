@@ -6,16 +6,22 @@ const SwitcherButton = styled.button`
   background-color: ${(props) => props.theme.primaryColor};
   color: ${(props) => props.theme.textColor};
   border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
+  padding: 15px;
+  border-radius: 50%;
   cursor: pointer;
   margin: 10px;
+  z-index: 999;
+  position: absolute;
+  bottom: 0px;
+  right: 0%
 `;
 
 const ThemeSwitcher = () => {
-  const { toggleTheme } = useTheme();
+  const { mode, toggleTheme } = useTheme();
 
-  return <SwitcherButton onClick={toggleTheme}>Toggle Theme</SwitcherButton>;
+  return <SwitcherButton onClick={toggleTheme}>
+    {mode === "light" ? <i className="fa-solid fa-sun"></i> : <i className="fa-solid fa-moon"></i>}
+  </SwitcherButton>;
 };
 
 export default ThemeSwitcher;

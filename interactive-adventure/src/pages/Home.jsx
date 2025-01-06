@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const Title = styled.h1`
   color: ${(props) => props.theme.primaryColor};
+  text-align: center;
 `;
 
 const Home = () => {
