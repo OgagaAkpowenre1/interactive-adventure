@@ -7,7 +7,7 @@ const Title = styled.h1`
 `;
 
 const Home = () => {
-  return <Title>Welcome to the Interactive Adventure!</Title>;
+  return <Title>Welcome to the IA!</Title>;
 };
 
 export default Home;

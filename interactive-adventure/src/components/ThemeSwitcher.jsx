@@ -6,7 +6,7 @@ const SwitcherButton = styled.button`
   background-color: ${(props) => props.theme.primaryColor};
   color: ${(props) => props.theme.textColor};
   border: none;
-  padding: 15px;
+  padding: 12px;
   border-radius: 50%;
   cursor: pointer;
   margin: 10px;
