@@ -1,16 +1,41 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+const LogoImg = styled.img`
+  width: 50px;
+  height: 50px;
+`
+
+const NavWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const LinkList = styled.ul`
+  display: flex;
+`
 
 const Navbar = () => {
   return (
-    <nav>
-      
-        <Link to={'/'}>Home</Link>
-        <Link to={'/editor'}>Story Editor</Link>
-        <Link to={'/stories'}>Story List</Link>
-      
-    </nav>
+    <NavWrapper>
+      <LogoImg />
+
+      <ul>
+        <li>
+          <Link to={"/"}>Home</Link>
+        </li>
+        <li>
+          <Link to={"/editor"}>Story Editor</Link>
+        </li>
+        <li>
+          <Link to={"/stories"}>Story List</Link>
+        </li>
+        <li>
+          <Link to={"/reader/:sceneId"}>Scene Reader</Link>
+        </li>
+      </ul>
+    </NavWrapper>
   );
 };
 
