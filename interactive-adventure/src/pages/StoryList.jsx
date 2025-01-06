@@ -1,11 +1,10 @@
 import React from "react"
 import styled from "styled-components";
 
-
-const StoryEditor = () => {
+const StoryList = () => {
     return (<>
-    This is the editor
+    This is the story list
     </>)
 }
 
-export default StoryEditor
+export default StoryList

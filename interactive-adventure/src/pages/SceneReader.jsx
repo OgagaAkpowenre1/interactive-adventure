@@ -7,10 +7,13 @@ const Wrapper = styled.div`
 
 `
 
-const Scene = () => {
+const SceneReader = () => {
     return (
         <Wrapper>
-            
+            This is the reader
         </Wrapper>
     )
 }
+
+
+export default SceneReader;

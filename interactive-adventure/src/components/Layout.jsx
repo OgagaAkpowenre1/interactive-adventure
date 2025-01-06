@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ThemeSwitcher from './ThemeSwitcher';
+import Navbar from './Navbar';
 
 const Wrapper = styled.div`
   display: flex;
