@@ -11,9 +11,9 @@ const SwitcherButton = styled.button`
   cursor: pointer;
   margin: 10px;
   z-index: 999;
-  position: absolute;
-  bottom: 0px;
-  right: 0%
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 `;
 
 const ThemeSwitcher = () => {

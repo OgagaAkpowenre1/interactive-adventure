@@ -5,36 +5,53 @@ import styled from "styled-components";
 const LogoImg = styled.img`
   width: 50px;
   height: 50px;
+  // flex: 1;
 `
 
 const NavWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  min-width: 100vw;
 `
 
 const LinkList = styled.ul`
   display: flex;
+  list-style-type: none;
+  justify-content: space-between;
+  // flex: 3;
+  align-items: center;
 `
+
+const StyledLink = styled(Link)`
+  color: ${(props) => props.theme.listColor};
+  text-decoration: none; /* Remove underline */
+  padding: 0.5rem;
+
+  &:hover {
+    color: ${(props) => props.theme.primaryColor}; /* Optional hover effect */
+  }
+`
+
 
 const Navbar = () => {
   return (
     <NavWrapper>
       <LogoImg />
 
-      <ul>
+      <LinkList>
         <li>
-          <Link to={"/"}>Home</Link>
+          <StyledLink to={"/"}>Home</StyledLink>
         </li>
         <li>
-          <Link to={"/editor"}>Story Editor</Link>
+          <StyledLink to={"/editor"}>Story Editor</StyledLink>
         </li>
         <li>
-          <Link to={"/stories"}>Story List</Link>
+          <StyledLink to={"/stories"}>Story List</StyledLink>
         </li>
         <li>
-          <Link to={"/reader/:sceneId"}>Scene Reader</Link>
+          <StyledLink to={"/reader/:sceneId"}>Scene Reader</StyledLink>
         </li>
-      </ul>
+      </LinkList>
     </NavWrapper>
   );
 };
