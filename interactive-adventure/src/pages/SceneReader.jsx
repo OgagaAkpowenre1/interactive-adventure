@@ -13,6 +13,7 @@ const Wrapper = styled(motion.div)`
   justify-content: center;
   background-color: ${(props) => props.theme.sceneBackgroundColor};
   padding: 1rem;
+  padding-bottom: 3rem;
 `;
 
 const SceneTextWrapper = styled(motion.div)`
@@ -21,6 +22,11 @@ const SceneTextWrapper = styled(motion.div)`
   margin: 2rem auto;
 `;
 
+const SceneText = styled(motion.p)`
+  font-size: 1.1rem;
+  font-weight: 400;
+`
+
 const SceneButtonsWrapper = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -28,10 +34,9 @@ const SceneButtonsWrapper = styled(motion.div)`
 `;
 
 //Animation variants
-
 const textVariants = {
   hidden: { y: "100%", opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 1, delay: 1 } },
+  visible: { y: 0, opacity: 1, transition: { duration: 1, delay: 2 } },
 };
 
 const buttonVariants = {
@@ -51,20 +56,21 @@ const SceneReader = () => {
         animate="visible"
         variants={textVariants}
       >
-        <p>
+        <SceneText>
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos dolor
           fugiat eum sit magni eaque hic eveniet, earum nisi aspernatur
           perferendis eligendi aliquid. Eligendi quo eaque voluptate velit nam,
           minus dolores eveniet odit incidunt laborum, commodi optio voluptatem
           unde voluptates?
-        </p>
+        </SceneText>
       </SceneTextWrapper>
       <SceneButtonsWrapper
         initial={"hidden"}
         animate={"visible"}
         variants={buttonVariants}
       >
-        <Button delay={"0.7s"} buttonText={"Option 1"} />
+        
+        <Button delay={"0.7s"} buttonText={"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestias officiis eligendi labore, obcaecati ab eveniet vero nihil omnis cumque maiores!"} />
         <Button delay={"0.9s"} buttonText={"Option 2"} />
         <Button delay={"0.12s"} buttonText={"Option 3"} />
         <Button delay={"0.15"} buttonText={"Option 4"} />

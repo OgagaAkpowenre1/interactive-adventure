@@ -1,6 +1,11 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
+  
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Parkinsans:wght@300..800&display=swap');
+  
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
+
   * {
     margin: 0;
     padding: 0;

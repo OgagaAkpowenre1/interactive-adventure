@@ -15,9 +15,9 @@ const SceneImage = styled(motion.img)`
   max-width: 100%;
   aspect-ratio: 16 / 9; /* Ensures the aspect ratio */
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
   border: 5px solid #121212;
-
+  
   /* Styling when magnified */
   ${(props) =>
     props.magnified &&
@@ -47,7 +47,7 @@ const SceneImageComponent = ({ src, alt }) => {
   };
 
   return (
-    <SceneImageWrapper>
+    <SceneImageWrapper >
       <SceneImage
         src={src}
         alt={alt}
