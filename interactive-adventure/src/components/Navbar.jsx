@@ -36,7 +36,9 @@ const StyledLink = styled(Link)`
 const Navbar = () => {
   return (
     <NavWrapper>
+      <StyledLink to={"/"}>
       <LogoImg />
+      </StyledLink>
 
       <LinkList>
         <li>
