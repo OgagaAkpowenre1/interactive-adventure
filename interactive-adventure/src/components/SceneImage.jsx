@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
-const SceneImageWrapper = styled.div`
+const SceneImageWrapper = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 1.5rem auto;
 `;
 
-const SceneImage = styled.img`
-  width: 640px; /* Adjust to fit your layout */
+const SceneImage = styled(motion.img)`
+  width:  clamp(300px, 70%, 1280px); /* Adjust to fit your layout */
   height: auto; /* Automatically maintains 16:9 aspect ratio */
   max-width: 100%;
   aspect-ratio: 16 / 9; /* Ensures the aspect ratio */
@@ -33,6 +34,11 @@ const SceneImage = styled.img`
   `}
 `;
 
+const imageVariants = {
+  hidden: { x: "100%", opacity: 0 },
+  visible: { x: 0, opacity: 1, transition: { duration: 1 } },
+};
+
 const SceneImageComponent = ({ src, alt }) => {
   const [isMagnified, setIsMagnified] = useState(false);
 
@@ -47,6 +53,9 @@ const SceneImageComponent = ({ src, alt }) => {
         alt={alt}
         magnified={isMagnified}
         onClick={toggleMagnify}
+        initial="hidden"
+        animate="visible"
+        variants={imageVariants}
       />
     </SceneImageWrapper>
   );

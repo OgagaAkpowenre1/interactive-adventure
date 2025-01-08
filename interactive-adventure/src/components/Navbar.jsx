@@ -11,7 +11,7 @@ const LogoImg = styled.img`
 const NavWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  min-width: 100vw;
+  width: 100%;
 `
 
 const LinkList = styled.ul`
