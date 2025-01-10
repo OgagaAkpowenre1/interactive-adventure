@@ -1,20 +1,13 @@
-import { motion } from "framer-motion";
 import React from "react";
 import styled from "styled-components";
-
-const Wrapper = styled(motion.div)``;
-
-
+import InfoBar from "../components/InfoBar";
 
 const StoryList = () => {
   return (
     <>
     
-      <Wrapper>
-        <StoryList>
-          
-        </StoryList>
-      </Wrapper>
+    This is the story list
+    <InfoBar />
     </>
   );
 };
