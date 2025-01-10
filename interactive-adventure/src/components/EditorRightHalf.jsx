@@ -5,6 +5,11 @@ import EditorButtons from "./EditorButtons";
 const Wrapper = styled.div`
   position: fixed;
   left: 70%;
+  top: 15%;
+
+    @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const RightHalf = () => {

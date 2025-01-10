@@ -3,8 +3,10 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+//   align-items: center;
   width: 100%;
+  float: left;
+  
 
   @media (min-width: 768px) {
     align-items: flex-start;

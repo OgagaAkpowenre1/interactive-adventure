@@ -8,6 +8,7 @@ const Wrapper = styled.div`
   text-align: center;
   padding: 1em;
   max-height: 350px;
+  background:rgb(114, 112, 112);
 
   i {
     font-size: 2em;

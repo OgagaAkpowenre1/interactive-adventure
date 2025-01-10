@@ -3,24 +3,11 @@ import styled from "styled-components";
 import RightHalf from "../components/EditorRightHalf";
 import LeftHalf from "../components/EditorLeftHalf";
 
-// const Wrapper = styled.div`
-//     display: flex;
-//   width: 100%;
-// `;
-
-// const Title = styled.div`
-//   display: flex;
-// `;
-
-// const Editor = styled.div`
-//   display: flex;
-//   width: 100%;
-// `;
-
 const Wrapper = styled.div`
-  display: flex;
+    // display: flex;
   flex-direction: column; /* Stack items by default */
   width: 100%;
+  margin-bottom: 2em;
 
   @media (min-width: 768px) {
     flex-direction: row; /* Switch to side-by-side layout for larger screens */
@@ -28,10 +15,14 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
+  display: flex;
+  align-items: center;
   text-align: center;
+  justify-content: center;
   margin-bottom: 1em;
 
-  h5, h6 {
+  h5,
+  h6 {
     margin: 0.5em;
   }
 `;
@@ -40,11 +31,20 @@ const Editor = styled.div`
   display: flex;
   flex-direction: column; /* Stack LeftHalf and RightHalf on mobile */
   width: 100%;
+  justify-content: space-between;
+  
 
   @media (min-width: 768px) {
     flex-direction: row; /* Side-by-side layout for larger screens */
   }
 `;
+
+const LeftHalfWrapper = styled.div`
+  flex: 1; /* This makes it take all the space left by RightHalf */
+  margin-right: 300px; /* Same as RightHalf width */
+  padding: 1em;
+`;
+
 
 const StoryEditor = () => {
   return (
@@ -55,7 +55,8 @@ const StoryEditor = () => {
         <h6>Scene Id</h6>
       </Title>
       <Editor>
-        <LeftHalf />
+        <LeftHalfWrapper><LeftHalf /></LeftHalfWrapper>
+        
         <br />
         <RightHalf />
       </Editor>
