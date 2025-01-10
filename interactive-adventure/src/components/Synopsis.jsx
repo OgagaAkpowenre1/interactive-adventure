@@ -4,7 +4,21 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   text-align: left;
-  
+    height: 100%;
+
+  h4 {
+    margin: 0; 
+    color: white;
+    font-size: 1.3em;
+    cursor: pointer;
+  }
+
+  p {
+    flex: 1; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    padding-top: 1em;
+  }
 `;
 
 const Synopsis = () => {

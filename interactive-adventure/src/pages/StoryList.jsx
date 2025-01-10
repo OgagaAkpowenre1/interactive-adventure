@@ -2,19 +2,21 @@ import React from "react";
 import styled from "styled-components";
 import StoryDetails from "../components/StoryDetails";
 
+
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 2em;
 
     h3 {
       margin: 1rem auto;
       font-weight: bold;
+      text-align: center;
     }
 `;
 
 const List = styled.div`
-  margin: 1rem auto;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 `
 
 const StoryList = () => {
@@ -22,6 +24,14 @@ const StoryList = () => {
     <Wrapper>
       <h3>This is the story list</h3>
       <List>
+        <StoryDetails />
+        <StoryDetails />
+        <StoryDetails />
+        <StoryDetails />
+        <StoryDetails />
+        <StoryDetails />
+        <StoryDetails />
+        <StoryDetails />
         <StoryDetails />
       </List>
     </Wrapper>
