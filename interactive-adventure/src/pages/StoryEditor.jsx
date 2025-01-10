@@ -4,10 +4,11 @@ import RightHalf from "../components/EditorRightHalf";
 import LeftHalf from "../components/EditorLeftHalf";
 
 const Wrapper = styled.div`
-    // display: flex;
+  // display: flex;
   flex-direction: column; /* Stack items by default */
   width: 100%;
   margin-bottom: 2em;
+  
 
   @media (min-width: 768px) {
     flex-direction: row; /* Switch to side-by-side layout for larger screens */
@@ -32,7 +33,6 @@ const Editor = styled.div`
   flex-direction: column; /* Stack LeftHalf and RightHalf on mobile */
   width: 100%;
   justify-content: space-between;
-  
 
   @media (min-width: 768px) {
     flex-direction: row; /* Side-by-side layout for larger screens */
@@ -45,6 +45,11 @@ const LeftHalfWrapper = styled.div`
   padding: 1em;
 `;
 
+const RightHalfWrapper = styled.div`
+//   flex: 1; /* Takes up the remaining 25% of the screen */
+//   max-width: 25%; /* Prevents RightHalf from exceeding 25% */
+//   overflow-y: auto;
+`;
 
 const StoryEditor = () => {
   return (
@@ -55,10 +60,14 @@ const StoryEditor = () => {
         <h6>Scene Id</h6>
       </Title>
       <Editor>
-        <LeftHalfWrapper><LeftHalf /></LeftHalfWrapper>
-        
+        <LeftHalfWrapper>
+          <LeftHalf />
+        </LeftHalfWrapper>
+
         <br />
-        <RightHalf />
+        <RightHalfWrapper>
+          <RightHalf />
+        </RightHalfWrapper>
       </Editor>
     </Wrapper>
   );
