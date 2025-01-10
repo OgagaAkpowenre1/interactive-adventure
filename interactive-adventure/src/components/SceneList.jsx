@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   overflow-y: auto;
-  max-width: fit-content;
+  width: 100%;
   border: 3px solid black;
   text-align: center;
   padding: 1em;
@@ -12,12 +12,17 @@ const Wrapper = styled.div`
   i {
     font-size: 2em;
   }
+
+
+  @media (min-width: 768px) {
+    max-width: fit-content;
+  }
 `;
 
 const Scene = styled.button`
-  width: 250px;
+  width: 100%;
   height: 150px;
-  margin: 1em;
+  margin: 1em 0; /* Stack scenes with vertical spacing on mobile */
   background: ${(props) => (props.backgroundImg ? `url(${props.backgroundImg})` : "rgb(150, 145, 145)")};
   background-size: cover;
   background-position: center;
@@ -37,6 +42,11 @@ const Scene = styled.button`
   &:hover {
     transform: scale(1.05);
     transition: transform 0.2s ease-in-out;
+  }
+
+  @media (min-width: 768px) {
+    width: 250px;
+    margin: 1em; /* Restore horizontal spacing on larger screens */
   }
 `;
 
