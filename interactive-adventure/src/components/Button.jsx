@@ -34,7 +34,7 @@ const SceneButton = styled.button`
   }
 `;
 
-const Button = ({delay, buttonText}) => {
+const Button = ({buttonText}) => {
 
     return (
         <SceneButton onClick={() => console.log(buttonText)}>{buttonText}</SceneButton>
