@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -18,10 +19,32 @@ const ImageUpload = styled.div`
   min-height: 200px;
   margin-bottom: 1em;
   background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #ccc
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 
   @media (min-width: 768px) {
     min-width: 500px;
     min-height: 500px;
+  }
+
+  input[type="file"] {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
   }
 `;
 
@@ -68,17 +91,95 @@ const ButtonCreator = styled.button`
   }
 `;
 
+const FormWrapper = styled.div`
+  margin-top: 1em;
+  padding: 1em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 80%;
+  display:flex;
+  flex-direction: column;
+
+  label {
+    margin-bottom: 0.5em;
+  }
+
+  input {
+    margin-bottom: 1em;
+    padding: 0.5em;
+    width: 100%;
+  }
+
+  button {
+    align-self: flex-end;
+  }
+`
+
 const LeftHalf = () => {
+  const [uploadedImage, setUploadedImage] = useState(null)
+  const [formVisible, setFormVisible] = useState(false)
+  const [formData, setFormData] = useState({text: "", sceneId: ""})
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setUploadedImage(imageUrl);
+    }
+  };
+
+  const handleFormToggle = () => {
+    setFormVisible(!formVisible);
+  };
+
+  const handleFormChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    console.log("Form submitted:", formData);
+    setFormData({ text: "", sceneId: "" });
+    setFormVisible(false);
+  };
+
     return(<Wrapper>
         <ImageUpload>
-
+          {uploadedImage ? <img src={uploadedImage} alt="previewImage" /> : <p>Click to upload image</p>}
+          <input type="file" name="sceneImage" accept="image/*" onChange={handleImageUpload} />
         </ImageUpload>
         <TextInput>
 
         </TextInput>
-        <ButtonCreator>
-            +
-        </ButtonCreator>
+        <ButtonCreator onClick={handleFormToggle}>+</ButtonCreator>
+
+        {formVisible && (
+        <FormWrapper>
+          <label>
+            Text:
+            <input
+              type="text"
+              name="text"
+              value={formData.text}
+              onChange={handleFormChange}
+              placeholder="Enter text"
+            />
+          </label>
+          <label>
+            Scene ID:
+            <input
+              type="text"
+              name="sceneId"
+              value={formData.sceneId}
+              onChange={handleFormChange}
+              placeholder="Enter scene ID"
+            />
+          </label>
+          <button onClick={handleFormSubmit}>Save</button>
+        </FormWrapper>
+      )}
+
     </Wrapper>)
 }
 

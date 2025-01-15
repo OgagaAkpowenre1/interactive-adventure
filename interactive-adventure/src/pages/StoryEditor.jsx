@@ -46,25 +46,24 @@ const LeftHalfWrapper = styled.div`
 `;
 
 const RightHalfWrapper = styled.div`
-//   flex: 1; /* Takes up the remaining 25% of the screen */
-//   max-width: 25%; /* Prevents RightHalf from exceeding 25% */
-//   overflow-y: auto;
+  flex: 1; /* Takes up the remaining 25% of the screen */
+  max-width: 25%; /* Prevents RightHalf from exceeding 25% */
+  overflow-y: auto;
 `;
 
 const StoryEditor = () => {
   return (
     <Wrapper>
-      This is the editor
       <Title>
-        <h5>Story Title</h5>
-        <h6>Scene Id</h6>
+        <a href=""><h4>Story Title</h4></a>
+        <h5>Scene Id</h5>
       </Title>
       <Editor>
         <LeftHalfWrapper>
           <LeftHalf />
         </LeftHalfWrapper>
 
-        <br />
+        {/* <br /> */}
         <RightHalfWrapper>
           <RightHalf />
         </RightHalfWrapper>
