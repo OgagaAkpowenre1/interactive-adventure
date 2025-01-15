@@ -1,17 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-//   align-items: center;
-  width: 100%;
-  float: left;
-  
-
-  @media (min-width: 768px) {
-    align-items: flex-start;
-  }
+  align-items: center;
 `;
 
 const ImageUpload = styled.div`
@@ -22,21 +15,19 @@ const ImageUpload = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px dashed #ccc
+  border: 2px dashed #ccc;
   position: relative;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+  cursor: pointer;
 
   @media (min-width: 768px) {
-    min-width: 500px;
-    min-height: 500px;
+    max-width: 500px;
+    min-height: 300px;
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
 
   input[type="file"] {
@@ -49,45 +40,23 @@ const ImageUpload = styled.div`
 `;
 
 const TextInput = styled.input`
-  width: 100%;
-  padding: 0.5em;
   margin-bottom: 1em;
+  padding: 0.5em;
+  width: 100%;
 `;
 
 const ButtonCreator = styled.button`
-  background-color: ${(props) => props.theme.buttonBackgroundColor};
-  color: ${(props) => props.theme.buttonColor};
-  border: 2px solid ${(props) => props.theme.borderColor};
-  padding: 0.8em 2.5em;
+  background-color: ${(props) => props.theme.buttonBackgroundColor || "blue"};
+  color: ${(props) => props.theme.buttonColor || "white"};
+  border: none;
+  padding: 0.8em 2em;
   font-weight: bold;
-  font-family: inherit;
   cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  animation: fadeIn 0.5s ease-in forwards;
-  animation-delay: ${(props) => props.delay}s;
-
-  width: 100%; /* Full width on mobile */
-
-  @media (min-width: 768px) {
-    width: auto; /* Default size for larger screens */
-  }
-
-  /* Boxy Shadow Effect */
-  box-shadow: 4px 4px 0 ${(props) => props.theme.shadowColor},
-              -2px -2px 0 ${(props) => props.theme.highlightColor};
-  transition: all 0.2s ease-in-out;
+  margin-bottom: 1em;
+  border-radius: 5px;
 
   &:hover {
-    /* Slight hover effect */
-    background-color: ${(props) => props.theme.hoverBackgroundColor};
-  }
-
-  &:active {
-    /* Pressed-down effect */
-    box-shadow: 2px 2px 0 ${(props) => props.theme.shadowColor},
-                -1px -1px 0 ${(props) => props.theme.highlightColor};
-    transform: translate(2px, 2px);
+    background-color: ${(props) => props.theme.hoverBackgroundColor || "darkblue"};
   }
 `;
 
@@ -96,8 +65,8 @@ const FormWrapper = styled.div`
   padding: 1em;
   border: 1px solid #ccc;
   border-radius: 5px;
-  width: 80%;
-  display:flex;
+  width: 100%;
+  display: flex;
   flex-direction: column;
 
   label {
@@ -113,12 +82,28 @@ const FormWrapper = styled.div`
   button {
     align-self: flex-end;
   }
-`
+`;
+
+const GeneratedButton = styled.button`
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.8em 1.5em;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-top: 0.5em;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
 
 const LeftHalf = () => {
-  const [uploadedImage, setUploadedImage] = useState(null)
-  const [formVisible, setFormVisible] = useState(false)
-  const [formData, setFormData] = useState({text: "", sceneId: ""})
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [formVisible, setFormVisible] = useState(false);
+  const [formData, setFormData] = useState({ text: "", sceneId: "" });
+  const [generatedButtons, setGeneratedButtons] = useState([]);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -139,22 +124,27 @@ const LeftHalf = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    console.log("Form submitted:", formData);
+
+    // Generate a new button with the input text
+    setGeneratedButtons((prevButtons) => [
+      ...prevButtons,
+      { text: formData.text, sceneId: formData.sceneId },
+    ]);
+
     setFormData({ text: "", sceneId: "" });
     setFormVisible(false);
   };
 
-    return(<Wrapper>
-        <ImageUpload>
-          {uploadedImage ? <img src={uploadedImage} alt="previewImage" /> : <p>Click to upload image</p>}
-          <input type="file" name="sceneImage" accept="image/*" onChange={handleImageUpload} />
-        </ImageUpload>
-        <TextInput>
+  return (
+    <Wrapper>
+      <ImageUpload onClick={(e) => e.stopPropagation()}>
+        {uploadedImage ? <img src={uploadedImage} alt="Uploaded preview" /> : <p>Click to upload an image</p>}
+        <input type="file" accept="image/*" onChange={handleImageUpload} />
+      </ImageUpload>
 
-        </TextInput>
-        <ButtonCreator onClick={handleFormToggle}>+</ButtonCreator>
+      <ButtonCreator onClick={handleFormToggle}>+</ButtonCreator>
 
-        {formVisible && (
+      {formVisible && (
         <FormWrapper>
           <label>
             Text:
@@ -163,7 +153,7 @@ const LeftHalf = () => {
               name="text"
               value={formData.text}
               onChange={handleFormChange}
-              placeholder="Enter text"
+              placeholder="Enter button text"
             />
           </label>
           <label>
@@ -180,7 +170,13 @@ const LeftHalf = () => {
         </FormWrapper>
       )}
 
-    </Wrapper>)
-}
+      {generatedButtons.map((button, index) => (
+        <GeneratedButton key={index}>
+          {button.text} - Scene ID: {button.sceneId}
+        </GeneratedButton>
+      ))}
+    </Wrapper>
+  );
+};
 
-export default LeftHalf
+export default LeftHalf;
