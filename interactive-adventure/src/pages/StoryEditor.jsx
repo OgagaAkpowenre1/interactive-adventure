@@ -8,26 +8,13 @@ const Wrapper = styled.div`
   // display: flex;
   flex-direction: column; /* Stack items by default */
   width: 100%;
-  margin-bottom: 2em;
+  margin-bottom: 3em;
   min-width: 90vw;
   min-height: 100vh;
   
 
   @media (min-width: 768px) {
     flex-direction: row; /* Switch to side-by-side layout for larger screens */
-  }
-`;
-
-const Title = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-  margin-bottom: 1em;
-
-  h5,
-  h6 {
-    margin: 0.5em;
   }
 `;
 
@@ -46,14 +33,14 @@ const Editor = styled.div`
 const LeftHalfWrapper = styled.div`
   flex: 1; /* This makes it take all the space left by RightHalf */
   margin-right: 300px; /* Same as RightHalf width */
-  padding: 1em;
+  padding-left: 2em;
 `;
 
 const RightHalfWrapper = styled.div`
   flex: 1; /* Takes up the remaining 25% of the screen */
   max-width: 25%; /* Prevents RightHalf from exceeding 25% */
   overflow-y: auto;
-  padding: 1em;
+  padding-right: 2em;
 `;
 
 const StoryEditor = () => {

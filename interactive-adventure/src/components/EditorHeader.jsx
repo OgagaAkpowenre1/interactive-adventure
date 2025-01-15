@@ -8,11 +8,12 @@ const HeaderWrapper = styled.div`
   align-items: flex-start;
   margin-bottom: 1em;
   padding: 1em;
-  background-color: #f9f9f9;
-  border-bottom: 2px solid #ddd;
+  background-color: ${(props) => props.theme.backgroundColor};
+//   border-bottom: 2px solid #ddd;
 
   h1 {
     margin: 0 0 0.5em;
+    // color: ${(props) => props.theme.textColor}
   }
 
   a {
@@ -31,9 +32,10 @@ const SceneIdWrapper = styled.div`
   align-items: center;
   gap: 0.5em;
 
+
   span {
     font-size: 1.2em;
-    color: #333;
+    color: ${(props) => props.theme.textColor};
     cursor: pointer;
 
     &:hover {
