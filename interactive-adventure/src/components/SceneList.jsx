@@ -3,10 +3,10 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   overflow-y: auto;
-  width: 100%;
+  width: 120%;
   border: 3px solid black;
   text-align: center;
-  padding: 1em;
+  padding: 1em auto;
   max-height: 350px;
   background:rgb(114, 112, 112);
 

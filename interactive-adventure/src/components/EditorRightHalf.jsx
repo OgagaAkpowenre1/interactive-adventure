@@ -6,9 +6,13 @@ const Wrapper = styled.div`
 //   position: fixed;
 //   left: 70%;
 //   top: 15%;
+    border: 1px solid red;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     @media (max-width: 768px) {
-    display: none;
+    // display: ;
   }
 `;
 

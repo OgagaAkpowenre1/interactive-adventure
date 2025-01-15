@@ -4,6 +4,13 @@ import StoryDetails from "../components/StoryDetails";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
+const PageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+`;
+
 const Wrapper = styled.div`
   margin-bottom: 2em;
 
@@ -49,6 +56,7 @@ const itemVariants = {
 
 const StoryList = () => {
   return (
+    <>
     <Wrapper>
       <h3>This is the story list</h3>
       <List
@@ -63,6 +71,7 @@ const StoryList = () => {
         ))}
       </List>
     </Wrapper>
+    </>
   );
 };
 

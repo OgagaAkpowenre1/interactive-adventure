@@ -12,6 +12,12 @@ const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html, body, #root {
+    height: 100%; /* Ensures full height usage */
+    width: 100%;  /* Ensures full width usage */
+    overflow-x: hidden; /* Prevent horizontal scroll */
+  }
+
   body {
     background-color: ${(props) => props.theme.backgroundColor};
     color: ${(props) => props.theme.textColor};

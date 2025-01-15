@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import RightHalf from "../components/EditorRightHalf";
 import LeftHalf from "../components/EditorLeftHalf";
+import EditorHeader from "../components/EditorHeader";
 
 const Wrapper = styled.div`
   // display: flex;
   flex-direction: column; /* Stack items by default */
   width: 100%;
   margin-bottom: 2em;
+  min-width: 90vw;
+  min-height: 100vh;
   
 
   @media (min-width: 768px) {
@@ -33,6 +36,7 @@ const Editor = styled.div`
   flex-direction: column; /* Stack LeftHalf and RightHalf on mobile */
   width: 100%;
   justify-content: space-between;
+  align-items: center;
 
   @media (min-width: 768px) {
     flex-direction: row; /* Side-by-side layout for larger screens */
@@ -49,15 +53,16 @@ const RightHalfWrapper = styled.div`
   flex: 1; /* Takes up the remaining 25% of the screen */
   max-width: 25%; /* Prevents RightHalf from exceeding 25% */
   overflow-y: auto;
+  padding: 1em;
 `;
 
 const StoryEditor = () => {
+  const [sceneID, setSceneID] = useState("")
+
   return (
+    <>
     <Wrapper>
-      <Title>
-        <a href=""><h4>Story Title</h4></a>
-        <h5>Scene Id</h5>
-      </Title>
+      <EditorHeader storyTitle={"My story"} storyId={"12345"} />
       <Editor>
         <LeftHalfWrapper>
           <LeftHalf />
@@ -69,6 +74,7 @@ const StoryEditor = () => {
         </RightHalfWrapper>
       </Editor>
     </Wrapper>
+    </>
   );
 };
 

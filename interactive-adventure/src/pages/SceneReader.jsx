@@ -4,6 +4,13 @@ import SceneImageComponent from "../components/SceneImage";
 import Button from "../components/Button";
 import { motion } from "framer-motion";
 
+const PageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+`;
+
 const Wrapper = styled(motion.div)`
   width: 100%;
   min-height: 100vh;
@@ -48,6 +55,7 @@ const SceneReader = () => {
 
 
   return (
+    <>
     <Wrapper>
       <SceneImageComponent
         src={"https://wallpapercave.com/wp/wp7135795.jpg"}
@@ -81,6 +89,7 @@ const SceneReader = () => {
         <Button buttonText={"Option 4"} />
       </SceneButtonsWrapper>
     </Wrapper>
+    </>
   );
 };
 

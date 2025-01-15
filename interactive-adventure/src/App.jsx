@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import GlobalStyles from "./styles/GlobalStyles.jsx";
 import Layout from "./components/Layout.jsx";
 import Navbar from "./components/Navbar.jsx";
+import styled from "styled-components";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const StoryEditor = React.lazy(() => import("./pages/StoryEditor"));
@@ -15,6 +16,13 @@ const SceneReader = React.lazy(() => import("./pages/SceneReader"));
 // import StoryEditor from "./pages/StoryEditor";
 // import StoryList from "./pages/StoryList";
 // import SceneReader from "./pages/SceneReader";
+
+const FullScreenWrapper = styled.main`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensures it always takes the full height of the viewport */
+  width: 100%;       /* Ensures it stretches across the screen */
+`;
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -43,6 +51,7 @@ const AppWrapper = () => {
       <GlobalStyles />
 
       <Router>
+        
         <Layout>
           <Navbar />
           <ErrorBoundary>
@@ -56,6 +65,7 @@ const AppWrapper = () => {
             </Suspense>
           </ErrorBoundary>
         </Layout>
+        
       </Router>
     </StyledThemeProvider>
   );

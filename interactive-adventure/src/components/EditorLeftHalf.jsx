@@ -5,6 +5,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 1px solid black;
 `;
 
 const ImageUpload = styled.div`
@@ -42,18 +43,20 @@ const ImageUpload = styled.div`
 const TextInput = styled.input`
   margin-bottom: 1em;
   padding: 0.5em;
-  width: 100%;
+  width: 80%;
 `;
 
 const ButtonCreator = styled.button`
   background-color: ${(props) => props.theme.buttonBackgroundColor || "blue"};
   color: ${(props) => props.theme.buttonColor || "white"};
   border: none;
-  padding: 0.8em 2em;
+  padding: 0.8em 1.5em;
   font-weight: bold;
   cursor: pointer;
-  margin-bottom: 1em;
+  // margin-bottom: 1em;
   border-radius: 5px;
+  // margin-top: 0.5em;
+  font-size: 1em;
 
   &:hover {
     background-color: ${(props) => props.theme.hoverBackgroundColor || "darkblue"};
@@ -91,13 +94,20 @@ const GeneratedButton = styled.button`
   padding: 0.8em 1.5em;
   border-radius: 5px;
   font-weight: bold;
-  margin-top: 0.5em;
+  // margin-top: 0.5em;
   cursor: pointer;
 
   &:hover {
     background-color: #0056b3;
   }
 `;
+
+const SceneButtonsWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1em;
+`  
 
 const LeftHalf = () => {
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -141,8 +151,8 @@ const LeftHalf = () => {
         {uploadedImage ? <img src={uploadedImage} alt="Uploaded preview" /> : <p>Click to upload an image</p>}
         <input type="file" accept="image/*" onChange={handleImageUpload} />
       </ImageUpload>
-
-      <ButtonCreator onClick={handleFormToggle}>+</ButtonCreator>
+      <TextInput placeholder="Tell your story" />
+      
 
       {formVisible && (
         <FormWrapper>
@@ -170,11 +180,15 @@ const LeftHalf = () => {
         </FormWrapper>
       )}
 
+      <SceneButtonsWrapper>
       {generatedButtons.map((button, index) => (
         <GeneratedButton key={index}>
           {button.text} - Scene ID: {button.sceneId}
         </GeneratedButton>
+        
       ))}
+      <ButtonCreator onClick={handleFormToggle}>+</ButtonCreator>
+      </SceneButtonsWrapper>
     </Wrapper>
   );
 };
