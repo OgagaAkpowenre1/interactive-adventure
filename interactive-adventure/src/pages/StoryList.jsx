@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import StoryDetails from "../components/StoryDetails";
+import StoryListItem from "../components/StoryListItem";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import testStory from "../testData";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -66,7 +67,7 @@ const StoryList = () => {
       >
         {[...Array(9)].map((_, index) => (
           <motion.div key={index} variants={itemVariants}>
-            <Link to={"/reader/:sceneId"}><StoryDetails /></Link>
+            <Link to={"/story/:storyId"}><StoryListItem  /></Link>
           </motion.div>
         ))}
       </List>

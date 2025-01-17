@@ -22,7 +22,7 @@ const InfoBar = ({ readingTime, genres, rating }) => {
       <span>Reading Time: {readingTime} mins</span>
       <span>Rating: {rating}/5</span>
       {genres.map((genre, index) => (
-        <span key={index}>{genre}</span>
+        <span key={index}><a href="#">{genre}</a></span>
       ))}
     </Wrapper>
   );

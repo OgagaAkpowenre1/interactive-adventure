@@ -6,11 +6,13 @@ import GlobalStyles from "./styles/GlobalStyles.jsx";
 import Layout from "./components/Layout.jsx";
 import Navbar from "./components/Navbar.jsx";
 import styled from "styled-components";
+import testStory from "./testData.js";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const StoryEditor = React.lazy(() => import("./pages/StoryEditor"));
 const StoryList = React.lazy(() => import("./pages/StoryList"));
 const SceneReader = React.lazy(() => import("./pages/SceneReader"));
+const StoryDetails = React.lazy(() => import("./pages/StoryDetails.jsx"))
 
 // import Home from "./pages/Home";
 // import StoryEditor from "./pages/StoryEditor";
@@ -61,6 +63,7 @@ const AppWrapper = () => {
                 <Route path="/editor" element={<StoryEditor />} />
                 <Route path="/stories" element={<StoryList />} />
                 <Route path="/reader/:sceneId" element={<SceneReader />} />
+                <Route path="story/:storyId" element={<StoryDetails story={testStory} />} />
               </Routes>
             </Suspense>
           </ErrorBoundary>

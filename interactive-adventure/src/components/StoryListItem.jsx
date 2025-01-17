@@ -54,7 +54,7 @@ const TextDetails = styled.div`
   }
 `;
 
-const StoryDetails = () => {
+const StoryListItem = () => {
   return (
     <Wrapper>
       <img src="https://wallpapercave.com/wp/wp7135795.jpg" alt="" />
@@ -66,4 +66,4 @@ const StoryDetails = () => {
   );
 };
 
-export default StoryDetails;
+export default StoryListItem;

@@ -23,7 +23,7 @@ const Wrapper = styled.div`
     }
   }
 `;
-
+ 
 const Carousel = ({ images, onImageClick }) => {
   return (
     <Wrapper>

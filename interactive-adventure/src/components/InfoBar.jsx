@@ -54,17 +54,32 @@ const ReadingTime = styled.div`
   }
 `;
 
-const InfoBar = () => {
+const Genre = ({genre}) => {
+  return (
+    <li>
+            <button>
+              <a href="#">{genre}</a>
+            </button>
+    </li>
+  )
+}
+
+const InfoBar = ({readingTime, ratings, genres}) => {
   return (
     <Wrapper>
       <Ratings>
+        {/* {Array(ratings)
+          .fill(0)
+          .map((_, index) => (
+            <i key={index} className="fa-solid fa-star"></i>
+          ))} */}
         <i className="fa-solid fa-star"></i>
         <i className="fa-solid fa-star"></i>
         <i className="fa-solid fa-star"></i>
       </Ratings>
       <ReadingTime>
         <i className="fa-solid fa-clock"></i>
-        <p>20 minutes</p>
+        <p>{readingTime}</p>
       </ReadingTime>
       <GenreList>
         <ul>
@@ -83,6 +98,9 @@ const InfoBar = () => {
               <a href="#">Suspense</a>
             </button>
           </li>
+          {/* {genres.map((genre, index) => (
+            <Genre key={index} genre={genre} />
+          ))} */}
         </ul>
       </GenreList>
     </Wrapper>
