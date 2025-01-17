@@ -1,27 +1,20 @@
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
 
-const storySchema = new Schema({
-  title: { type: String, required: true },
-  author: { type: String, required: true },
-  genre: { type: String },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-  scenes: {
-    type: Map,
-    of: new Schema({
-      id: { type: String, required: true },
-      text: { type: String },
-      image: {type: String},
-      options: [
-        {
-          text: { type: String },
-          nextScene: { type: String },
-        },
-      ],
-    }),
+const storySchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    synopsis: { type: String, required: true },
+    cover: { type: String, required: true }, // URL or file path for cover image
+    genres: [{ type: String }],
+    readingTime: { type: String }, // Optional, e.g., "20 mins"
+    rating: { type: Number, min: 1, max: 5 }, // Optional
+    gallery: [{type: String}]
   },
-});
+  { timestamps: true } // Automatically adds createdAt and updatedAt fields
+);
+
+storySchema.index({ title: 1 });
 
 const Story = mongoose.model("Story", storySchema);
+
 module.exports = Story;
