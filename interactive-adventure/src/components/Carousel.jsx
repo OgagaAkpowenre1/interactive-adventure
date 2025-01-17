@@ -40,3 +40,4 @@ const Carousel = ({ images, onImageClick }) => {
 };
 
 export default Carousel;
+

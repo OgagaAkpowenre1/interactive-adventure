@@ -13,6 +13,12 @@ const Wrapper = styled.div`
     background: #f0f0f0;
     border-radius: 4px;
     padding: 0.2em 0.5em;
+    background-color: transparent;
+    border-radius: 12px;
+    border: 1px solid pink;
+    padding: 0.4em 0.8em;
+    margin-right: 1em;
+    text-transform: capitalize;
   }
 `;
 

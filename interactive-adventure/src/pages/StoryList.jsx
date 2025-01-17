@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import StoryListItem from "../components/StoryListItem";
+import SearchFilter from "../components/SearchFilter";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import testStory from "../testData";
@@ -14,6 +15,9 @@ const PageWrapper = styled.div`
 
 const Wrapper = styled.div`
   margin-bottom: 2em;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 
     h3 {
       margin: 1rem auto;
@@ -59,6 +63,7 @@ const StoryList = () => {
   return (
     <>
     <Wrapper>
+      <SearchFilter />
       <h3>This is the story list</h3>
       <List
         variants={listVariants}

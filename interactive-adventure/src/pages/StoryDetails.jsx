@@ -3,6 +3,7 @@ import styled from "styled-components";
 import InfoBar from "../components/StoryPageInfo";
 import Carousel from "../components/Carousel";
 import MagnifiedImage from "../components/MagnifiedImage";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: flex;
@@ -21,6 +22,11 @@ const Wrapper = styled.div`
 
 const Content = styled.div`
   flex: 2;
+
+  button {
+    border-radius: 5px;
+    margin-top: 1em;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -78,6 +84,7 @@ const StoryDetails = ({ story }) => {
             genres={story.genres}
             rating={story.rating}
           />
+          <Link to={"/editor"}><button>Edit Scenes</button></Link>
         </Content>
       </Wrapper>
       <GalleryWrapper>
