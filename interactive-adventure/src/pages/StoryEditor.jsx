@@ -35,7 +35,7 @@ const LeftHalfWrapper = styled.div`
   margin-right: 300px; /* Same as RightHalf width */
   padding-left: 2em;
 `;
-
+ 
 const RightHalfWrapper = styled.div`
   flex: 1; /* Takes up the remaining 25% of the screen */
   max-width: 25%; /* Prevents RightHalf from exceeding 25% */
