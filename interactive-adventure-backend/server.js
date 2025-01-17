@@ -10,12 +10,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// const storyRoutes = require('./routes/storyRoutes');
+const storyRoutes = require('./routes/storyRoutes');
 
 const PORT = process.env.PORT || 5000;
 
 // Routes
-// app.use('/api/stories', storyRoutes)
+app.use('/api/stories', storyRoutes)
 
 app.get('/api/test', (req, res) => { 
     res.json("I work")

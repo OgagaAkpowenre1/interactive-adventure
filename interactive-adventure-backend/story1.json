@@ -26,3 +26,21 @@ Invoke-RestMethod -Method POST -Uri http://localhost:5000/api/stories/675ff30226
   -Body '{"text":"Changed text","options":[{"text":"Next","nextSceneId":"scene2"}]}'
 
   Invoke-RestMethod -Method DELETE -Uri http://localhost:5000/api/stories/6762d4799b66027d8484a762/delete-story
+
+  curl -X POST http://localhost:5000/api/stories/create \
+-H "Content-Type: application/json" \
+-d '{
+  "title": "A New Adventure",
+  "synopsis": "This is an epic story of courage and discovery.",
+  "cover": "https://example.com/cover.jpg",
+  "genres": ["fantasy", "adventure"],
+  "readingTime": "15 mins",
+  "rating": 5,
+  "gallery": ["https://example.com/gallery1.jpg", "https://example.com/gallery2.jpg"]
+}'
+
+curl -X DELETE http://localhost:5000/api/stories/delete \
+-H "Content-Type: application/json" \
+-d '{
+  
+}'
