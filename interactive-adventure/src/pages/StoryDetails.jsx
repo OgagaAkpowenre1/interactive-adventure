@@ -3,7 +3,7 @@ import styled from "styled-components";
 import InfoBar from "../components/StoryPageInfo";
 import Carousel from "../components/Carousel";
 import MagnifiedImage from "../components/MagnifiedImage";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: flex;
@@ -49,8 +49,15 @@ const GalleryWrapper = styled.div`
   margin-top: 2em;
 `;
 
-const StoryDetails = ({ story }) => {
+const StoryDetails = ({ story : propStory }) => {
+  const location = useLocation()
+  
+  const story = location.state || propStory  
   const [magnifiedImage, setMagnifiedImage] = React.useState(null);
+
+  if (!story) {
+    return <p>No story details available.</p>;
+  }
 
   const handleImageClick = (image) => {
     setMagnifiedImage(image);
