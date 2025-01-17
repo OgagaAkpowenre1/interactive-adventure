@@ -44,3 +44,9 @@ curl -X DELETE http://localhost:5000/api/stories/delete \
 -d '{
   
 }'
+
+curl -X PUT http://localhost:5000/api/stories/678a76f5efef7c64f803bd8d/edit \
+-H "Content-Type: application/json" \
+-d '{
+  "synopsis": "changing the story"
+}'
