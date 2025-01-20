@@ -119,5 +119,14 @@ const deleteStory = async (req, res) => {
     }
 }
 
+const fetchStories = async (req, res) => {
+    try {
+        return res.json({"hello":"stories"})
+    } catch (error) {
+        console.error("Error creating story", error)
+        res.status(500).json({error : "An error occurred while fetching the stories"})
+    }
+}
+
 module.exports = {createStory, deleteStory, editStory}
  

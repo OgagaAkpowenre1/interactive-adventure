@@ -1,6 +1,17 @@
 const Scene = require("../models/scenes")
 const Story = require("../models/stories")
 const {default: mongoose} = require("mongoose")
+const multer = require("multer");
+const cloudinary = require("../cloudinary");
+const { v4: uuidv4 } = require("uuid");
+
+// Configure multer storage (for temporary file handling)
+const storage = multer.memoryStorage(); // Store in memory for easy upload to Cloudinary
+const upload = multer({ storage }).single("image"); // Handle single file upload, field name "image"
+
+const uploadImage = require("./uploadImage")
+
+
 
 const createScene = async (req, res) => {
     try {
@@ -8,7 +19,8 @@ const createScene = async (req, res) => {
         console.log("Request received:", req.body);
 
         const { storyId }= req.params
-        const { sceneTitle, sceneContent, options, image, isEnd = false } = req.body;
+
+        const { sceneTitle, sceneContent, options, isEnd = false } = req.body;
 
         console.log(storyId)
         console.log(sceneTitle, sceneContent, options, image)
@@ -48,12 +60,30 @@ const createScene = async (req, res) => {
             }
         }
 
+        upload(req, res, async (err) => {
+            if(err){
+                return res.status(400).json({message: "Error uploading image"})
+            }
+
+            let imageUrl = null
+
+            if(req.file){
+                try {
+                    imageUrl = await uploadImage(req.file)
+                    console.log("Image uploaded successfully", imageUrl)
+                } catch (error) {
+                    return res.status(500).json({ message: uploadError });
+                }
+            }
+        })
+
+
         const newScene = new Scene ({
             storyId,
             sceneTitle,
             sceneContent,
             options, 
-            image,
+            image : imageUrl,
             isEnd 
         })
 

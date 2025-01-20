@@ -21,16 +21,12 @@ const Wrapper = styled.div`
   }
 `;
 
-const Synopsis = () => {
+const Synopsis = ({story}) => {
   return (
     <Wrapper>
-      <h4>Title</h4>
+      <h4>{story.title}</h4>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Autem culpa
-        rerum magni voluptatem, molestiae excepturi earum! Sapiente nesciunt ad
-        tempore fugit veritatis vero quas eos et quod, iusto minus laudantium
-        corporis, beatae expedita laboriosam? Sunt iure sed sit illum
-        voluptatibus?
+        {story.synopsis}
       </p>
     </Wrapper>
   );

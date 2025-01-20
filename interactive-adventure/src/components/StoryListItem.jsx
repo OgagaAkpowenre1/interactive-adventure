@@ -54,13 +54,13 @@ const TextDetails = styled.div`
   }
 `;
 
-const StoryListItem = () => {
+const StoryListItem = ({story}) => {
   return (
     <Wrapper>
       <img src="https://wallpapercave.com/wp/wp7135795.jpg" alt="" />
       <TextDetails>
-        <Synopsis />
-        <InfoBar />
+        <Synopsis story={story} />
+        <InfoBar story={story} />
       </TextDetails>
     </Wrapper>
   );

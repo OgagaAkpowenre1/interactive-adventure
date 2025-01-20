@@ -1,10 +1,11 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import StoryListItem from "../components/StoryListItem";
 import SearchFilter from "../components/SearchFilter";
 import NewStoryForm from "../components/NewStoryForm";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import axiosInstance from "../api";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -91,6 +92,29 @@ const itemVariants = {
 
 const StoryList = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [stories, setStories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Fetch stories when component mounts
+    const fetchStories = async () => {
+      try {
+        const response = await axiosInstance.get('/stories');  // Assuming your API endpoint is /stories
+        setStories(response.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStories();
+  }, []);
+
+  // Handle loading and error states
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <>
@@ -106,7 +130,7 @@ const StoryList = () => {
           initial="hidden"
           animate="visible"
         >
-          {[...Array(9)].map((_, index) => (
+          {[...Array(9)].map((story, index) => (
             <motion.div
               key={index}
               variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
