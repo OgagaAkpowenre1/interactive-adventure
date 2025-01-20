@@ -1,6 +1,6 @@
 const Story = require("../models/stories")
 const { default: mongoose } = require("mongoose");
-
+   
 //Create a new story
 const createStory = async (req, res) => {
     try {
@@ -120,4 +120,4 @@ const deleteStory = async (req, res) => {
 }
 
 module.exports = {createStory, deleteStory, editStory}
-
+ 

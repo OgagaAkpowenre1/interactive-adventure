@@ -1,0 +1,8 @@
+{
+    "sceneTitle": "The End",
+    "sceneContent": "The story is Over",
+    "options": [{"text":"The End"}],
+    "image": "y",
+    "isEnd": true
+  }
+  

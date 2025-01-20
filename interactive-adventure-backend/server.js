@@ -11,11 +11,14 @@ app.use(cors());
 app.use(express.json());
 
 const storyRoutes = require('./routes/storyRoutes');
+const sceneRoutes = require('./routes/sceneRoutes')
 
 const PORT = process.env.PORT || 5000;
 
 // Routes
 app.use('/api/stories', storyRoutes)
+
+app.use('/api/scenes', sceneRoutes)
 
 app.get('/api/test', (req, res) => { 
     res.json("I work")

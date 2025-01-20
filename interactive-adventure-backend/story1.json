@@ -39,7 +39,19 @@ Invoke-RestMethod -Method POST -Uri http://localhost:5000/api/stories/675ff30226
   "gallery": ["https://example.com/gallery1.jpg", "https://example.com/gallery2.jpg"]
 }'
 
-curl -X DELETE http://localhost:5000/api/stories/delete \
+curl -X POST http://localhost:5000/api/stories/create \
+-H "Content-Type: application/json" \
+-d '{
+  "title": "The Same But Different",
+  "synopsis": "This is an epic story of courage and discovery.",
+  "cover": "https://example.com/cover.jpg",
+  "genres": ["fantasy", "adventure"],
+  "readingTime": "15 mins",
+  "rating": 5,
+  "gallery": ["https://example.com/gallery1.jpg", "https://example.com/gallery2.jpg"]
+}'
+
+curl -X DELETE http://localhost:5000/api/stories/678e06b3fc71c43adcf1e58c/delete \
 -H "Content-Type: application/json" \
 -d '{
   
@@ -50,3 +62,86 @@ curl -X PUT http://localhost:5000/api/stories/678a76f5efef7c64f803bd8d/edit \
 -d '{
   "synopsis": "changing the story"
 }'
+
+curl -X POST http://localhost:5000/api/scenes/678a76f5efef7c64f803bd8d/createScene \ 
+-H "Content-Type: application/json" \ 
+-d ' { 
+  "sceneTitle":"The beginning",
+  "sceneContent": "Our story begins",
+   "options":[{"text":"Go on", "nextScene": ""}],
+   "image":"x"
+} '
+
+curl -X POST http://localhost:5000/api/scenes/678a76f5efef7c64f803bd8d/createScene \
+-H "Content-Type: application/json" \
+-d '{
+  "sceneTitle": "The beginning",
+  "sceneContent": "Our story begins",
+  "options": [{"text": "Go on"}],
+  "image": "x"
+}'
+
+
+curl -X PUT http://localhost:5000/api/scenes/678a76f5efef7c64f803bd8d/678e2691b032516cc221e29a/edit \
+-H "Content-Type: application/json" \
+-d '{
+  "sceneTitle": "The middle",
+  "sceneContent": "The story reaches it's climax",
+  "options": [{"title": "End it"}],
+  "image": "y"
+}' \
+
+
+curl -X PUT "http://localhost:5000/api/scenes/678a76f5efef7c64f803bd8d/678e2691b032516cc221e29a/edit" \
+-H "Content-Type: application/json" \
+-d '{
+  "sceneTitle": "The middle",
+  "sceneContent": "The story reaches its climax",
+  "options": [{"text": "End it", "nextScene": "The End"}],
+  "image": "y"
+}'
+
+
+curl -X POST http://localhost:5000/api/scenes/678e3a91bed4549d5d955e6e/createScene \
+-H "Content-Type: application/json" \
+-d '{
+  "sceneTitle": "The beginning",
+  "sceneContent": "Our story begins",
+  "options": [{"text": "Go on"}],
+  "image": "x"
+}'
+
+##update for new story
+curl -X PUT "http://localhost:5000/api/scenes/678e3a91bed4549d5d955e6e/678e3b5abed4549d5d955e82/edit" \
+-H "Content-Type: application/json" \
+-d '{
+  "sceneTitle": "The End",
+  "sceneContent": "It's over",
+  "options": [],
+  "image": "y",
+  "isEnd": true
+}'
+
+curl -X PUT "http://localhost:5000/api/scenes/678e3a91bed4549d5d955e6e/678e3b5abed4549d5d955e82/edit" \
+-H "Content-Type: application/json" \
+-d '{
+  "sceneTitle": "The End",
+  "sceneContent": "It's over",
+  "options": [],
+  "image": "y"
+}'
+
+
+
+curl -X PUT "http://localhost:5000/api/scenes/678e3a91bed4549d5d955e6e/678e3fcb524b78fbd4a075cd/edit" \
+-H "Content-Type: application/json" \
+-d @data.json
+678e3a91bed4549d5d955e6e
+
+
+curl -X DELETE "http://localhost:5000/api/scenes/678e3a91bed4549d5d955e6e/678e3fcb524b78fbd4a075cd/delete" \
+-H "Content-Type: application/json" \
+-d ''
+
+
+678a76f5efef7c64f803bd8d
