@@ -131,13 +131,13 @@ const StoryList = () => {
           initial="hidden"
           animate="visible"
         >
-          {[...Array(9)].map((story, index) => (
+          {stories.map((story, index) => (
             <motion.div
               key={index}
               variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
             >
               <Link to={`/story/${index + 1}`}>
-                <StoryListItem />
+                <StoryListItem story={story} />
               </Link>
             </motion.div>
           ))}
