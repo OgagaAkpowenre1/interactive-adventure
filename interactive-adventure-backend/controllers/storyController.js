@@ -121,12 +121,22 @@ const deleteStory = async (req, res) => {
 
 const fetchStories = async (req, res) => {
     try {
-        return res.json({"hello":"stories"})
+        return res.status(200).json({"hello":"stories"})
     } catch (error) {
         console.error("Error creating story", error)
         res.status(500).json({error : "An error occurred while fetching the stories"})
     }
-}
+} 
 
-module.exports = {createStory, deleteStory, editStory}
+// const fetchStories = async (req, res) => {
+//     try {
+//         const stories = await Story.find(); // Fetch all stories
+//         res.status(200).json(stories); // Send the stories as a JSON response
+//     } catch (error) {
+//         console.error('Error fetching stories:', error);
+//         res.status(500).json({ error: 'An error occurred while fetching stories' });
+//     }
+// };
+
+module.exports = {createStory, deleteStory, editStory, fetchStories}
  

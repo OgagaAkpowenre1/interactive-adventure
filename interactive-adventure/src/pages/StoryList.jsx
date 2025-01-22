@@ -95,12 +95,13 @@ const StoryList = () => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+ 
   useEffect(() => {
     // Fetch stories when component mounts
     const fetchStories = async () => {
       try {
         const response = await axiosInstance.get('/stories');  // Assuming your API endpoint is /stories
+        console.log(response.data)
         setStories(response.data);
       } catch (err) {
         setError(err.message);

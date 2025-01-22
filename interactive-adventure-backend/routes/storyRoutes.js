@@ -3,7 +3,7 @@ const {createStory, deleteStory, editStory, fetchStories} = require("../controll
 
 const router = express.Router()
 
-// router.get("/", fetchStories)
+router.get("/", fetchStories)
 router.post("/create", createStory)
 router.delete("/:storyId/delete", deleteStory)
 router.put("/:storyId/edit", editStory)
