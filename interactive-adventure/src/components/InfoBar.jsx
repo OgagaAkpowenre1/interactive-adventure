@@ -64,7 +64,7 @@ const Genre = ({genre}) => {
   )
 }
 
-const InfoBar = ({readingTime, ratings, genres}) => {
+const InfoBar = ({story}) => {
   return (
     <Wrapper>
       <Ratings>
@@ -79,11 +79,11 @@ const InfoBar = ({readingTime, ratings, genres}) => {
       </Ratings>
       <ReadingTime>
         <i className="fa-solid fa-clock"></i>
-        <p>{readingTime}</p>
+        <p>{story.readingTime}</p>
       </ReadingTime>
       <GenreList>
         <ul>
-          <li>
+          {/* <li>
             <button>
               <a href="#">Horror</a>
             </button>
@@ -97,10 +97,10 @@ const InfoBar = ({readingTime, ratings, genres}) => {
             <button>
               <a href="#">Suspense</a>
             </button>
-          </li>
-          {/* {genres.map((genre, index) => (
+          </li> */}
+          {story.genres.map((genre, index) => (
             <Genre key={index} genre={genre} />
-          ))} */}
+          ))}
         </ul>
       </GenreList>
     </Wrapper>
