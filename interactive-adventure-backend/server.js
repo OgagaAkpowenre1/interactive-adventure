@@ -13,14 +13,23 @@ if (!MONGO_URI) {
 
 
 const app = express(); 
-// app.use(cors());
+const allowedOrigins = [
+    'https://5173-idx-interactive-adventure-1737094341845.cluster-rcyheetymngt4qx5fpswua3ry4.cloudworkstations.dev', // Your frontend
+    'https://interactive-adventure-production.up.railway.app', // Your Railway domain (if making backend-to-backend calls)
+];
 
-// Or, restrict CORS to specific origins:
 app.use(cors({
-    origin: 'https://5173-idx-interactive-adventure-1737094341845.cluster-rcyheetymngt4qx5fpswua3ry4.cloudworkstations.dev/',
-         // replace with the origin of your frontend (React app),
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or Postman)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
-  }));
+}));
 
 app.use(express.json());
 
