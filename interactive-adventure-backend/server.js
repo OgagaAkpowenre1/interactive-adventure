@@ -12,7 +12,7 @@ if (!MONGO_URI) {
 }
 
 
-const app = express();
+const app = express(); 
 // app.use(cors());
 
 // Or, restrict CORS to specific origins:
