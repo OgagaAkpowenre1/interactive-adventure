@@ -81,6 +81,14 @@ const StoryDetails = ({ story : propStory }) => {
     }
   }
 
+  const readStory = async (story) => {
+    try {
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       {magnifiedImage && (
@@ -107,6 +115,8 @@ const StoryDetails = ({ story : propStory }) => {
           />
           <Link to={"/editor"}><button>Edit Scenes</button></Link>
           <button onClick={() => {deleteStory(story)}}>Delete Story</button>
+          <button>Edit</button>
+          <button>Read</button>
         </Content>
       </Wrapper>
       <GalleryWrapper>

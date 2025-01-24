@@ -251,8 +251,63 @@ const deleteScene = async (req, res) => {
     }
 };
 
+const fetchInitialScenesForReader = async (req, res) => {
+    const { storyId } = req.params;
+  
+    try {
+      const scenes = await Scene.find(
+        { storyId, isPlaceholder: false },
+        { sceneTitle: 1, _id: 1, options: 1 }
+      )
+        .limit(3) // Fetch the first 3 scenes
+        .sort({ createdAt: 1 });
+  
+      res.status(200).json(scenes);
+    } catch (error) {
+      console.error("Error fetching scenes for reader:", error);
+      res.status(500).json({ message: "Failed to fetch scenes for reader." });
+    }
+  };
+
+  
+  const fetchScenesForEditor = async (req, res) => {
+    const { storyId } = req.params;
+  
+    try {
+      const scenes = await Scene.find(
+        { storyId },
+        { sceneTitle: 1, _id: 1, options: 1 } // Include minimal fields
+      ).sort({ createdAt: 1 });
+  
+      res.status(200).json(scenes);
+    } catch (error) {
+      console.error("Error fetching scenes for editor:", error);
+      res.status(500).json({ message: "Failed to fetch scenes for editor." });
+    }
+  };
+
+  
+  const fetchSceneById = async (req, res) => {
+    const { storyId, sceneId } = req.params;
+  
+    try {
+      const scene = await Scene.findOne(
+        { _id: sceneId, storyId },
+        { sceneTitle: 1, sceneContent: 1, options: 1 }
+      );
+  
+      if (!scene) {
+        return res.status(404).json({ message: "Scene not found" });
+      }
+  
+      res.status(200).json(scene);
+    } catch (error) {
+      console.error("Error fetching scene:", error);
+      res.status(500).json({ message: "Failed to fetch scene" });
+    }
+  };
+  
 
 
 
-
-module.exports = { createScene, editScene, deleteScene }
+module.exports = { createScene, editScene, deleteScene, fetchInitialScenesForReader, fetchScenesForEditor, fetchSceneById }
