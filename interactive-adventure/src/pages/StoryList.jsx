@@ -6,6 +6,7 @@ import NewStoryForm from "../components/NewStoryForm";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import axiosInstance from "../api";
+import { useStoryContext } from "../contexts/storyContext";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -95,7 +96,7 @@ const StoryList = () => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
- 
+  const {setSelectedStory} = useStoryContext()
   useEffect(() => {
     // Fetch stories when component mounts
     const fetchStories = async () => {
@@ -136,7 +137,10 @@ const StoryList = () => {
               key={index}
               variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
             >
-              <Link to={`/story/${index + 1}`}>
+              <Link 
+              key={index} 
+              to={`/story/${story._id}`} 
+              onClick={() => {setSelectedStory(story)}}>
                 <StoryListItem story={story} />
               </Link>
             </motion.div>

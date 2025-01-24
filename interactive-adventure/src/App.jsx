@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext.jsx";
+import { StoryProvider } from "./contexts/storyContext.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import GlobalStyles from "./styles/GlobalStyles.jsx";
 import Layout from "./components/Layout.jsx";
@@ -58,6 +59,7 @@ const AppWrapper = () => {
           <Navbar />
           <ErrorBoundary>
             <Suspense fallback={<div>Loading page...</div>}>
+            <StoryProvider>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/editor/:storyId/:sceneId" element={<StoryEditor />} />
@@ -65,7 +67,8 @@ const AppWrapper = () => {
                 <Route path="/reader/:storyId/:sceneId" element={<SceneReader />} />
                 <Route path="story/:storyId" element={<StoryDetails story={testStory} />} />
               </Routes>
-            </Suspense>
+              </StoryProvider>
+            </Suspense> 
           </ErrorBoundary>
         </Layout>
         

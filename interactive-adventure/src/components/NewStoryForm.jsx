@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../api";
 
 
 const Overlay = styled.div`
@@ -116,6 +117,7 @@ const CloseButton = styled.button`
 const NewStoryForm = ({ visible, toggleVisibility }) => {
   const [genres, setGenres] = useState([]);
   const [genreInput, setGenreInput] = useState("");
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const addGenre = () => {
@@ -129,11 +131,26 @@ const NewStoryForm = ({ visible, toggleVisibility }) => {
     setGenres(genres.filter((genre) => genre !== genreToRemove));
   };
 
+  const createStory = async (storyData) => {
+    setLoading(true)
+    try {
+      const response = await axiosInstance.post('/stories/create', storyData)
+      console.log(response.data)
+      setLoading(false)
+
+      const createdStory = response.data
+      navigate(`/story/${createdStory._id}`, {state : createdStory})
+    } catch (error) {
+      console.log(error.response)
+      setLoading(false)
+    }
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = {
-        mainImage: e.target.cover.files[0]?.name || "",
+        cover: e.target.cover.files[0]?.name || "",
         title: e.target.title.value,
         synopsis: e.target.synopsis.value,
         genres: genres,
@@ -142,14 +159,24 @@ const NewStoryForm = ({ visible, toggleVisibility }) => {
         gallery: [], // Extend as needed
     };
 
-    console.log("Form Data:", formData);
-    toggleVisibility()
+    // console.log("Form Data:", formData);
+    console.log("creating story")
+    createStory(formData)
+    // toggleVisibility()
     navigate('/story/:id', {state: formData})
 
     e.target.reset();
     setGenres([]);
     toggleVisibility();
   };
+
+  if(loading){
+    return (<>
+      <Overlay visible={true} />
+      <p>Loading....</p>
+      </>
+    )
+  }
 
   return (
     <>

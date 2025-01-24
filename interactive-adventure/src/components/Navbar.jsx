@@ -43,15 +43,15 @@ const Navbar = () => {
       <LinkList>
         <li>
           <StyledLink to={"/"}>Home</StyledLink>
-        </li>
+        </li> 
         <li>
-          <StyledLink to={"/editor"}>Story Editor</StyledLink>
+          <StyledLink to={"/editor/:storyId/:sceneId"}>Story Editor</StyledLink>
         </li>
         <li>
           <StyledLink to={"/stories"}>Story List</StyledLink>
         </li>
         <li>
-          <StyledLink to={"/reader/:sceneId"}>Scene Reader</StyledLink>
+          <StyledLink to={"/reader/:storyId/:sceneId"}>Scene Reader</StyledLink>
         </li>
       </LinkList>
     </NavWrapper>

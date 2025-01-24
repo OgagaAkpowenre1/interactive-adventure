@@ -4,6 +4,7 @@ import InfoBar from "../components/StoryPageInfo";
 import Carousel from "../components/Carousel";
 import MagnifiedImage from "../components/MagnifiedImage";
 import { Link, useLocation } from "react-router-dom";
+import { useStoryContext } from "../contexts/storyContext";
 
 const Wrapper = styled.div`
   display: flex;
@@ -51,13 +52,17 @@ const GalleryWrapper = styled.div`
 
 const StoryDetails = ({ story : propStory }) => {
   const location = useLocation()
+  const {selectedStory, setSelectedStory} = useStoryContext()
   
-  const story = location.state || propStory  
+  
+  const story = location.state || selectedStory  
   const [magnifiedImage, setMagnifiedImage] = React.useState(null);
 
   if (!story) {
     return <p>No story details available.</p>;
   }
+
+  // console.log(selectedStory)
 
   const handleImageClick = (image) => {
     setMagnifiedImage(image);
@@ -78,9 +83,9 @@ const StoryDetails = ({ story : propStory }) => {
       <Wrapper>
         <ImageContainer>
           <img
-            src={story.mainImage}
+            src={story.cover}
             alt={story.title}
-            onClick={() => handleImageClick(story.mainImage)}
+            onClick={() => handleImageClick(story.cover)}
           />
         </ImageContainer>
         <Content>

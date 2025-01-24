@@ -80,7 +80,7 @@ const InfoBar = ({story}) => {
       <ReadingTime>
         <i className="fa-solid fa-clock"></i>
         <p>{story.readingTime}</p>
-      </ReadingTime>
+      </ReadingTime> 
       <GenreList>
         <ul>
           {/* <li>
