@@ -3,8 +3,9 @@ import styled from "styled-components";
 import InfoBar from "../components/StoryPageInfo";
 import Carousel from "../components/Carousel";
 import MagnifiedImage from "../components/MagnifiedImage";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useStoryContext } from "../contexts/storyContext";
+import axiosInstance from "../api";
 
 const Wrapper = styled.div`
   display: flex;
@@ -53,16 +54,13 @@ const GalleryWrapper = styled.div`
 const StoryDetails = ({ story : propStory }) => {
   const location = useLocation()
   const {selectedStory, setSelectedStory} = useStoryContext()
-  
-  
+  const navigate = useNavigate()
   const story = location.state || selectedStory  
   const [magnifiedImage, setMagnifiedImage] = React.useState(null);
 
   if (!story) {
     return <p>No story details available.</p>;
   }
-
-  // console.log(selectedStory)
 
   const handleImageClick = (image) => {
     setMagnifiedImage(image);
@@ -71,6 +69,17 @@ const StoryDetails = ({ story : propStory }) => {
   const handleCloseMagnified = () => {
     setMagnifiedImage(null);
   };
+
+  const deleteStory = async (story) => {
+    try {
+      console.log(story._id)
+      const response = await axiosInstance.delete(`/stories/${story._id}/delete`, story._id)
+      console.log(response)
+      navigate('/stories')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -97,6 +106,7 @@ const StoryDetails = ({ story : propStory }) => {
             rating={story.rating}
           />
           <Link to={"/editor"}><button>Edit Scenes</button></Link>
+          <button onClick={() => {deleteStory(story)}}>Delete Story</button>
         </Content>
       </Wrapper>
       <GalleryWrapper>
