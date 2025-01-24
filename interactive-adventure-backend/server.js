@@ -18,6 +18,12 @@ const allowedOrigins = [
     'https://interactive-adventure-production.up.railway.app', // Your Railway domain (if making backend-to-backend calls)
 ];
 
+app.use((req, res, next) => {
+    console.log('Request origin:', req.headers.origin);
+    next();
+});
+
+
 app.use(cors({
     origin: (origin, callback) => {
         // Allow requests with no origin (like mobile apps or Postman)
@@ -27,7 +33,7 @@ app.use(cors({
         } else {
             callback(new Error('Not allowed by CORS'));
         }
-    },
+    }, 
     credentials: true
 }));
 
