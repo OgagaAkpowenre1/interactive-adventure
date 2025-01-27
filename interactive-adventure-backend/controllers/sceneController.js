@@ -254,6 +254,12 @@ const deleteScene = async (req, res) => {
 const fetchInitialScenesForReader = async (req, res) => {
     const { storyId } = req.params;
     console.log("Fetching scenes for storyId:", storyId);
+
+
+    if (!mongoose.Types.ObjectId.isValid(storyId)) {
+      return res.status(400).json({ message: "Invalid story ID format" });
+    }
+
     try {
       const scenes = await Scene.find(
         { storyId, isPlaceholder: false },
@@ -271,21 +277,26 @@ const fetchInitialScenesForReader = async (req, res) => {
   };
 
   
-  const fetchScenesForEditor = async (req, res) => {
+const fetchScenesForEditor = async (req, res) => {
     const { storyId } = req.params;
-  
-    try {
-      const scenes = await Scene.find(
-        { storyId },
-        { sceneTitle: 1, _id: 1, options: 1 } // Include minimal fields
-      ).sort({ createdAt: 1 });
-  
-      res.status(200).json(scenes);
-    } catch (error) {
-      console.error("Error fetching scenes for editor:", error);
-      res.status(500).json({ message: "Failed to fetch scenes for editor." });
+
+    // Validate storyId format
+    if (!mongoose.Types.ObjectId.isValid(storyId)) {
+        return res.status(400).json({ message: "Invalid story ID format" });
     }
-  };
+    console.log("Story ID from params:", storyId);
+    try {
+        const scenes = await Scene.find(
+            { storyId },
+            { sceneTitle: 1, _id: 1, options: 1 } // Include minimal fields
+        ).sort({ createdAt: 1 });
+
+        res.status(200).json(scenes);
+    } catch (error) {
+        console.error("Error fetching scenes for editor:", error);
+        res.status(500).json({ message: "Failed to fetch scenes for editor." });
+    }
+};
 
   
   const fetchSceneById = async (req, res) => {

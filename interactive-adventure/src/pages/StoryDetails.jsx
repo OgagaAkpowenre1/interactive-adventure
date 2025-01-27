@@ -71,6 +71,16 @@ const StoryDetails = ({ story : propStory }) => {
     }
   }
 
+  const goToEditor = async () => {
+    try {
+      // navigate(`/editor/${story._id}`)
+      const response = await axiosInstance.get(`/scenes/edit/${story._id}`);
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   React.useEffect(() => {
     
   }, [])
@@ -136,7 +146,7 @@ const StoryDetails = ({ story : propStory }) => {
           />
           <Link to={"/editor"}><button>Edit Scenes</button></Link>
           <button onClick={() => {deleteStory(story)}}>Delete Story</button>
-          <button>Edit</button>
+          <button onClick={() => goToEditor()}>Edit</button>
           <button onClick={() => fetchScenes()}>Read</button>
         </Content>
       </Wrapper>

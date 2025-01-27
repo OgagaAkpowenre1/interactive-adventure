@@ -16,7 +16,7 @@ router.put("/:storyId/:sceneId/edit", editScene)
 router.delete("/:storyId/:sceneId/delete", deleteScene)
 router.get("/:storyId/read", fetchInitialScenesForReader)
 router.get("/:storyId/:sceneId", fetchSceneById)
-router.get("/:storyId/edit", fetchScenesForEditor)
+router.get("/edit/:storyId", fetchScenesForEditor)
 
 console.log("story controller loaded")
 
