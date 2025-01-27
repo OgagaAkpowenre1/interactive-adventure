@@ -3,6 +3,9 @@ import styled from "styled-components";
 import RightHalf from "../components/EditorRightHalf";
 import LeftHalf from "../components/EditorLeftHalf";
 import EditorHeader from "../components/EditorHeader";
+import { useNavigate } from "react-router-dom";
+import { useStoryContext } from "../contexts/storyContext";
+
 
 const Wrapper = styled.div`
   // display: flex;
@@ -45,11 +48,13 @@ const RightHalfWrapper = styled.div`
 
 const StoryEditor = () => {
   const [sceneID, setSceneID] = useState("")
+  const {selectedStory, setSelectedStory, scenes, setScenes} = useStoryContext()
+  const story = selectedStory
 
   return (
     <>
     <Wrapper>
-      <EditorHeader storyTitle={"My story"} storyId={"12345"} />
+      <EditorHeader storyTitle={story.title} storyId={story._id} />
       <Editor>
         <LeftHalfWrapper>
           <LeftHalf />

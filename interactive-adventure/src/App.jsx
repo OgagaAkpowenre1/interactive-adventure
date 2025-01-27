@@ -62,7 +62,7 @@ const AppWrapper = () => {
             <StoryProvider>
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/editor/:storyId/:sceneId" element={<StoryEditor />} />
+                <Route path="/editor/:storyId" element={<StoryEditor />} />
                 <Route path="/stories" element={<StoryList />} />
                 <Route path="/reader/:storyId/:sceneId" element={<SceneReader />} />
                 <Route path="story/:storyId" element={<StoryDetails story={testStory} />} />

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import InfoBar from "../components/StoryPageInfo";
 import Carousel from "../components/Carousel";
@@ -53,7 +53,7 @@ const GalleryWrapper = styled.div`
 
 const StoryDetails = ({ story : propStory }) => {
   const location = useLocation()
-  const {selectedStory, setSelectedStory} = useStoryContext()
+  const {selectedStory, setSelectedStory, scenes, setScenes} = useStoryContext()
   const navigate = useNavigate()
   const story = location.state || selectedStory  
   const [magnifiedImage, setMagnifiedImage] = React.useState(null);
@@ -76,15 +76,21 @@ const StoryDetails = ({ story : propStory }) => {
       // navigate(`/editor/${story._id}`)
       console.log(story._id)
       const response = await axiosInstance.get(`/scenes/edit/${story._id}`);
-      console.log(response.data)
+      // console.log(response.data)
+      setScenes(response.data)
+      // console.log(scenes)
+      navigate(`/editor/${story._id}`)
     } catch (error) {
       console.log(error)
     }
   }
 
-  React.useEffect(() => {
-    
-  }, [])
+  useEffect(() => {
+    // Check if scenes is loaded, then navigate
+    if (scenes.length > 0) {
+      navigate(`/editor/${story._id}`);
+    }
+  }, [scenes, navigate]); 
 
   if (!story) {
     return <p>No story details available.</p>;

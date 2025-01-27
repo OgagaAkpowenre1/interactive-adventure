@@ -5,6 +5,7 @@ const StoryContext = createContext();
 export const StoryProvider = ({ children }) => {
   const [selectedStory, setSelectedStory] = useState(null);
   const [selectedScene, setSelectedScene] = useState(null);
+  const [scenes, setScenes] = useState([])
 
   return (
     <StoryContext.Provider
@@ -13,6 +14,8 @@ export const StoryProvider = ({ children }) => {
         setSelectedStory,
         selectedScene,
         setSelectedScene,
+        scenes,
+        setScenes
       }}
     >
       {children}

@@ -52,11 +52,15 @@ const Scene = styled.button`
 `;
 
 const SceneList = ({ scenes }) => {
+  if (!scenes || scenes.length === 0) {
+    return <p>No scenes available.</p>;
+  }
+
   return (
     <Wrapper>
       <p>Number of scenes: {scenes.length}</p>
       {scenes.map((scene, index) => (
-        <Scene key={index} backgroundImg={scene.previewImage}>
+        <Scene key={index} backgroundImg={scene.image || "https://wallpapercave.com/wp/wp7135795.jpg"}>
           {/* You can add an overlay or other content if needed */}
         </Scene>
       ))}

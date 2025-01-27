@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import SceneList from "./SceneList";
 import EditorButtons from "./EditorButtons";
+import { useStoryContext } from "../contexts/storyContext";
 
 const Wrapper = styled.div`
 //   position: fixed;
@@ -17,16 +18,21 @@ const Wrapper = styled.div`
 `;
 
 const RightHalf = () => {
+  const {scenes, setScenes} = useStoryContext()
+  console.log(scenes)
+
+  const safeScenes = Array.isArray(scenes) ? scenes : [];
+
+  // Check if scenes is an empty array
+  if (!scenes || scenes.length === 0) {
+    return <p>No scenes available.</p>;
+  }
+
   return (
     <Wrapper>
       <h3>Select Scenes</h3>
       <SceneList
-        scenes={[
-          { previewImage: "https://wallpapercave.com/wp/wp7135795.jpg" },
-          { previewImage: "https://wallpapercave.com/wp/wp7135795.jpg" },
-          { previewImage: "https://wallpapercave.com/wp/wp7135795.jpg" },
-          { previewImage: "https://wallpapercave.com/wp/wp7135795.jpg" },
-        ]}
+        scenes={scenes}
       />
       <EditorButtons />
     </Wrapper>
