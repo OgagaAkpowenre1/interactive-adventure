@@ -261,12 +261,22 @@ const fetchInitialScenesForReader = async (req, res) => {
     }
 
     try {
+      console.log("looking for scenes")
       const scenes = await Scene.find(
-        { storyId, isPlaceholder: false },
+        { storyId },
         { sceneTitle: 1, _id: 1, options: 1 }
       )
         .limit(3) // Fetch the first 3 scenes
-        .sort({ createdAt: 1 });
+        .sort({ createdAt: 1 })
+        // .limit(3)
+
+        // const scenes = await Scene.find(
+        //   { storyId },
+        //   { sceneTitle: 1, _id: 1, options: 1 }
+        // );
+        // console.log("Filtering scenes")
+        // scenes.find({storyId, isPlaceholder: false})
+        // scenes.sort({createdAt: 1})
   
         console.log("Fetched scenes:", scenes);
       res.status(200).json(scenes);
