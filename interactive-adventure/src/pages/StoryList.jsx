@@ -102,7 +102,7 @@ const StoryList = () => {
     const fetchStories = async () => {
       try {
         const response = await axiosInstance.get('/stories');  // Assuming your API endpoint is /stories
-        console.log(response.data)
+        // console.log(response.data)
         setStories(response.data);
       } catch (err) {
         setError(err.message);

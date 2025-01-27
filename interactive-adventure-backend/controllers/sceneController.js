@@ -253,7 +253,7 @@ const deleteScene = async (req, res) => {
 
 const fetchInitialScenesForReader = async (req, res) => {
     const { storyId } = req.params;
-  
+    console.log("Fetching scenes for storyId:", storyId);
     try {
       const scenes = await Scene.find(
         { storyId, isPlaceholder: false },
@@ -262,6 +262,7 @@ const fetchInitialScenesForReader = async (req, res) => {
         .limit(3) // Fetch the first 3 scenes
         .sort({ createdAt: 1 });
   
+        console.log("Fetched scenes:", scenes);
       res.status(200).json(scenes);
     } catch (error) {
       console.error("Error fetching scenes for reader:", error);
@@ -317,9 +318,10 @@ const fetchInitialScenesForReader = async (req, res) => {
     }
   };
 
-  const getNextScenes = async (storyId, currentSceneId) => {
+  const getNextScenes = async (req, res) => {
     try {
       // Find the current scene and its options
+      const {storyId, currentSceneId} = req.params
       const currentScene = await Scene.findById(currentSceneId).populate("options.nextScene");
   
       // Fetch the next 3 scenes for each option (path)
@@ -337,8 +339,9 @@ const fetchInitialScenesForReader = async (req, res) => {
     }
   };
 
-  const getSceneById = async (sceneId) => {
+  const getSceneById = async (req, res) => {
     try {
+      const {sceneId} = req.params;
       const scene = await Scene.findById(sceneId).populate("options.nextScene");
       return scene;
     } catch (error) {
@@ -348,10 +351,15 @@ const fetchInitialScenesForReader = async (req, res) => {
   };
   
   
-  const setStartScene = async (storyId, sceneId) => {
-    // Ensure that only one scene can be marked as start
+  const setStartScene = async (req, res) => {
+    try {
+      // Ensure that only one scene can be marked as start
+    const {storyId, sceneId} = req.params
     await Scene.updateMany({ storyId }, { $set: { isStart: false } });
     await Scene.findByIdAndUpdate(sceneId, { isStart: true });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to set start scene" });
+    }
   };
   
   
@@ -361,4 +369,4 @@ const startReader = async (req, res) => {
 }
 
 
-module.exports = { createScene, editScene, deleteScene, fetchInitialScenesForReader, fetchScenesForEditor, fetchSceneById }
+module.exports = { createScene, editScene, deleteScene, fetchInitialScenesForReader, fetchScenesForEditor, fetchSceneById, setStartScene, getNextScenes }

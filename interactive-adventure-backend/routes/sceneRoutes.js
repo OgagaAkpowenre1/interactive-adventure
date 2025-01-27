@@ -5,7 +5,9 @@ const {
     deleteScene, 
     fetchInitialScenesForReader, 
     fetchSceneById, 
-    fetchScenesForEditor
+    fetchScenesForEditor,
+    getNextScenes,
+    setStartScene,
 } = require("../controllers/sceneController")
 const router = express.Router();
 

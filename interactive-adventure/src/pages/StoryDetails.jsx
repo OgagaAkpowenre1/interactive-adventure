@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import InfoBar from "../components/StoryPageInfo";
 import Carousel from "../components/Carousel";
@@ -57,9 +57,30 @@ const StoryDetails = ({ story : propStory }) => {
   const navigate = useNavigate()
   const story = location.state || selectedStory  
   const [magnifiedImage, setMagnifiedImage] = React.useState(null);
+  const [loading, setLoading] = useState(false)
+
+  const fetchScenes = async () => {
+    try {
+      setLoading(true)
+      const response = await axiosInstance.get(`/scenes/${story._id}/read`);
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  React.useEffect(() => {
+    
+  }, [])
 
   if (!story) {
     return <p>No story details available.</p>;
+  }
+
+  if(loading) {
+    return <p>Loading...</p>
   }
 
   const handleImageClick = (image) => {
@@ -116,7 +137,7 @@ const StoryDetails = ({ story : propStory }) => {
           <Link to={"/editor"}><button>Edit Scenes</button></Link>
           <button onClick={() => {deleteStory(story)}}>Delete Story</button>
           <button>Edit</button>
-          <button>Read</button>
+          <button onClick={() => fetchScenes()}>Read</button>
         </Content>
       </Wrapper>
       <GalleryWrapper>
