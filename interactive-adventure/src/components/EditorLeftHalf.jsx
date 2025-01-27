@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useStoryContext } from "../contexts/storyContext";
 
 const Wrapper = styled.div`
   display: flex;
@@ -112,8 +113,10 @@ const SceneButtonsWrapper = styled.div`
 const LeftHalf = () => {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [formVisible, setFormVisible] = useState(false);
-  const [formData, setFormData] = useState({ text: "", sceneId: "" });
+  const [formData, setFormData] = useState({ text: "", sceneTitle: "" });
   const [generatedButtons, setGeneratedButtons] = useState([]);
+  const { addGeneratedScene,  sceneData } = useStoryContext(); // Access context function to add scenes
+
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -121,6 +124,7 @@ const LeftHalf = () => {
       const imageUrl = URL.createObjectURL(file);
       setUploadedImage(imageUrl);
     }
+    sceneData.image = ""
   };
 
   const handleFormToggle = () => {
@@ -138,10 +142,11 @@ const LeftHalf = () => {
     // Generate a new button with the input text
     setGeneratedButtons((prevButtons) => [
       ...prevButtons,
-      { text: formData.text, sceneId: formData.sceneId },
+      { text: formData.text, sceneTitle: formData.sceneTitle },
     ]);
-
-    setFormData({ text: "", sceneId: "" });
+    sceneData.options.push(formData)
+    setFormData({ sceneContent: "", sceneTitle: "" });
+    
     setFormVisible(false);
   };
 
@@ -151,7 +156,7 @@ const LeftHalf = () => {
         {uploadedImage ? <img src={uploadedImage} alt="Uploaded preview" /> : <p>Click to upload an image</p>}
         <input type="file" accept="image/*" onChange={handleImageUpload} />
       </ImageUpload>
-      <TextInput placeholder="Tell your story" />
+      <TextInput placeholder="Tell your story" onChange={(e) => {sceneData.sceneContent = e.target.value}} />
       
 
       {formVisible && (
@@ -167,13 +172,13 @@ const LeftHalf = () => {
             />
           </label>
           <label>
-            Scene ID:
+            Scene Title:
             <input
               type="text"
-              name="sceneId"
-              value={formData.sceneId}
+              name="sceneTitle"
+              value={formData.sceneTitle}
               onChange={handleFormChange}
-              placeholder="Enter scene ID"
+              placeholder="Enter scene Title"
             />
           </label>
           <button onClick={handleFormSubmit}>Save</button>
@@ -183,7 +188,7 @@ const LeftHalf = () => {
       <SceneButtonsWrapper>
       {generatedButtons.map((button, index) => (
         <GeneratedButton key={index}>
-          {button.text} - Scene ID: {button.sceneId}
+          {button.text} - Scene Title: {button.sceneTitle}
         </GeneratedButton>
         
       ))}

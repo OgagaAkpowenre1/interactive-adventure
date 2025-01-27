@@ -45,7 +45,7 @@ const Navbar = () => {
           <StyledLink to={"/"}>Home</StyledLink>
         </li> 
         <li>
-          <StyledLink to={"/editor/:storyId/:sceneId"}>Story Editor</StyledLink>
+          <StyledLink to={"/editor/:storyId"}>Story Editor</StyledLink>
         </li>
         <li>
           <StyledLink to={"/stories"}>Story List</StyledLink>

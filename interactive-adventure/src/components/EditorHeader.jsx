@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useStoryContext } from "../contexts/storyContext";
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -54,14 +55,17 @@ const SceneIdWrapper = styled.div`
 const EditorHeader = ({ storyTitle, storyId }) => {
   const [sceneId, setSceneId] = useState(""); // Store the scene ID
   const [isEditing, setIsEditing] = useState(false); // Toggle between display and edit mode
+  const {sceneData} = useStoryContext()
 
   const handleBlur = () => {
     setIsEditing(false); // Exit edit mode on blur
+    sceneData.sceneTitle = sceneId
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       setIsEditing(false); // Exit edit mode on Enter
+      sceneData.sceneTitle = sceneId
     }
   };
 

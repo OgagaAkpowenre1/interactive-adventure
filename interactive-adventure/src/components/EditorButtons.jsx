@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useStoryContext } from "../contexts/storyContext";
+import axiosInstance from "../api";
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -111,6 +113,7 @@ const ModalContent = styled.div`
 
 const EditorButtons = () => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const {sceneData, selectedStory} = useStoryContext()
 
   const handleDeleteClick = () => {
     setModalOpen(true);
@@ -125,11 +128,20 @@ const EditorButtons = () => {
     console.log("Deleted!");
   };
 
+  const submitScene =  async (sceneData) => {
+    try {
+      const response = await axiosInstance.post(`/scenes/${selectedStory._id}/createScene`, sceneData)
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       <ButtonWrapper>
         <ActionButtons>
-          <button className="save">Save</button>
+          <button className="save" onClick={() => submitScene(sceneData)}>Save</button>
           <button className="delete" onClick={handleDeleteClick}>
             Delete
           </button>

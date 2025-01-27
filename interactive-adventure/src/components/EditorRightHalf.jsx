@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 `;
 
 const RightHalf = () => {
-  const {scenes, setScenes} = useStoryContext()
+  const {scenes, setScenes, sceneData} = useStoryContext()
   console.log(scenes)
 
   const safeScenes = Array.isArray(scenes) ? scenes : [];
