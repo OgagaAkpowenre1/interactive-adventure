@@ -306,8 +306,59 @@ const fetchInitialScenesForReader = async (req, res) => {
       res.status(500).json({ message: "Failed to fetch scene" });
     }
   };
-  
 
+  const getStartScene = async (storyId) => {
+    try {
+      const startScene = await Scene.findOne({ storyId, isStart: true });
+      return startScene;
+    } catch (error) {
+      console.error("Error fetching start scene:", error);
+      return null;
+    }
+  };
+
+  const getNextScenes = async (storyId, currentSceneId) => {
+    try {
+      // Find the current scene and its options
+      const currentScene = await Scene.findById(currentSceneId).populate("options.nextScene");
+  
+      // Fetch the next 3 scenes for each option (path)
+      let nextScenes = [];
+      for (const option of currentScene.options) {
+        const nextSceneId = option.nextScene;
+        const nextScene = await Scene.findById(nextSceneId).populate("options.nextScene").limit(3);
+        nextScenes.push(nextScene);
+      }
+  
+      return nextScenes;
+    } catch (error) {
+      console.error("Error fetching next scenes:", error);
+      return null;
+    }
+  };
+
+  const getSceneById = async (sceneId) => {
+    try {
+      const scene = await Scene.findById(sceneId).populate("options.nextScene");
+      return scene;
+    } catch (error) {
+      console.error("Error fetching scene:", error);
+      return null;
+    }
+  };
+  
+  
+  const setStartScene = async (storyId, sceneId) => {
+    // Ensure that only one scene can be marked as start
+    await Scene.updateMany({ storyId }, { $set: { isStart: false } });
+    await Scene.findByIdAndUpdate(sceneId, { isStart: true });
+  };
+  
+  
+const startReader = async (req, res) => {
+    const {storyId} = req.params
+    
+}
 
 
 module.exports = { createScene, editScene, deleteScene, fetchInitialScenesForReader, fetchScenesForEditor, fetchSceneById }
