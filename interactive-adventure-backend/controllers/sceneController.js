@@ -112,6 +112,8 @@ const editScene = async (req, res) => {
             return res.status(404).json({ message: "Story not found" });
         }
 
+        console.log("Story found!")
+
         if (!mongoose.Types.ObjectId.isValid(sceneId)) {
             console.log("Invalid scene ID format", sceneId);
             return res.status(400).json({ message: "Invalid scene ID format" });
@@ -168,12 +170,12 @@ const editScene = async (req, res) => {
                         }
                     }
                 }
-                
+                 
                 // Save the updated scene with the new options
                 scene.options = options;
                  // Make sure to update the scene's options with modified nextScene
-                
-            }
+                  
+            }  
             scene.options = options; // Ensure options are updated
         }
 
