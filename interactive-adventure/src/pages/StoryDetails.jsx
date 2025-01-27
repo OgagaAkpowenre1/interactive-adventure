@@ -74,6 +74,7 @@ const StoryDetails = ({ story : propStory }) => {
   const goToEditor = async () => {
     try {
       // navigate(`/editor/${story._id}`)
+      console.log(story._id)
       const response = await axiosInstance.get(`/scenes/edit/${story._id}`);
       console.log(response.data)
     } catch (error) {
