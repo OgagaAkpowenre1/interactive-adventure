@@ -143,5 +143,9 @@ curl -X DELETE "http://localhost:5000/api/scenes/678e3a91bed4549d5d955e6e/678e3f
 -H "Content-Type: application/json" \
 -d ''
 
+curl -X GET "http://localhost:5000/api/scenes/edit/678e3a91bed4549d5d955e6e/" \
+-H "Content-Type: application/json" \
+-d ''
+
 
 678a76f5efef7c64f803bd8d
