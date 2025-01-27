@@ -278,8 +278,9 @@ const fetchInitialScenesForReader = async (req, res) => {
 
   
 const fetchScenesForEditor = async (req, res) => {
+    console.log("hi")
     const { storyId } = req.params;
-  console.log(storyId, 'what was fetched')
+    console.log(storyId, 'what was fetched')
     // Validate storyId format
     if (!mongoose.Types.ObjectId.isValid(storyId)) {
         return res.status(400).json({ message: "Invalid story ID format" });
