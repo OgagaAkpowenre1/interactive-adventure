@@ -280,4 +280,90 @@
 //   }
 
 
+// const createScene = async (req, res) => {
+//     try {
+
+//         console.log("Request received:", req.body);
+
+//         const { storyId }= req.params
+//         console.log('Request body:', req.body)
+//         console.log('Request file:', req.file)
+//         const { sceneTitle, sceneContent, options, isEnd = false } = req.body;
+        
+
+//         console.log(storyId)
+//         console.log(sceneTitle, sceneContent, options)
+
+//         if(!mongoose.Types.ObjectId.isValid(storyId)){
+//             console.log("Invalid story ID format", storyId)
+//             return res.status(400).json({ message: "Invalid story ID format" });
+//         }
+
+//         const story = await Story.findById(storyId)
+//         if (!story) {
+//             console.log("Story not found", storyId);
+//             return res.status(404).json({ message: "Story not found" });
+//         }
+
+//         if(options && options.length > 0){
+            
+//             for(let i = 0; i < options.length; i++){
+//                 const option = options[i]
+//                 console.log(option)
+//                 if(option.text && !mongoose.Types.ObjectId.isValid(option.nextScene)){
+//                     console.log("Passed the condition")
+//                     const placeholderScene = new Scene ({
+//                         storyId, 
+//                         sceneTitle : option.text,
+//                         sceneContent: "",
+//                         options : [],
+//                         image : "",
+//                         isPlaceholder: true
+//                     })
+
+//                     await placeholderScene.save()
+//                     console.log("Placeholder scene created", placeholderScene._id)
+//                     option.nextScene = placeholderScene._id
+                    
+//                 }
+//             }
+//         }
+
+//         // upload(req, res, async (err) => {
+//         //     if(err){
+//         //         return res.status(400).json({message: "Error uploading image"})
+//         //     }
+//         //   })
+//             let imageUrl = null
+
+//             if(req.file){
+//                 try {
+//                     imageUrl = await upload(req.file)
+//                     console.log("Image uploaded successfully", imageUrl)
+//                 } catch (error) {
+//                     return res.status(500).json({ message: uploadError });
+//                 }
+//             }
+        
+
+
+//         const newScene = new Scene ({
+//             storyId,
+//             sceneTitle,
+//             sceneContent,
+//             options: JSON.parse(options), 
+//             image : imageUrl,
+//             isEnd 
+//         })
+
+//         await newScene.save()
+//         console.log("Scene created")
+//         return res.status(201).json(newScene)
+//     } catch (error) {
+//         console.error("Error creating scene:", error);
+//         return res.status(500).json({ message: "Internal server error" });
+//     }
+// }
+
+
 //   module.exports = { addScene, modifyScene, deleteScene, findScene };

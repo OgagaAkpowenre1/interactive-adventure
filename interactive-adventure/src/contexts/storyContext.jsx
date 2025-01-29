@@ -14,6 +14,20 @@ export const StoryProvider = ({ children }) => {
     setGeneratedScenes((prevScenes) => [...prevScenes, newScene]);
   };
 
+  const fetchAllScenes = async () => {
+    try {
+      // navigate(`/editor/${story._id}`)
+      // console.log(story._id)
+      const response = await axiosInstance.get(`/scenes/edit/${selectedStory._id}`);
+      // console.log(response.data)
+      setScenes(response.data)
+      // console.log(scenes)
+      // navigate(`/editor/${story._id}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <StoryContext.Provider
       value={{
@@ -27,7 +41,8 @@ export const StoryProvider = ({ children }) => {
         setGeneratedScenes,
         addGeneratedScene,
         sceneData,
-        setSceneData
+        setSceneData,
+        fetchAllScenes
       }}
     >
       {children}

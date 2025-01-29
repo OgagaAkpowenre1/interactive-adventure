@@ -121,7 +121,7 @@ const ModalContent = styled.div`
 
 const EditorButtons = ({formData}) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const {sceneData, selectedStory, selectedScene} = useStoryContext()
+  const {sceneData, selectedStory, selectedScene, setSelectedScene, fetchAllScenes} = useStoryContext()
 
   const handleDeleteClick = () => {
     setModalOpen(true);
@@ -153,6 +153,7 @@ const EditorButtons = ({formData}) => {
       });
 
       console.log("Scene created:", response.data);
+      fetchAllScenes()
     } catch (error) {
       console.error("Error submitting scene:", error);
     }
@@ -171,6 +172,8 @@ const EditorButtons = ({formData}) => {
 
       const response = await axiosInstance.put(`/scenes/${selectedStory._id}/${selectedScene._id}/edit`, updatedData)
       console.log("scene updated", response.data)
+      setSelectedScene(response.data)
+      fetchAllScenes()
     } catch (error) {
       console.error("Error updating scene", error)
     }
