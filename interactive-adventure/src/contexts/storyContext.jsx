@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-
+import axiosInstance from '../api';
 const StoryContext = createContext();
 
 export const StoryProvider = ({ children }) => {
