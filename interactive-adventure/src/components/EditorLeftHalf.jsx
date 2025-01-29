@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useStoryContext } from "../contexts/storyContext";
 
@@ -204,6 +204,17 @@ const LeftHalf = ({ formData, setFormData }) => {
   const [formVisible, setFormVisible] = useState(false);
   const [optionData, setOptionData] = useState({ text: "", sceneTitle: "" });
 
+    // When scene changes, update the displayed image
+    useEffect(() => {
+      if (formData.imageFile instanceof File) {
+        // Show preview if a new image was uploaded
+        setUploadedImage(URL.createObjectURL(formData.imageFile));
+      } else {
+        // Otherwise, show the scene's existing image
+        setUploadedImage(formData.imageFile || null);
+      }
+    }, [formData.imageFile, formData.image]);
+
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -247,7 +258,7 @@ const LeftHalf = ({ formData, setFormData }) => {
       <TextInput
         name="sceneContent"
         placeholder="Tell your story"
-        value={formData.sceneContent}
+        value={formData.sceneContent || ""}
         onChange={(e) => setFormData({ ...formData, sceneContent: e.target.value })}
       />
 

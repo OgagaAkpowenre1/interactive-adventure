@@ -388,7 +388,7 @@ const fetchScenesForEditor = async (req, res) => {
   try {
       // Find all scenes for the specific story
       const scenes = await Scene.find({ storyId })
-          .select("sceneTitle _id options image isPlaceholder isEnd createdAt") // Select fields you need
+          .select("sceneTitle _id options image isPlaceholder isEnd createdAt sceneContent") // Select fields you need
           .sort({ createdAt: 1 }) // Sort by creation date
           .populate({
               path: "options.nextScene", // Populate `nextScene` field in `options`

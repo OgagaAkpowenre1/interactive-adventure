@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const RightHalf = ({formData}) => {
+const RightHalf = ({formData, setFormData}) => {
   const {scenes, setScenes, sceneData} = useStoryContext()
   // console.log(scenes)
 
@@ -32,7 +32,7 @@ const RightHalf = ({formData}) => {
     <Wrapper>
       <h3>Select Scenes</h3>
       { scenes.length === 0 ? <p>No scenes available.</p> :<SceneList
-        scenes={scenes}
+        scenes={scenes} setFormData={setFormData}
       />}
       <EditorButtons formData={formData} />
     </Wrapper>

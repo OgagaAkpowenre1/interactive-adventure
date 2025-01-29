@@ -41,6 +41,14 @@ const ActionButtons = styled.div`
         background-color: #d32f2f;
       }
     }
+
+    &.update {
+      background-color: rebeccapurple;
+
+      &:hover {
+        background-color: #d32f2f;
+      }
+    }
   }
 `;
 
@@ -149,6 +157,7 @@ const EditorButtons = ({formData}) => {
       console.error("Error submitting scene:", error);
     }
   };
+
 
 
   return (

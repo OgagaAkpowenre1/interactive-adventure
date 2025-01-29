@@ -51,21 +51,46 @@ const Scene = styled.button`
   }
 `;
 
-const SceneList = ({ scenes }) => {
+const SceneList = ({ scenes, setFormData  }) => {
   if (!scenes || scenes.length === 0) {
     return <p>No scenes available.</p>;
   }
   console.log(scenes)
 
+  const handleSceneSelect = (sceneID) => {
+    // setSceneID(sceneID);
+    
+    // Find the selected scene from context data
+    const selectedScene = scenes.find(scene => scene._id === sceneID);
+    console.log(selectedScene)
+    if (selectedScene) {
+      setFormData({
+        sceneTitle: selectedScene.sceneTitle,
+        sceneContent: selectedScene.sceneContent,
+        options: selectedScene.options || [],
+        imageFile: selectedScene.image || null, // Reset image file, since it's already stored as a URL
+      });
+    }
+  };
+
+  const handlePlusClick = () => {
+    setFormData({
+      sceneTitle: "",
+      sceneContent: "",
+      options: [],
+      imageFile: null,
+    });
+  };
+
   return (
     <Wrapper>
       <p>Number of scenes: {scenes.length}</p>
       {scenes.map((scene, index) => (
-        <Scene key={index} backgroundImg={scene.image || "https://wallpapercave.com/wp/wp7135795.jpg"}>
+        <Scene key={index} backgroundImg={scene.image || "https://wallpapercave.com/wp/wp7135795.jpg"} onClick={() => handleSceneSelect(scene._id)} >
           {/* You can add an overlay or other content if needed */}
         </Scene>
       ))}
-      <Scene>
+      <Scene onClick={() => handlePlusClick()}>
         <i className="fa-solid fa-plus"></i>
       </Scene>
     </Wrapper>
