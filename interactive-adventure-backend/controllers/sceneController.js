@@ -187,13 +187,17 @@ const createScene = async (req, res) => {
 
 const editScene = async (req, res) => {
     try {
+        console.log("Request recieved", req.body)
         const { storyId, sceneId } = req.params;
+        console.log(sceneId)
         const { sceneTitle, sceneContent, options, image, isEnd = false } = req.body; // Default for isEnd
 
         if (!mongoose.Types.ObjectId.isValid(storyId)) {
             console.log("Invalid story ID format", storyId);
             return res.status(400).json({ message: "Invalid story ID format" });
         }
+
+        console.log(req.body)
 
         const story = await Story.findById(storyId);
         if (!story) {
@@ -226,60 +230,67 @@ const editScene = async (req, res) => {
           return res.status(400).json({ message: `A scene with the title "${sceneTitle}" already exists in this story.` });
       }
 
+      console.log("Duplicate scene check:", duplicateScene); // Add this log to debug
+
 
         // Create placeholder scenes if needed
         if (!isEnd && options && options.length > 0) {
-            for (let i = 0; i < options.length; i++) {
-                const option = options[i];
-                if (option.text) {
-                    const nextSceneTitle = option.nextSceneTitle;
-                
-                    if (!nextSceneTitle) {
-                        // If no nextSceneTitle is provided, create a placeholder
-                        const placeholderScene = new Scene({
-                            storyId,
-                            sceneTitle: option.text, // Use the option text as the title
-                            sceneContent: "",
-                            options: [],
-                            image: "",
-                            isPlaceholder: true // Mark as placeholder
-                        });
-                
-                        await placeholderScene.save();
-                        console.log("Placeholder scene created:", placeholderScene._id);
-                
-                        option.nextSceneTitle = placeholderScene.sceneTitle; // Update the option to link to the placeholder scene title
-                        option.nextScene = placeholderScene._id; // Optionally, also store the ObjectId
-                    } else {
-                        // Check if the scene with the title exists in this story
-                        const existingScene = await Scene.findOne({ storyId, sceneTitle: nextSceneTitle });
-                        
-                        if (!existingScene) {
-                            // If no scene exists with the given title, create a placeholder
-                            const placeholderScene = new Scene({
-                                storyId,
-                                sceneTitle: nextSceneTitle,
-                                sceneContent: "",
-                                options: [],
-                                image: "",
-                                isPlaceholder: true
-                            });
-                
-                            await placeholderScene.save();
-                            console.log("Placeholder scene created:", placeholderScene._id);
-                            option.nextSceneTitle = placeholderScene.sceneTitle; // Update option
-                            option.nextScene = placeholderScene._id; // Optionally, update with the ObjectId
-                        }
-                    }
-                }
-                 
-                // Save the updated scene with the new options
-                scene.options = options;
-                 // Make sure to update the scene's options with modified nextScene
+          for (let i = 0; i < options.length; i++) {
+              const option = options[i];
+              if (option.text) {
+                  const nextSceneTitle = option.nextSceneTitle;
                   
-            }  
-            scene.options = options; // Ensure options are updated
-        }
+                  if (!nextSceneTitle) {
+                      // If no nextSceneTitle is provided, create a placeholder
+                      const placeholderScene = await Scene.findOne({
+                          storyId,
+                          sceneTitle: option.text,
+                          isPlaceholder: true
+                      });
+                      
+                      if (!placeholderScene) {
+                          const newPlaceholder = new Scene({
+                              storyId,
+                              sceneTitle: option.text,
+                              sceneContent: "",
+                              options: [],
+                              image: "",
+                              isPlaceholder: true
+                          });
+                          await newPlaceholder.save();
+                          option.nextSceneTitle = newPlaceholder.sceneTitle; // Update the option with the new placeholder title
+                          option.nextScene = newPlaceholder._id; // Optionally, store the ObjectId
+                      } else {
+                          option.nextSceneTitle = placeholderScene.sceneTitle;
+                          option.nextScene = placeholderScene._id;
+                      }
+                  } else {
+                      // Check if a scene with the nextSceneTitle exists in this story
+                      const existingScene = await Scene.findOne({
+                          storyId,
+                          sceneTitle: nextSceneTitle
+                      });
+                      
+                      if (!existingScene) {
+                          const placeholderScene = new Scene({
+                              storyId,
+                              sceneTitle: nextSceneTitle,
+                              sceneContent: "",
+                              options: [],
+                              image: "",
+                              isPlaceholder: true
+                          });
+      
+                          await placeholderScene.save();
+                          option.nextSceneTitle = placeholderScene.sceneTitle;
+                          option.nextScene = placeholderScene._id;
+                      }
+                  }
+              }
+          }
+          scene.options = options; // Ensure options are updated
+      }
+      
 
         // Update the scene
         const updatedScene = await Scene.findByIdAndUpdate(
