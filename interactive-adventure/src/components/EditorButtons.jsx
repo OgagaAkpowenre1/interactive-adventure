@@ -128,14 +128,36 @@ const EditorButtons = () => {
     console.log("Deleted!");
   };
 
-  const submitScene =  async (sceneData) => {
+  // const submitScene =  async (sceneData) => {
+  //   try {
+  //     const response = await axiosInstance.post(`/scenes/${selectedStory._id}/createScene`, sceneData)
+  //     console.log(response.data)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
+  const submitScene = async () => {
     try {
-      const response = await axiosInstance.post(`/scenes/${selectedStory._id}/createScene`, sceneData)
-      console.log(response.data)
+      const sceneFormData = new FormData();
+      sceneFormData.append("sceneTitle", formData.sceneTitle);
+      sceneFormData.append("sceneContent", formData.sceneContent);
+      sceneFormData.append("options", JSON.stringify(formData.options));
+
+      if (formData.imageFile) {
+        sceneFormData.append("image", formData.imageFile);
+      }
+
+      const response = await axiosInstance.post(`/scenes/${selectedStory._id}/createScene`, sceneFormData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      console.log("Scene created:", response.data);
     } catch (error) {
-      console.log(error)
+      console.error("Error submitting scene:", error);
     }
-  }
+  };
+
 
   return (
     <>

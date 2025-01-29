@@ -17,11 +17,11 @@ const Wrapper = styled.div`
   }
 `;
 
-const RightHalf = () => {
+const RightHalf = ({formData}) => {
   const {scenes, setScenes, sceneData} = useStoryContext()
   console.log(scenes)
 
-  const safeScenes = Array.isArray(scenes) ? scenes : [];
+  // const safeScenes = Array.isArray(scenes) ? scenes : [];
 
   // Check if scenes is an empty array
   if (!scenes || scenes.length === 0) {
