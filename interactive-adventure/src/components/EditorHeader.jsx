@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useStoryContext } from "../contexts/storyContext";
@@ -56,6 +56,12 @@ const EditorHeader = ({ storyTitle, storyId, formData, setFormData }) => {
   const [sceneId, setSceneId] = useState(""); // Store the scene ID
   const [isEditing, setIsEditing] = useState(false); // Toggle between display and edit mode
   const {sceneData} = useStoryContext()
+
+  useEffect(() => {
+    if(formData.sceneTitle){
+      setSceneId(formData.sceneTitle)
+    } 
+  }, [formData.sceneTitle])
 
   const handleBlur = () => {
     setIsEditing(false); // Exit edit mode on blur

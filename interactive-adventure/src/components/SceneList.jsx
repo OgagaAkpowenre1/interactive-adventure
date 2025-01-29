@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useStoryContext } from "../contexts/storyContext";
 
 const Wrapper = styled.div`
   overflow-y: auto;
@@ -52,16 +53,16 @@ const Scene = styled.button`
 `;
 
 const SceneList = ({ scenes, setFormData  }) => {
+  const {setSelectedScene, selectedScene} = useStoryContext()
   if (!scenes || scenes.length === 0) {
     return <p>No scenes available.</p>;
   }
-  console.log(scenes)
 
   const handleSceneSelect = (sceneID) => {
     // setSceneID(sceneID);
     
     // Find the selected scene from context data
-    const selectedScene = scenes.find(scene => scene._id === sceneID);
+    setSelectedScene(scenes.find(scene => scene._id === sceneID));
     console.log(selectedScene)
     if (selectedScene) {
       setFormData({

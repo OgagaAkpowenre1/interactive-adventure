@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import RightHalf from "../components/EditorRightHalf";
 import LeftHalf from "../components/EditorLeftHalf";
@@ -47,8 +47,7 @@ const RightHalfWrapper = styled.div`
 `;
 
 const StoryEditor = () => {
-  const [sceneID, setSceneID] = useState("")
-  const {selectedStory, setSelectedStory, scenes, setScenes} = useStoryContext()
+  const {selectedStory, setSelectedStory, scenes, setScenes, selectedScene, setSelectedScene} = useStoryContext()
   const story = selectedStory
   const [formData, setFormData] = useState({
     sceneTitle: scenes[0].sceneTitle || "",
@@ -56,8 +55,19 @@ const StoryEditor = () => {
     options: scenes[0].options || [],
     imageFile: scenes[0].image || null,
   });
+  // setSelectedScene(scenes[0])
 
-  console.log(formData)
+  useEffect(() => {
+    if (selectedScene) {
+      setFormData({
+        sceneTitle: selectedScene.sceneTitle,
+        sceneContent: selectedScene.sceneContent,
+        options: selectedScene.options || [],
+        imageFile: selectedScene.image || null,
+      });
+    }
+  }, [selectedScene]);
+  
 
   return (
     <>

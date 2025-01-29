@@ -43,6 +43,29 @@ const createScene = async (req, res) => {
           }
       }
 
+      if(options && options.length > 0){
+                    for(let i = 0; i < options.length; i++){
+                        const option = options[i]
+                        console.log(option)
+                        if(option.text && !mongoose.Types.ObjectId.isValid(option.nextScene)){
+                            console.log("Passed the condition")
+                            const placeholderScene = new Scene ({
+                                storyId, 
+                                sceneTitle : option.text,
+                                sceneContent: "",
+                                options : [],
+                                image : "",
+                                isPlaceholder: true
+                            })
+        
+                            await placeholderScene.save()
+                            console.log("Placeholder scene created", placeholderScene._id)
+                            option.nextScene = placeholderScene._id
+                            
+                        }
+                    }
+                }
+
       // Upload image if present
       let imageUrl = null;
       if (req.file) {
@@ -190,6 +213,19 @@ const editScene = async (req, res) => {
             console.log("Scene not found", sceneId);
             return res.status(404).json({ message: "Scene not found" });
         }
+
+         // Check if another scene in the same story already has the new sceneTitle
+         const duplicateScene = await Scene.findOne({
+          storyId,
+          sceneTitle,
+          _id: { $ne: sceneId }, // Exclude the current scene being updated
+      });
+
+      if (duplicateScene) {
+          // Duplicate title found, prevent the update
+          return res.status(400).json({ message: `A scene with the title "${sceneTitle}" already exists in this story.` });
+      }
+
 
         // Create placeholder scenes if needed
         if (!isEnd && options && options.length > 0) {

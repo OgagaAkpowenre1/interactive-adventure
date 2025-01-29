@@ -121,7 +121,7 @@ const ModalContent = styled.div`
 
 const EditorButtons = ({formData}) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const {sceneData, selectedStory} = useStoryContext()
+  const {sceneData, selectedStory, selectedScene} = useStoryContext()
 
   const handleDeleteClick = () => {
     setModalOpen(true);
@@ -158,6 +158,24 @@ const EditorButtons = ({formData}) => {
     }
   };
 
+  const updateScene = async () => {
+    try {
+      console.log(selectedScene)
+
+      const updatedData = {
+        sceneTitle: formData.sceneTitle,
+        sceneContent: formData.sceneContent,
+        options: formData.options,
+        image: formData.imageFile,
+      };
+
+      const response = await axiosInstance.put(`/scenes/${selectedStory._id}/${selectedScene._id}/edit`, updatedData)
+      console.log("scene updated", response.data)
+    } catch (error) {
+      console.error("Error updating scene", error)
+    }
+  }
+
 
 
   return (
@@ -168,7 +186,7 @@ const EditorButtons = ({formData}) => {
           <button className="delete" onClick={handleDeleteClick}>
             Delete
           </button>
-          <button className="update" onClick={()=> console.log("Updated scene")}>Update</button>
+          <button className="update" onClick={()=> updateScene()}>Update</button>
         </ActionButtons>
         <PreviewButton>Preview</PreviewButton>
       </ButtonWrapper>
