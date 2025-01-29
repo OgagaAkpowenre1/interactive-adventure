@@ -34,9 +34,10 @@ const {
     getNextScenes,
     setStartScene,
 } = require("../controllers/sceneController");
-
+const multer = require("multer");
 const mongoose = require("mongoose");
 const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage() }).single("imageFile"); // Apply multer
 
 const validateObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
@@ -62,7 +63,7 @@ router.use((req, res, next) => {
 });
 
 // Route definitions
-router.post("/:storyId/createScene", createScene);
+router.post("/:storyId/createScene", upload, createScene);
 router.put("/:storyId/:sceneId/edit", editScene);
 router.delete("/:storyId/:sceneId/delete", deleteScene);
 router.get("/:storyId/read", fetchInitialScenesForReader);

@@ -6,98 +6,161 @@ const multer = require("multer");
 const cloudinary = require("../cloudinary");
 const { v4: uuidv4 } = require("uuid");
 
+
 // Configure multer storage (for temporary file handling)
 const storage = multer.memoryStorage(); // Store in memory for easy upload to Cloudinary
 const upload = multer({ storage }).single("imageFile"); // Handle single file upload, field name "image"
 
 const uploadImage = require("./uploadImage")
 
-
-
 const createScene = async (req, res) => {
-    try {
+  try {
+      console.log("Incoming request:", req.body);
+      console.log("Incoming file:", req.file);
 
-        console.log("Request received:", req.body);
+      const { storyId }= req.params;
+      const { sceneTitle, sceneContent, options, isEnd = false } = req.body;
+      
+      if (!sceneTitle || !sceneContent) {
+          return res.status(400).json({ message: "Scene title and content are required" });
+      }
 
-        const { storyId }= req.params
-        console.log('Request body:', req.body)
-        console.log('Request file:', req.file)
-        const { sceneTitle, sceneContent, options, isEnd = false } = req.body;
+      if (!mongoose.Types.ObjectId.isValid(storyId)) {
+          return res.status(400).json({ message: "Invalid story ID format" });
+      }
+
+      const story = await Story.findById(storyId);
+      if (!story) {
+          return res.status(404).json({ message: "Story not found" });
+      }
+
+      let parsedOptions = [];
+      if (options) {
+          try {
+              parsedOptions = JSON.parse(options); // ✅ Prevents crashing if options is undefined
+          } catch (error) {
+              return res.status(400).json({ message: "Invalid options format" });
+          }
+      }
+
+      // Upload image if present
+      let imageUrl = null;
+      if (req.file) {
+          try {
+              imageUrl = await uploadImage(req.file);
+              console.log("Image uploaded successfully:", imageUrl);
+          } catch (uploadError) {
+              return res.status(500).json({ message: "Error uploading image" });
+          }
+      }
+
+      // Create new scene
+      const newScene = new Scene({
+          storyId,
+          sceneTitle,
+          sceneContent,
+          options: parsedOptions,
+          image: imageUrl,
+          isEnd 
+      });
+
+      await newScene.save();
+      console.log("Scene created:", newScene._id);
+      return res.status(201).json(newScene);
+
+  } catch (error) {
+      console.error("Error creating scene:", error);
+      return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+
+// const createScene = async (req, res) => {
+//     try {
+
+//         console.log("Request received:", req.body);
+
+//         const { storyId }= req.params
+//         console.log('Request body:', req.body)
+//         console.log('Request file:', req.file)
+//         const { sceneTitle, sceneContent, options, isEnd = false } = req.body;
         
 
-        console.log(storyId)
-        console.log(sceneTitle, sceneContent, options)
+//         console.log(storyId)
+//         console.log(sceneTitle, sceneContent, options)
 
-        if(!mongoose.Types.ObjectId.isValid(storyId)){
-            console.log("Invalid story ID format", storyId)
-            return res.status(400).json({ message: "Invalid story ID format" });
-        }
+//         if(!mongoose.Types.ObjectId.isValid(storyId)){
+//             console.log("Invalid story ID format", storyId)
+//             return res.status(400).json({ message: "Invalid story ID format" });
+//         }
 
-        const story = await Story.findById(storyId)
-        if (!story) {
-            console.log("Story not found", storyId);
-            return res.status(404).json({ message: "Story not found" });
-        }
+//         const story = await Story.findById(storyId)
+//         if (!story) {
+//             console.log("Story not found", storyId);
+//             return res.status(404).json({ message: "Story not found" });
+//         }
 
-        if(options && options.length > 0){
+//         if(options && options.length > 0){
             
-            for(let i = 0; i < options.length; i++){
-                const option = options[i]
-                console.log(option)
-                if(option.text && !mongoose.Types.ObjectId.isValid(option.nextScene)){
-                    console.log("Passed the condition")
-                    const placeholderScene = new Scene ({
-                        storyId, 
-                        sceneTitle : option.text,
-                        sceneContent: "",
-                        options : [],
-                        image : "",
-                        isPlaceholder: true
-                    })
+//             for(let i = 0; i < options.length; i++){
+//                 const option = options[i]
+//                 console.log(option)
+//                 if(option.text && !mongoose.Types.ObjectId.isValid(option.nextScene)){
+//                     console.log("Passed the condition")
+//                     const placeholderScene = new Scene ({
+//                         storyId, 
+//                         sceneTitle : option.text,
+//                         sceneContent: "",
+//                         options : [],
+//                         image : "",
+//                         isPlaceholder: true
+//                     })
 
-                    await placeholderScene.save()
-                    console.log("Placeholder scene created", placeholderScene._id)
-                    option.nextScene = placeholderScene._id
+//                     await placeholderScene.save()
+//                     console.log("Placeholder scene created", placeholderScene._id)
+//                     option.nextScene = placeholderScene._id
                     
-                }
-            }
-        }
+//                 }
+//             }
+//         }
 
-        // upload(req, res, async (err) => {
-        //     if(err){
-        //         return res.status(400).json({message: "Error uploading image"})
-        //     }
-        //   })
-            let imageUrl = null
+//         // upload(req, res, async (err) => {
+//         //     if(err){
+//         //         return res.status(400).json({message: "Error uploading image"})
+//         //     }
+//         //   })
+//             let imageUrl = null
 
-            if(req.file){
-                try {
-                    imageUrl = await upload(req.file)
-                    console.log("Image uploaded successfully", imageUrl)
-                } catch (error) {
-                    return res.status(500).json({ message: uploadError });
-                }
-            }
+//             if(req.file){
+//                 try {
+//                     imageUrl = await upload(req.file)
+//                     console.log("Image uploaded successfully", imageUrl)
+//                 } catch (error) {
+//                     return res.status(500).json({ message: uploadError });
+//                 }
+//             }
         
 
 
-        const newScene = new Scene ({
-            storyId,
-            sceneTitle,
-            sceneContent,
-            options: JSON.parse(options), 
-            image : imageUrl,
-            isEnd 
-        })
+//         const newScene = new Scene ({
+//             storyId,
+//             sceneTitle,
+//             sceneContent,
+//             options: JSON.parse(options), 
+//             image : imageUrl,
+//             isEnd 
+//         })
 
-        await newScene.save()
-        console.log("Scene created")
-        return res.status(201).json(newScene)
-    } catch (error) {
-        console.error("Error creating scene:", error);
-        return res.status(500).json({ message: "Internal server error" });
-    }
-}
+//         await newScene.save()
+//         console.log("Scene created")
+//         return res.status(201).json(newScene)
+//     } catch (error) {
+//         console.error("Error creating scene:", error);
+//         return res.status(500).json({ message: "Internal server error" });
+//     }
+// }
 
 const editScene = async (req, res) => {
     try {

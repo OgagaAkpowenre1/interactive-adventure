@@ -151,5 +151,12 @@ curl -X GET "http://localhost:5000/api/scenes/678e3a91bed4549d5d955e6e/read" \
 -H "Content-Type: application/json" \
 -d ''
 
+curl -X POST http://localhost:5000/api/scenes/678a76f5efef7c64f803bd8d/createScene \
+  -F "sceneTitle=Test Scene" \
+  -F "sceneContent=This is a test content" \
+  -F "options=[{\"text\": \"Go left\", \"sceneTitle\": \"Left Path\"}]" \
+  -F "imageFile=@/home/user/interactive-adventure/interactive-adventure-backend/008 (2).png"
+
+
 
 678a76f5efef7c64f803bd8d

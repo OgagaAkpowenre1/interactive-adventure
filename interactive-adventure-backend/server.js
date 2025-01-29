@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const multer = require('multer');
 require('dotenv').config(); 
 
 
@@ -37,7 +38,8 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(express.json());
+app.use(express.json()); // For JSON body parsing
+app.use(express.urlencoded({ extended: true })); // For form data parsing
 
 const storyRoutes = require('./routes/storyRoutes');
 const sceneRoutes = require('./routes/sceneRoutes')
@@ -54,7 +56,7 @@ app.use('/api/stories', storyRoutes)
 //         res.status(500).json({error : "An error occurred while fetching the stories"})
 //     }
     
-// })
+// }) 
 app.use('/api/scenes', sceneRoutes)
 
 app.get('/api/test', (req, res) => { 
