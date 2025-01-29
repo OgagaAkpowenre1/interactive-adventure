@@ -128,15 +128,6 @@ const EditorButtons = ({formData}) => {
     console.log("Deleted!");
   };
 
-  // const submitScene =  async (sceneData) => {
-  //   try {
-  //     const response = await axiosInstance.post(`/scenes/${selectedStory._id}/createScene`, sceneData)
-  //     console.log(response.data)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
   const submitScene = async () => {
     try {
       console.log(formData)
@@ -146,7 +137,7 @@ const EditorButtons = ({formData}) => {
       sceneFormData.append("options", JSON.stringify(formData.options));
 
       if (formData.imageFile) {
-        sceneFormData.append("image", formData.imageFile);
+        sceneFormData.append("imageFile", formData.imageFile);
       }
 
       const response = await axiosInstance.post(`/scenes/${selectedStory._id}/createScene`, sceneFormData, {
@@ -168,6 +159,7 @@ const EditorButtons = ({formData}) => {
           <button className="delete" onClick={handleDeleteClick}>
             Delete
           </button>
+          <button className="update" onClick={()=> console.log("Updated scene")}>Update</button>
         </ActionButtons>
         <PreviewButton>Preview</PreviewButton>
       </ButtonWrapper>

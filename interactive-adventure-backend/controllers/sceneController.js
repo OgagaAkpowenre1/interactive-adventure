@@ -355,27 +355,54 @@ const fetchInitialScenesForReader = async (req, res) => {
   };
 
   
-const fetchScenesForEditor = async (req, res) => {
-    console.log("hi")
-    const { storyId } = req.params;
-    console.log(storyId, 'what was fetched')
-    // Validate storyId format
-    if (!mongoose.Types.ObjectId.isValid(storyId)) {
-        return res.status(400).json({ message: "Invalid story ID format" });
-    }
-    console.log("Story ID from params:", storyId);
-    try {
-        const scenes = await Scene.find(
-            { storyId },
-            { sceneTitle: 1, _id: 1, options: 1 } // Include minimal fields
-        ).sort({ createdAt: 1 });
+// const fetchScenesForEditor = async (req, res) => {
+//     console.log("hi")
+//     const { storyId } = req.params;
+//     console.log(storyId, 'what was fetched')
+//     // Validate storyId format
+//     if (!mongoose.Types.ObjectId.isValid(storyId)) {
+//         return res.status(400).json({ message: "Invalid story ID format" });
+//     }
+//     console.log("Story ID from params:", storyId);
+//     try {
+//         const scenes = await Scene.find(
+//             { storyId },
+//             { sceneTitle: 1, _id: 1, options: 1, image: 1, isPlaceholder: 1, isEnd: 1 } // Include minimal fields
+//         ).sort({ createdAt: 1 });
 
-        res.status(200).json(scenes);
-    } catch (error) {
-        console.error("Error fetching scenes for editor:", error);
-        res.status(500).json({ message: "Failed to fetch scenes for editor." });
-    }
+//         res.status(200).json(scenes);
+//     } catch (error) {
+//         console.error("Error fetching scenes for editor:", error);
+//         res.status(500).json({ message: "Failed to fetch scenes for editor." });
+//     }
+// };
+
+const fetchScenesForEditor = async (req, res) => {
+  const { storyId } = req.params;
+
+  // Validate storyId format
+  if (!mongoose.Types.ObjectId.isValid(storyId)) {
+      return res.status(400).json({ message: "Invalid story ID format" });
+  }
+
+  try {
+      // Find all scenes for the specific story
+      const scenes = await Scene.find({ storyId })
+          .select("sceneTitle _id options image isPlaceholder isEnd createdAt") // Select fields you need
+          .sort({ createdAt: 1 }) // Sort by creation date
+          .populate({
+              path: "options.nextScene", // Populate `nextScene` field in `options`
+              select: "sceneTitle _id" // Include only necessary fields for `nextScene`
+          });
+
+      // Send the scenes data as a response
+      res.status(200).json(scenes);
+  } catch (error) {
+      console.error("Error fetching scenes for editor:", error);
+      res.status(500).json({ message: "Failed to fetch scenes for editor." });
+  }
 };
+
 
   
   const fetchSceneById = async (req, res) => {

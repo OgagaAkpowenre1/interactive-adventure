@@ -55,6 +55,7 @@ const SceneList = ({ scenes }) => {
   if (!scenes || scenes.length === 0) {
     return <p>No scenes available.</p>;
   }
+  console.log(scenes)
 
   return (
     <Wrapper>
