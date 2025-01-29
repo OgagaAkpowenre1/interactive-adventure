@@ -111,7 +111,7 @@ const ModalContent = styled.div`
   }
 `;
 
-const EditorButtons = () => {
+const EditorButtons = ({formData}) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const {sceneData, selectedStory} = useStoryContext()
 

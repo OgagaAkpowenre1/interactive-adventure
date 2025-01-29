@@ -19,22 +19,22 @@ const Wrapper = styled.div`
 
 const RightHalf = ({formData}) => {
   const {scenes, setScenes, sceneData} = useStoryContext()
-  console.log(scenes)
+  // console.log(scenes)
 
   // const safeScenes = Array.isArray(scenes) ? scenes : [];
 
   // Check if scenes is an empty array
-  if (!scenes || scenes.length === 0) {
-    return <p>No scenes available.</p>;
-  }
+  // if (!scenes || scenes.length === 0) {
+  //   return <p>No scenes available.</p>;
+  // }
 
   return (
     <Wrapper>
       <h3>Select Scenes</h3>
-      <SceneList
+      { scenes.length === 0 ? <p>No scenes available.</p> :<SceneList
         scenes={scenes}
-      />
-      <EditorButtons />
+      />}
+      <EditorButtons formData={formData} />
     </Wrapper>
   );
 };

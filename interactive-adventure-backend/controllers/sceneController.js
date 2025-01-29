@@ -23,7 +23,7 @@ const createScene = async (req, res) => {
         const { sceneTitle, sceneContent, options, isEnd = false } = req.body;
 
         console.log(storyId)
-        console.log(sceneTitle, sceneContent, options, image)
+        console.log(sceneTitle, sceneContent, options)
 
         if(!mongoose.Types.ObjectId.isValid(storyId)){
             console.log("Invalid story ID format", storyId)
@@ -60,11 +60,11 @@ const createScene = async (req, res) => {
             }
         }
 
-        upload(req, res, async (err) => {
-            if(err){
-                return res.status(400).json({message: "Error uploading image"})
-            }
-
+        // upload(req, res, async (err) => {
+        //     if(err){
+        //         return res.status(400).json({message: "Error uploading image"})
+        //     }
+        //   })
             let imageUrl = null
 
             if(req.file){
@@ -75,7 +75,7 @@ const createScene = async (req, res) => {
                     return res.status(500).json({ message: uploadError });
                 }
             }
-        })
+        
 
 
         const newScene = new Scene ({
