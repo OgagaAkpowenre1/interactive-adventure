@@ -21,6 +21,7 @@ const createScene = async (req, res) => {
         const { storyId }= req.params
 
         const { sceneTitle, sceneContent, options, isEnd = false } = req.body;
+        console.log(req.body)
 
         console.log(storyId)
         console.log(sceneTitle, sceneContent, options)
