@@ -139,6 +139,7 @@ const EditorButtons = ({formData}) => {
 
   const submitScene = async () => {
     try {
+      console.log(formData)
       const sceneFormData = new FormData();
       sceneFormData.append("sceneTitle", formData.sceneTitle);
       sceneFormData.append("sceneContent", formData.sceneContent);

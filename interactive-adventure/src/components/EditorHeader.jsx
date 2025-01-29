@@ -52,20 +52,21 @@ const SceneIdWrapper = styled.div`
   }
 `;
 
-const EditorHeader = ({ storyTitle, storyId }) => {
+const EditorHeader = ({ storyTitle, storyId, formData, setFormData }) => {
   const [sceneId, setSceneId] = useState(""); // Store the scene ID
   const [isEditing, setIsEditing] = useState(false); // Toggle between display and edit mode
   const {sceneData} = useStoryContext()
 
   const handleBlur = () => {
     setIsEditing(false); // Exit edit mode on blur
-    sceneData.sceneTitle = sceneId
+    setFormData((prev) => ({ ...prev, sceneTitle: sceneId })); // ✅ Update state correctly
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       setIsEditing(false); // Exit edit mode on Enter
-      sceneData.sceneTitle = sceneId
+      // sceneData.sceneTitle = sceneId
+      setFormData((prev) => ({ ...prev, sceneTitle: sceneId })); // ✅ Update state correctly
     }
   };
 

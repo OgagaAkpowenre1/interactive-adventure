@@ -60,7 +60,7 @@ const StoryEditor = () => {
   return (
     <>
     <Wrapper>
-      <EditorHeader storyTitle={story.title} storyId={story._id} />
+      <EditorHeader storyTitle={story.title} storyId={story._id} formData={formData} setFormData={setFormData} />
       <Editor>
         <LeftHalfWrapper >
           <LeftHalf formData={formData} setFormData={setFormData} />
