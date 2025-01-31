@@ -190,15 +190,24 @@ const NewStoryForm = ({ visible, toggleVisibility, existingStory }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const storyData = {
-      title,
-      synopsis,
-      genres,
-      cover, // You might need to handle image upload separately if using Cloudinary
-      readingTime: existingStory?.readingTime || "30 mins",
-      rating: existingStory?.rating || 3,
-      gallery: existingStory?.gallery || [],
-    };
+    // const storyData = {
+    //   title,
+    //   synopsis,
+    //   genres,
+    //   cover, // You might need to handle image upload separately if using Cloudinary
+    //   readingTime: existingStory?.readingTime || "30 mins",
+    //   rating: existingStory?.rating || 3,
+    //   gallery: existingStory?.gallery || [],
+    // };
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('synopsis', synopsis);
+    formData.append('genres', JSON.stringify(genres)); // Convert genres array to string
+    formData.append('cover', cover); // Append the cover file
+    formData.append('readingTime', existingStory?.readingTime || "30 mins");
+    formData.append('rating', existingStory?.rating || 3);
+    formData.append('gallery', JSON.stringify(existingStory?.gallery || []));
 
     setLoading(true);
 
@@ -209,7 +218,11 @@ const NewStoryForm = ({ visible, toggleVisibility, existingStory }) => {
         console.log("Story updated:", response.data);
       } else {
         // Create new story
-        const response = await axiosInstance.post("/stories/create", storyData);
+        const response = await axiosInstance.post("/stories/create", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data', // Ensure correct headers for file upload
+          }
+        });
         console.log("Story created:", response.data);
         navigate(`/story/${response.data._id}`, { state: response.data });
       }

@@ -141,7 +141,9 @@ const editStory = async (req, res) => {
         }
 
         const { title, synopsis, genres, readingTime, rating, gallery } = req.body;
-        const { cover } = req.file;
+
+        console.log("Received file:", req.file);
+        
 
         const story = await Story.findById(storyId);
 
