@@ -134,7 +134,7 @@ const EditorButtons = ({formData}) => {
   const handleConfirmDelete = () => {
     setModalOpen(false);
     deleteScene()
-    console.log("Deleted!");
+    // console.log("Deleted!");
   };
 
   const submitScene = async () => {
@@ -205,7 +205,7 @@ const EditorButtons = ({formData}) => {
           );
 
           if (confirmDelete) {
-              forceDeleteScene(sceneId);
+              forceDeleteScene(selectedScene._id);
           }
       } else {
           console.error("Error deleting scene", error);

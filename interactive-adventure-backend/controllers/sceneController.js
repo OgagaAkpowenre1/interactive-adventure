@@ -230,71 +230,139 @@ const editScene = async (req, res) => {
 };
 
 
+// const deleteScene = async (req, res) => {
+//     try {
+//         console.log("Request received:", req.body);
+
+//         const { storyId, sceneId } = req.params;
+
+//         // Validate storyId format
+//         if (!mongoose.Types.ObjectId.isValid(storyId)) {
+//             console.log("Invalid story ID format", storyId);
+//             return res.status(400).json({ message: "Invalid story ID format" });
+//         }
+
+//         // Find the story in the database
+//         const story = await Story.findById(storyId);
+//         if (!story) {
+//             console.log("Story not found", storyId);
+//             return res.status(404).json({ message: "Story not found" });
+//         }
+
+//         // Validate sceneId format
+//         if (!mongoose.Types.ObjectId.isValid(sceneId)) {
+//             console.log("Invalid scene ID format", sceneId);
+//             return res.status(400).json({ message: "Invalid scene ID format" });
+//         }
+
+//         // Find the scene in the database
+//         const scene = await Scene.findById(sceneId);
+//         if (!scene) {
+//             console.log("Scene not found", sceneId);
+//             return res.status(404).json({ message: "Scene not found" });
+//         }
+
+//         // Check if this scene is referenced by any other scenes
+//         const referencingScenes = await Scene.find({
+//             "options.nextScene": sceneId
+//         });
+
+//         if (referencingScenes.length > 0) {
+//             console.log("Scene is being referenced by other scenes");
+//             return res.status(400).json({
+//                 message: "Cannot delete scene because it's referenced by other scenes.",
+//                 referencedBy: referencingScenes.map((scene) => scene.sceneTitle)
+//             });
+//         }
+
+//                 // If forced, remove references before deleting
+//                 if (forceDelete) {
+//                   await Scene.updateMany(
+//                       { "options.nextScene": sceneId },
+//                       { $set: { "options.$[].nextScene": null, "options.$[].nextSceneTitle": null } }
+//                   );
+//               }
+
+//         // Delete the scene if no references are found
+//         await Scene.findByIdAndDelete(sceneId);
+//         console.log("Scene deleted successfully", sceneId);
+
+//         // Return success message
+//         return res.status(200).json({ message: "Scene deleted successfully" });
+
+//     } catch (error) {
+//         console.error("Error deleting scene:", error);
+//         return res.status(500).json({ message: "Internal server error" });
+//     }
+// };
+
 const deleteScene = async (req, res) => {
-    try {
-        console.log("Request received:", req.body);
+  try {
+      console.log("Request received:", req.body);
 
-        const { storyId, sceneId } = req.params;
+      const { storyId, sceneId } = req.params;
+      const forceDelete = req.query.force === "true"; // Extract force parameter
 
-        // Validate storyId format
-        if (!mongoose.Types.ObjectId.isValid(storyId)) {
-            console.log("Invalid story ID format", storyId);
-            return res.status(400).json({ message: "Invalid story ID format" });
-        }
+      // Validate storyId format
+      if (!mongoose.Types.ObjectId.isValid(storyId)) {
+          console.log("Invalid story ID format", storyId);
+          return res.status(400).json({ message: "Invalid story ID format" });
+      }
 
-        // Find the story in the database
-        const story = await Story.findById(storyId);
-        if (!story) {
-            console.log("Story not found", storyId);
-            return res.status(404).json({ message: "Story not found" });
-        }
+      // Find the story in the database
+      const story = await Story.findById(storyId);
+      if (!story) {
+          console.log("Story not found", storyId);
+          return res.status(404).json({ message: "Story not found" });
+      }
 
-        // Validate sceneId format
-        if (!mongoose.Types.ObjectId.isValid(sceneId)) {
-            console.log("Invalid scene ID format", sceneId);
-            return res.status(400).json({ message: "Invalid scene ID format" });
-        }
+      // Validate sceneId format
+      if (!mongoose.Types.ObjectId.isValid(sceneId)) {
+          console.log("Invalid scene ID format", sceneId);
+          return res.status(400).json({ message: "Invalid scene ID format" });
+      }
 
-        // Find the scene in the database
-        const scene = await Scene.findById(sceneId);
-        if (!scene) {
-            console.log("Scene not found", sceneId);
-            return res.status(404).json({ message: "Scene not found" });
-        }
+      // Find the scene in the database
+      const scene = await Scene.findById(sceneId);
+      if (!scene) {
+          console.log("Scene not found", sceneId);
+          return res.status(404).json({ message: "Scene not found" });
+      }
 
-        // Check if this scene is referenced by any other scenes
-        const referencingScenes = await Scene.find({
-            "options.nextScene": sceneId
-        });
+      // Check if this scene is referenced by any other scenes
+      const referencingScenes = await Scene.find({
+          "options.nextScene": sceneId
+      });
 
-        if (referencingScenes.length > 0) {
-            console.log("Scene is being referenced by other scenes");
-            return res.status(400).json({
-                message: "Cannot delete scene because it's referenced by other scenes.",
-                referencedBy: referencingScenes.map((scene) => scene.sceneTitle)
-            });
-        }
+      if (referencingScenes.length > 0 && !forceDelete) {
+          console.log("Scene is being referenced by other scenes");
+          return res.status(400).json({
+              message: "Cannot delete scene because it's referenced by other scenes.",
+              referencedBy: referencingScenes.map((scene) => scene.sceneTitle)
+          });
+      }
 
-                // If forced, remove references before deleting
-                if (forceDelete) {
-                  await Scene.updateMany(
-                      { "options.nextScene": sceneId },
-                      { $set: { "options.$[].nextScene": null, "options.$[].nextSceneTitle": null } }
-                  );
-              }
+      // If forced, remove references before deleting
+      if (forceDelete) {
+          await Scene.updateMany(
+              { "options.nextScene": sceneId },
+              { $set: { "options.$[].nextScene": null, "options.$[].nextSceneTitle": null } }
+          );
+      }
 
-        // Delete the scene if no references are found
-        await Scene.findByIdAndDelete(sceneId);
-        console.log("Scene deleted successfully", sceneId);
+      // Delete the scene
+      await Scene.findByIdAndDelete(sceneId);
+      console.log("Scene deleted successfully", sceneId);
 
-        // Return success message
-        return res.status(200).json({ message: "Scene deleted successfully" });
+      // Return success message
+      return res.status(200).json({ message: "Scene deleted successfully" });
 
-    } catch (error) {
-        console.error("Error deleting scene:", error);
-        return res.status(500).json({ message: "Internal server error" });
-    }
+  } catch (error) {
+      console.error("Error deleting scene:", error);
+      return res.status(500).json({ message: "Internal server error" });
+  }
 };
+
 
 const fetchInitialScenesForReader = async (req, res) => {
     const { storyId } = req.params;
