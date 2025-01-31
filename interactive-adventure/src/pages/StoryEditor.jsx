@@ -50,10 +50,10 @@ const StoryEditor = () => {
   const {selectedStory, setSelectedStory, scenes, setScenes, selectedScene, setSelectedScene} = useStoryContext()
   const story = selectedStory
   const [formData, setFormData] = useState({
-    sceneTitle: scenes[0].sceneTitle || "",
-    sceneContent:scenes[0].sceneContent || "",
-    options: scenes[0].options || [],
-    imageFile: scenes[0].image || null,
+    sceneTitle: scenes[0]?.sceneTitle || "",
+    sceneContent:scenes[0]?.sceneContent || "",
+    options: scenes[0]?.options || [],
+    imageFile: scenes[0]?.image || null,
   });
   // setSelectedScene(scenes[0])
 

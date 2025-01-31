@@ -135,9 +135,9 @@ const SceneReader = () => {
       <SceneButtonsWrapper>
         {scene.options.map((option, index) => (
           <Button key={index} buttonText={option.text} onClick={() => {
-            console.log(`Navigating to scene: ${option.nextScene}`);
+            console.log(`Navigating to scene: ${option._id}`);
             navigate(`/reader/${storyId}/${option._id}`, {
-              state: { scene: option.nextScene }
+              state: { scene: option._id }
             });
           }} />
         ))}

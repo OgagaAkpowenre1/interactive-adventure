@@ -79,7 +79,7 @@ const StoryDetails = () => {
       setLoading(true);
       const response = await axiosInstance.get(`/scenes/${story._id}/read`);
       setScenes(response.data);
-      
+        console.log(scenes)
       // Store scenes in localStorage
       localStorage.setItem(`scenes_${story._id}`, JSON.stringify(response.data));
   
