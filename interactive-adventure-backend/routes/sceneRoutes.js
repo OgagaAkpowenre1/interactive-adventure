@@ -35,13 +35,8 @@ const {
     setStartScene,
 } = require("../controllers/sceneController");
 const multer = require("multer");
-co;
-
-// Debugging middleware
-router.use((req, res, next) => {
-    console.log(`Incoming request: ${req.method} ${req.originalUrl}`);
-    next();
-});nst mongoose = require("mongoose");
+// const mongoose = require("mongoose");
+const { default: mongoose } = require("mongoose");
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() }).single("imageFile"); // Apply multer
 
@@ -60,7 +55,13 @@ router.param("sceneId", (req, res, next, sceneId) => {
         return res.status(400).json({ message: "Invalid scene ID format" });
     }
     next();
-})
+});
+
+// Debugging middleware
+router.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.originalUrl}`);
+    next();
+});
 
 // Route definitions
 router.post("/:storyId/createScene", upload, createScene);
