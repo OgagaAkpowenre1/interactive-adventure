@@ -43,9 +43,9 @@ const createScene = async (req, res) => {
           }
       }
 
-      if(options && options.length > 0){
-                    for(let i = 0; i < options.length; i++){
-                        const option = options[i]
+      if(parsedOptions && parsedOptions.length > 0){
+                    for(let i = 0; i < parsedOptions.length; i++){
+                        const option = parsedOptions[i]
                         console.log(option)
                         if(option.text && !mongoose.Types.ObjectId.isValid(option.nextScene)){
                             console.log("Passed the condition")
