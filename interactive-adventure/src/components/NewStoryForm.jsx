@@ -214,7 +214,11 @@ const NewStoryForm = ({ visible, toggleVisibility, existingStory }) => {
     try {
       if (existingStory) {
         // Update existing story
-        const response = await axiosInstance.put(`/stories/${existingStory._id}/edit`, storyData);
+        const response = await axiosInstance.put(`/stories/${existingStory._id}/edit`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
         console.log("Story updated:", response.data);
       } else {
         // Create new story

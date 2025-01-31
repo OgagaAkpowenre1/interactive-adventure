@@ -61,17 +61,40 @@ const StoryDetails = () => {
   const [loading, setLoading] = useState(false)
   const [showEditForm, setShowEditForm] = useState(false)
 
+  // const fetchScenes = async () => {
+  //   try {
+  //     setLoading(true)
+  //     const response = await axiosInstance.get(`/scenes/${story._id}/read`);
+  //     setScenes(response.data)
+  //     navigate(`/reader/${selectedStory._id}/${scenes[0]._id}`)
+  //   } catch (error) {
+  //     console.log(error)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
   const fetchScenes = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axiosInstance.get(`/scenes/${story._id}/read`);
-      console.log(response.data)
+      setScenes(response.data);
+      
+      // Store scenes in localStorage
+      localStorage.setItem(`scenes_${story._id}`, JSON.stringify(response.data));
+  
+      // Navigate to the reader with the first scene in state
+      if (response.data.length > 0) {
+        navigate(`/reader/${selectedStory._id}/${response.data[0]._id}`, {
+          state: { scene: response.data[0] } // Pass first scene
+        });
+      }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };  
 
   const editStory = async () => {
     try {
@@ -97,9 +120,9 @@ const StoryDetails = () => {
 
   useEffect(() => {
     // Check if scenes is loaded, then navigate
-    if (scenes.length > 0) {
-      navigate(`/editor/${story._id}`);
-    }
+    // if (scenes.length > 0) {
+    //   // navigate(`/editor/${story._id}`);
+    // }
   }, [scenes, navigate]); 
 
   if (!story) {

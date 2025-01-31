@@ -3,6 +3,10 @@ import styled from "styled-components";
 import SceneImageComponent from "../components/SceneImage";
 import Button from "../components/Button";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useStoryContext } from "../contexts/storyContext";
+import { useLocation, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -51,45 +55,94 @@ const SceneButtonsWrapper = styled(motion.div)`
 //   visible: { y: 0, opacity: 1, transition: { duration: 1, delay: 2} },
 // };
 
-const SceneReader = () => {
+// const SceneReader = ({scene}) => {
+  // const navigate = useNavigate()
+//   const {selectedStory} = useStoryContext()
 
+//   const handleOptionClick = (nextScene) => {
+//     if (nextScene) {
+//       navigate(`/reader/${selectedStory._id}/${encodeURIComponent(nextScene)}`); // Encode title to handle special characters
+//     }
+//   };
+
+//   return (
+//     <>
+//     <Wrapper>
+//       <SceneImageComponent
+//         src={scene.image || "https://wallpapercave.com/wp/wp7135795.jpg"}
+//         alt={"Image"}
+//       />
+//       <SceneTextWrapper
+//         // initial="hidden"
+//         // animate="visible"
+//         // variants={textVariants}
+//       >
+//         <SceneText>
+//           {scene.sceneContent || "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos dolor"}
+//         </SceneText>
+//       </SceneTextWrapper>
+//       <SceneButtonsWrapper
+//         // initial={"hidden"}
+//         // animate={"visible"}
+//         // variants={buttonVariants}
+//       >{scene.options.map((option, index) => (
+//         <Button buttonText={option.text} onClick={() => handleOptionClick()} />
+//       ))}
+//         {/* <Button
+//           buttonText={
+//             "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestias officiis eligendi labore, obcaecati ab eveniet vero nihil omnis cumque maiores!"
+//           }
+//         />
+//         <Button buttonText={"Option 2"} />
+//         <Button buttonText={"Option 3"} />
+//         <Button buttonText={"Option 4"} /> */}
+//       </SceneButtonsWrapper>
+//     </Wrapper>
+//     </>
+//   );
+// };
+
+
+
+const SceneReader = () => {
+  const location = useLocation();
+  const navigate = useNavigate()
+  const { sceneId, storyId } = useParams(); // Get scene ID from URL
+  const [scene, setScene] = useState(location.state?.scene || null);
+
+  console.log(scene)
+
+  useEffect(() => {
+    if (!scene) {
+      // Try to get scenes from localStorage if state is missing
+      const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
+      const foundScene = storedScenes.find(s => s._id === sceneId);
+
+      if (foundScene) {
+        setScene(foundScene);
+      }
+    }
+  }, [scene, sceneId, storyId]);
+
+  if (!scene) return <p>Loading...</p>;
 
   return (
-    <>
     <Wrapper>
-      <SceneImageComponent
-        src={"https://wallpapercave.com/wp/wp7135795.jpg"}
-        alt={"Image"}
-      />
-      <SceneTextWrapper
-        // initial="hidden"
-        // animate="visible"
-        // variants={textVariants}
-      >
-        <SceneText>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos dolor
-          fugiat eum sit magni eaque hic eveniet, earum nisi aspernatur
-          perferendis eligendi aliquid. Eligendi quo eaque voluptate velit nam,
-          minus dolores eveniet odit incidunt laborum, commodi optio voluptatem
-          unde voluptates?
-        </SceneText>
+      <SceneImageComponent src={scene.image || "https://wallpapercave.com/wp/wp7135795.jpg"} alt="Scene Image" />
+      <SceneTextWrapper>
+        <SceneText>{scene.sceneContent}</SceneText>
       </SceneTextWrapper>
-      <SceneButtonsWrapper
-        // initial={"hidden"}
-        // animate={"visible"}
-        // variants={buttonVariants}
-      >
-        <Button
-          buttonText={
-            "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestias officiis eligendi labore, obcaecati ab eveniet vero nihil omnis cumque maiores!"
-          }
-        />
-        <Button buttonText={"Option 2"} />
-        <Button buttonText={"Option 3"} />
-        <Button buttonText={"Option 4"} />
+      <SceneButtonsWrapper>
+        {scene.options.map((option, index) => (
+          <Button key={index} buttonText={option.text} onClick={() => {
+            console.log(`Navigating to scene: ${option.nextScene}`);
+            navigate(`/reader/${storyId}/${option._id}`, {
+              state: { scene: option.nextScene }
+            });
+          }} />
+        ))}
       </SceneButtonsWrapper>
     </Wrapper>
-    </>
   );
 };
 

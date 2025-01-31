@@ -34,10 +34,10 @@ const SceneButton = styled.button`
   }
 `;
 
-const Button = ({buttonText}) => {
+const Button = ({buttonText, onClick}) => {
 
     return (
-        <SceneButton onClick={() => console.log(buttonText)}>{buttonText}</SceneButton>
+        <SceneButton onClick={onClick}>{buttonText}</SceneButton>
     )
 }
 

@@ -377,7 +377,7 @@ const fetchInitialScenesForReader = async (req, res) => {
       console.log("looking for scenes")
       const scenes = await Scene.find(
         { storyId },
-        { sceneTitle: 1, _id: 1, options: 1 }
+        { sceneTitle: 1, _id: 1, options: 1, image: 1,  }
       )
         .limit(3) // Fetch the first 3 scenes
         .sort({ createdAt: 1 })
