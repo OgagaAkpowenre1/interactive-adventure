@@ -275,6 +275,14 @@ const deleteScene = async (req, res) => {
             });
         }
 
+                // If forced, remove references before deleting
+                if (forceDelete) {
+                  await Scene.updateMany(
+                      { "options.nextScene": sceneId },
+                      { $set: { "options.$[].nextScene": null, "options.$[].nextSceneTitle": null } }
+                  );
+              }
+
         // Delete the scene if no references are found
         await Scene.findByIdAndDelete(sceneId);
         console.log("Scene deleted successfully", sceneId);

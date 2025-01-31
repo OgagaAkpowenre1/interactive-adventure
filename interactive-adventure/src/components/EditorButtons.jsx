@@ -121,7 +121,7 @@ const ModalContent = styled.div`
 
 const EditorButtons = ({formData}) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const {sceneData, selectedStory, selectedScene, setSelectedScene, fetchAllScenes} = useStoryContext()
+  const {scenes, sceneData, selectedStory, selectedScene, setSelectedScene, fetchAllScenes} = useStoryContext()
 
   const handleDeleteClick = () => {
     setModalOpen(true);
@@ -133,6 +133,7 @@ const EditorButtons = ({formData}) => {
 
   const handleConfirmDelete = () => {
     setModalOpen(false);
+    deleteScene()
     console.log("Deleted!");
   };
 
@@ -177,6 +178,39 @@ const EditorButtons = ({formData}) => {
     } catch (error) {
       console.error("Error updating scene", error)
     }
+  }
+
+  const forceDeleteScene = async (sceneId) => {
+    try {
+        await axiosInstance.delete(`/scenes/${selectedStory._id}/${sceneId}/delete?force=true`);
+        // setScenes((prev) => prev.filter((scene) => scene._id !== sceneId));
+        console.log("Scene deleted forcefully");
+        setSelectedScene(scenes[-1])
+    } catch (error) {
+        console.error("Error force-deleting scene", error);
+    }
+};
+
+  const deleteScene = async () => {
+    try {
+      console.log(selectedScene)
+      const response = await axiosInstance.delete(`/scenes/${selectedStory._id}/${selectedScene._id}/delete`)
+      console.log("Deleted scene")
+      fetchAllScenes()
+      setSelectedScene(scenes[-1])
+    } catch (error) {
+      if (error.response && error.response.status === 400 && error.response.data.referencedBy) {
+          const confirmDelete = window.confirm(
+              `This scene is referenced by: ${error.response.data.referencedBy.join(", ")}. Are you sure you want to delete it?`
+          );
+
+          if (confirmDelete) {
+              forceDeleteScene(sceneId);
+          }
+      } else {
+          console.error("Error deleting scene", error);
+      }
+  }
   }
 
 
