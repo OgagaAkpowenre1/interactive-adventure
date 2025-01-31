@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api";
 
@@ -115,10 +115,10 @@ const CloseButton = styled.button`
 `;
 
 const NewStoryForm = ({ visible, toggleVisibility, existingStory }) => {
-  const [title, setTitle] = useState(existingStory.title || "")
-  const [synopsis, setSynopsis] = useState(existingStory.synopsis || "")
-  const [cover, setCover] = useState(existingStory.cover || "")
-  const [genres, setGenres] = useState(existingStory.genres || []);
+  const [title, setTitle] = useState(existingStory?.title || "")
+  const [synopsis, setSynopsis] = useState(existingStory?.synopsis || "")
+  const [cover, setCover] = useState(existingStory?.cover || "")
+  const [genres, setGenres] = useState(existingStory?.genres || []);
   const [genreInput, setGenreInput] = useState("");
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
@@ -236,10 +236,10 @@ const NewStoryForm = ({ visible, toggleVisibility, existingStory }) => {
         <CloseButton onClick={toggleVisibility}>&times;</CloseButton>
         <form onSubmit={handleSubmit}>
           <label htmlFor="title">Story Title</label>
-          <input type="text" id="title" name="title" placeholder="Story Title" required />
+          <input type="text" id="title" name="title" placeholder="Story Title" onChange={(e) => setTitle(e.target.value)} required />
 
           <label htmlFor="synopsis">Synopsis</label>
-          <textarea id="synopsis" name="synopsis" rows="6" placeholder="Synopsis" required></textarea>
+          <textarea id="synopsis" name="synopsis" rows="6" placeholder="Synopsis" onChange={(e) => setSynopsis(e.target.value)} required></textarea>
 
           <label htmlFor="genres">Genres</label>
           <div className="genres">
@@ -261,7 +261,7 @@ const NewStoryForm = ({ visible, toggleVisibility, existingStory }) => {
           />
 
           <label htmlFor="cover">Story Cover</label>
-          <input type="file" accept="image/*" id="cover" name="cover" required />
+          <input type="file" accept="image/*" id="cover" name="cover" onChange={handleCoverChange} required />
 
           <button type="submit">{existingStory ? "Save changes" :"Create Story"}</button>
         </form>

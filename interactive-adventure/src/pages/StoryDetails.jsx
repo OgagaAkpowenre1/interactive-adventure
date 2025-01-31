@@ -6,6 +6,7 @@ import MagnifiedImage from "../components/MagnifiedImage";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useStoryContext } from "../contexts/storyContext";
 import axiosInstance from "../api";
+import NewStoryForm from "../components/NewStoryForm";
 
 const Wrapper = styled.div`
   display: flex;

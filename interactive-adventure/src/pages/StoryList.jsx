@@ -122,7 +122,7 @@ const StoryList = () => {
     <>
       <Wrapper>
         <SearchFilter />
-        <NewStoryForm visible={isFormVisible} toggleVisibility={() => setIsFormVisible(false)} />
+        <NewStoryForm visible={isFormVisible} toggleVisibility={() => setIsFormVisible(false)} existingStory={null} />
         <h3>This is the story list</h3>
         <List
           variants={{
