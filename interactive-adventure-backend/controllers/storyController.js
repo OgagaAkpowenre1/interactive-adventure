@@ -194,8 +194,8 @@ const editStory = async (req, res) => {
 
         if (genres) {
             console.log("Changing genres");
-            genres = JSON.parse(genres)
-            story.genres = genres;
+            
+            story.genres = JSON.parse(genres);
         }
 
         if (readingTime) {
