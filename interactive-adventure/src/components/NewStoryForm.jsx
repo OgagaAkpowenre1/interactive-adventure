@@ -114,11 +114,23 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-const NewStoryForm = ({ visible, toggleVisibility }) => {
-  const [genres, setGenres] = useState([]);
+const NewStoryForm = ({ visible, toggleVisibility, existingStory }) => {
+  const [title, setTitle] = useState(existingStory.title || "")
+  const [synopsis, setSynopsis] = useState(existingStory.synopsis || "")
+  const [cover, setCover] = useState(existingStory.cover || "")
+  const [genres, setGenres] = useState(existingStory.genres || []);
   const [genreInput, setGenreInput] = useState("");
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if(existingStory){
+      setTitle(existingStory.title)
+      setSynopsis(existingStory.synopsis)
+      setCover(existingStory.cover)
+      setGenres(existingStory.genres || [])
+    }
+  }, [existingStory])
 
   const addGenre = () => {
     if (genreInput && !genres.includes(genreInput)) {
@@ -129,6 +141,10 @@ const NewStoryForm = ({ visible, toggleVisibility }) => {
 
   const removeGenre = (genreToRemove) => {
     setGenres(genres.filter((genre) => genre !== genreToRemove));
+  };
+
+  const handleCoverChange = (e) => {
+    setCover(e.target.files[0]); // Store the file object
   };
 
   const createStory = async (storyData) => {
@@ -146,28 +162,63 @@ const NewStoryForm = ({ visible, toggleVisibility }) => {
     }
   }
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   const formData = {
+  //       cover: e.target.cover.files[0]?.name || "",
+  //       title: e.target.title.value,
+  //       synopsis: e.target.synopsis.value,
+  //       genres: genres,
+  //       readingTime: "30 mins", // Example, calculate dynamically if needed
+  //       rating: 3, // Default value
+  //       gallery: [], // Extend as needed
+  //   };
+
+  //   // console.log("Form Data:", formData);
+  //   console.log("creating story")
+  //   createStory(formData)
+  //   // toggleVisibility()
+  //   navigate('/story/:id', {state: formData})
+
+  //   e.target.reset();
+  //   setGenres([]);
+  //   toggleVisibility();
+  // };
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = {
-        cover: e.target.cover.files[0]?.name || "",
-        title: e.target.title.value,
-        synopsis: e.target.synopsis.value,
-        genres: genres,
-        readingTime: "30 mins", // Example, calculate dynamically if needed
-        rating: 3, // Default value
-        gallery: [], // Extend as needed
+    const storyData = {
+      title,
+      synopsis,
+      genres,
+      cover, // You might need to handle image upload separately if using Cloudinary
+      readingTime: existingStory?.readingTime || "30 mins",
+      rating: existingStory?.rating || 3,
+      gallery: existingStory?.gallery || [],
     };
 
-    // console.log("Form Data:", formData);
-    console.log("creating story")
-    createStory(formData)
-    // toggleVisibility()
-    navigate('/story/:id', {state: formData})
+    setLoading(true);
 
-    e.target.reset();
-    setGenres([]);
-    toggleVisibility();
+    try {
+      if (existingStory) {
+        // Update existing story
+        const response = await axiosInstance.put(`/stories/${existingStory._id}/edit`, storyData);
+        console.log("Story updated:", response.data);
+      } else {
+        // Create new story
+        const response = await axiosInstance.post("/stories/create", storyData);
+        console.log("Story created:", response.data);
+        navigate(`/story/${response.data._id}`, { state: response.data });
+      }
+    } catch (error) {
+      console.error("Error saving story", error);
+    } finally {
+      setLoading(false);
+      toggleVisibility();
+    }
   };
 
   if(loading){
@@ -212,7 +263,7 @@ const NewStoryForm = ({ visible, toggleVisibility }) => {
           <label htmlFor="cover">Story Cover</label>
           <input type="file" accept="image/*" id="cover" name="cover" required />
 
-          <button type="submit">Create Story</button>
+          <button type="submit">{existingStory ? "Save changes" :"Create Story"}</button>
         </form>
       </Wrapper>
     </>

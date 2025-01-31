@@ -51,13 +51,14 @@ const GalleryWrapper = styled.div`
   margin-top: 2em;
 `;
 
-const StoryDetails = ({ story : propStory }) => {
+const StoryDetails = () => {
   const location = useLocation()
   const {selectedStory, setSelectedStory, scenes, setScenes} = useStoryContext()
   const navigate = useNavigate()
   const story = location.state || selectedStory  
   const [magnifiedImage, setMagnifiedImage] = React.useState(null);
   const [loading, setLoading] = useState(false)
+  const [showEditForm, setShowEditForm] = useState(false)
 
   const fetchScenes = async () => {
     try {
@@ -68,6 +69,14 @@ const StoryDetails = ({ story : propStory }) => {
       console.log(error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const editStory = async () => {
+    try {
+      
+    } catch (error) {
+      console.error("Error editing story", error)
     }
   }
 
@@ -136,6 +145,7 @@ const StoryDetails = ({ story : propStory }) => {
         />
       )}
       <Wrapper>
+      <NewStoryForm visible={showEditForm} toggleVisibility={() => setShowEditForm(false)} existingStory={story} />
         <ImageContainer>
           <img
             src={story.cover}
@@ -151,10 +161,12 @@ const StoryDetails = ({ story : propStory }) => {
             genres={story.genres}
             rating={story.rating}
           />
-          <Link to={"/editor"}><button>Edit Scenes</button></Link>
+          <Link to={"/editor"}><button onClick={() => goToEditor()}>Edit Scenes</button></Link>
           <button onClick={() => {deleteStory(story)}}>Delete Story</button>
-          <button onClick={() => goToEditor()}>Edit</button>
+          {/* <button onClick={() => editStory()}>Edit</button> */}
+          <button onClick={() => setShowEditForm(true)}>Edit</button>
           <button onClick={() => fetchScenes()}>Read</button>
+
         </Content>
       </Wrapper>
       <GalleryWrapper>

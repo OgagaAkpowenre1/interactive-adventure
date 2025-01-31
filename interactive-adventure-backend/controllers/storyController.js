@@ -1,19 +1,30 @@
 const Story = require("../models/stories")
 const { default: mongoose } = require("mongoose");
+const uploadImage = require("./uploadImage")
+const multer = require("multer");
    
 //Create a new story
 const createStory = async (req, res) => {
     try {
-        const {title, synopsis, cover, genres, readingTime, rating, gallery} = req.body
+        const {title, synopsis, genres, readingTime, rating, gallery} = req.body
+        let coverUrl = ""
+        if (req.file) {
+            try {
+              console.log("Uploading cover...");
+              coverUrl = await uploadImage(req.file);
+            } catch (uploadError) {
+              return res.status(500).json({ error: uploadError.message });
+            }
+          }
 
-        if(!title || !synopsis  || !cover){
-            return res.status(400).json({error : "title, synopsis and cover are required"})
+        if(!title || !synopsis){
+            return res.status(400).json({error : "title and synopsis are required"})
         }
 
         const newStory = new Story({
             title,
             synopsis,
-            cover,
+            cover : coverUrl,
             genres: genres  || [],
             readingTime : readingTime  || null,
             rating : rating  || 3,
@@ -39,7 +50,7 @@ const editStory = async (req, res) => {
             return res.status(400).json({ message: "Invalid story ID format" });
         }
 
-        const {title, synopsis, cover, genres, readingTime, rating, gallery} = req.body
+        const {title, synopsis, genres, readingTime, rating, gallery} = req.body
 
         const story = await Story.findById(storyId)
 
@@ -49,6 +60,28 @@ const editStory = async (req, res) => {
         }
 
         console.log("Story found", story)
+
+        if (req.file) {
+            try {
+              console.log("Uploading new cover...");
+              const newCoverUrl = await uploadImage(req.file);
+      
+              // Delete old cover if it exists
+              if (story.cover) {
+                try {
+                  const oldCoverPublicId = story.cover.split('/').pop().split('.')[0];
+                  await cloudinary.uploader.destroy(`story_covers/${oldCoverPublicId}`);
+                  console.log("Old cover deleted");
+                } catch (deleteError) {
+                  console.error("Error deleting old cover:", deleteError);
+                }
+              }
+      
+              story.cover = newCoverUrl;
+            } catch (uploadError) {
+              return res.status(500).json({ error: uploadError.message });
+            }
+          }
 
         if(title){
             console.log("Changing title")
@@ -60,10 +93,10 @@ const editStory = async (req, res) => {
             story.synopsis = synopsis
         }
 
-        if(cover){
-            console.log("Changing cover")
-            story.cover = cover
-        }
+        // if(cover){
+        //     console.log("Changing cover")
+        //     story.cover = cover
+        // }
 
         if(genres){
             console.log("Changing genres")
