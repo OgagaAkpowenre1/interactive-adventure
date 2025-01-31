@@ -1,5 +1,6 @@
 const express = require("express")
 const multer = require("multer");
+const mongoose = require("mongoose");
 const upload = multer({ storage: multer.memoryStorage() }).single("cover"); // Apply multer
 const {createStory, deleteStory, editStory, fetchStories} = require("../controllers/storyController")
 
