@@ -14,10 +14,12 @@ const uploadImage = async (file, folder = "story_covers") => {
       { folder, public_id: publicId, overwrite: true },
       (error, result) => {
         if (error) {
+          console.error("Cloudinary error:", error); 
           return reject(`Error uploading image to Cloudinary, ${error.message}`);
         }
 
         // Resolve with the URL to the uploaded image
+        console.log("Cloudinary upload result:", result)
         resolve(result.secure_url);
       }
     ).end(file.buffer); // Upload the image file's buffer to Cloudinary

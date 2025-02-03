@@ -3,7 +3,7 @@ const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() }).single("cover"); // Apply multer
 const {createStory, deleteStory, editStory, fetchStories} = require("../controllers/storyController")
 const router = express.Router()
-
+ 
  
 router.get("/", fetchStories)
 router.post("/create", upload,  createStory)

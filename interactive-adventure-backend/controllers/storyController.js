@@ -3,18 +3,21 @@ const { default: mongoose } = require("mongoose");
 const uploadImage = require("./uploadImage")
 const multer = require("multer");
    
-//Create a new story
+//Create a new story 
 const createStory = async (req, res) => {
     try {
         const {title, synopsis, genres, readingTime, rating, gallery} = req.body
         let coverUrl = ""
         if (req.file) {
+            console.log("image cover received", req.file)
             try {
               console.log("Uploading cover...");
               coverUrl = await uploadImage(req.file);
             } catch (uploadError) {
               return res.status(500).json({ error: uploadError.message });
             }
+          } else {
+            console.log("No file received for cover")
           }
 
         if(!title || !synopsis){

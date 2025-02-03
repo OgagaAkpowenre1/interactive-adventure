@@ -199,7 +199,7 @@ const NewStoryForm = ({ visible, toggleVisibility, existingStory }) => {
     //   rating: existingStory?.rating || 3,
     //   gallery: existingStory?.gallery || [],
     // };
-
+ 
     const formData = new FormData();
     formData.append('title', title);
     formData.append('synopsis', synopsis);
