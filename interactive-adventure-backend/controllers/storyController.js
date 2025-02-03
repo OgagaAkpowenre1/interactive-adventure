@@ -1,6 +1,6 @@
 const Story = require("../models/stories")
 const { default: mongoose } = require("mongoose");
-const uploadImage = require("./uploadImage")
+const {uploadImage} = require("./uploadImage")
 const multer = require("multer");
    
 //Create a new story 
