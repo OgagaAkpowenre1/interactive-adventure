@@ -54,6 +54,8 @@ const StoryEditor = () => {
     sceneContent:scenes[0]?.sceneContent || "",
     options: scenes[0]?.options || [],
     imageFile: scenes[0]?.image || null,
+    isPlaceholder: false,
+    isEnd: false
   });
   // setSelectedScene(scenes[0])
 
@@ -64,6 +66,8 @@ const StoryEditor = () => {
         sceneContent: selectedScene.sceneContent,
         options: selectedScene.options || [],
         imageFile: selectedScene.image || null,
+        isPlaceholder: selectedScene.isPlaceholder || false,
+        isEnd: selectedScene.isEnd || false
       });
     }
   }, [selectedScene]);

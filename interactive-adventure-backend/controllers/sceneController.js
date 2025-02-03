@@ -11,7 +11,7 @@ const { v4: uuidv4 } = require("uuid");
 const storage = multer.memoryStorage(); // Store in memory for easy upload to Cloudinary
 const upload = multer({ storage }).single("imageFile"); // Handle single file upload, field name "image"
 
-const uploadImage = require("./uploadImage")
+const uploadImage = require("./uploadSceneImage")
 
 const createScene = async (req, res) => {
   try {
