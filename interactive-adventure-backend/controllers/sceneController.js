@@ -139,7 +139,7 @@ const editScene = async (req, res) => {
 
       if (duplicateScene) {
           // Duplicate title found, prevent the update
-          return res.status(400).json({ message: `A scene with the title "${sceneTitle}" already exists in this story.` });
+          return res.status(409).json({ message: `A scene with the title "${sceneTitle}" already exists in this story.` });
       }
 
       console.log("Duplicate scene check:", duplicateScene); // Add this log to debug
@@ -364,40 +364,66 @@ const deleteScene = async (req, res) => {
 };
 
 
-const fetchInitialScenesForReader = async (req, res) => {
-    const { storyId } = req.params;
-    console.log("Fetching scenes for storyId:", storyId);
+// const fetchInitialScenesForReader = async (req, res) => {
+//     const { storyId } = req.params;
+//     console.log("Fetching scenes for storyId:", storyId);
 
 
-    if (!mongoose.Types.ObjectId.isValid(storyId)) {
-      return res.status(400).json({ message: "Invalid story ID format" });
-    }
+//     if (!mongoose.Types.ObjectId.isValid(storyId)) {
+//       return res.status(400).json({ message: "Invalid story ID format" });
+//     }
 
-    try {
-      console.log("looking for scenes")
-      const scenes = await Scene.find(
-        { storyId },
-        { sceneTitle: 1, _id: 1, options: 1, image: 1,  }
-      )
-        .limit(3) // Fetch the first 3 scenes
-        .sort({ createdAt: 1 })
-        // .limit(3)
+//     try {
+//       console.log("looking for scenes")
+//       const scenes = await Scene.find(
+//         { storyId },
+//         { sceneTitle: 1, _id: 1, options: 1, image: 1,  }
+//       )
+//         .limit(3) // Fetch the first 3 scenes
+//         .sort({ createdAt: 1 })
+//         // .limit(3)
 
-        // const scenes = await Scene.find(
-        //   { storyId },
-        //   { sceneTitle: 1, _id: 1, options: 1 }
-        // );
-        // console.log("Filtering scenes")
-        // scenes.find({storyId, isPlaceholder: false})
-        // scenes.sort({createdAt: 1})
+//         const scenes = await Scene.find(
+//           { storyId },
+//           { sceneTitle: 1, _id: 1, options: 1 }
+//         );
+//         console.log("Filtering scenes")
+//         scenes.find({storyId, isPlaceholder: false})
+//         scenes.sort({createdAt: 1})
   
-        console.log("Fetched scenes:", scenes);
-      res.status(200).json(scenes);
-    } catch (error) {
-      console.error("Error fetching scenes for reader:", error);
-      res.status(500).json({ message: "Failed to fetch scenes for reader." });
-    }
-  };
+//         console.log("Fetched scenes:", scenes);
+//       res.status(200).json(scenes);
+//     } catch (error) {
+//       console.error("Error fetching scenes for reader:", error);
+//       res.status(500).json({ message: "Failed to fetch scenes for reader." });
+//     }
+//   };
+
+const fetchInitialScenesForReader = async (req, res) => {
+  const { storyId } = req.params;
+  console.log("Fetching scenes for storyId:", storyId);
+
+  if (!mongoose.Types.ObjectId.isValid(storyId)) {
+    return res.status(400).json({ message: "Invalid story ID format" });
+  }
+
+  try {
+    console.log("Looking for scenes...");
+
+    // Fetch scenes, filter out placeholders, and sort them
+    const scenes = await Scene.find(
+      { storyId, isPlaceholder: false }, // Exclude placeholder scenes
+      { sceneTitle: 1, _id: 1, options: 1, image: 1, createdAt: 1 } // Select required fields
+    ).sort({ createdAt: 1 }) // Sort by creation date (earliest first)
+     .limit(3); // Fetch only the first 3 scenes
+
+    console.log("Fetched scenes:", scenes);
+    res.status(200).json(scenes);
+  } catch (error) {
+    console.error("Error fetching scenes for reader:", error);
+    res.status(500).json({ message: "Failed to fetch scenes for reader." });
+  }
+};
 
   
 // const fetchScenesForEditor = async (req, res) => {

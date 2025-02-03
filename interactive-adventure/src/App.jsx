@@ -8,6 +8,7 @@ import Layout from "./components/Layout.jsx";
 import Navbar from "./components/Navbar.jsx";
 import styled from "styled-components";
 import testStory from "./testData.js";
+import { Toaster } from "react-hot-toast";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const StoryEditor = React.lazy(() => import("./pages/StoryEditor"));
@@ -56,6 +57,7 @@ const AppWrapper = () => {
       <Router>
         
         <Layout>
+          <Toaster position="bottom-right" />
           <Navbar />
           <ErrorBoundary>
             <Suspense fallback={<div>Loading page...</div>}>

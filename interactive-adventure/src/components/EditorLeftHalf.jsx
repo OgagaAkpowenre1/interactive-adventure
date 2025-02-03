@@ -291,7 +291,7 @@ const LeftHalf = ({ formData, setFormData }) => {
       <SceneButtonsWrapper>
         {formData.options.map((button, index) => (
           <GeneratedButton key={index}>
-            {button.text} → {button.sceneTitle}
+            {button.text} → {button.nextScene?.sceneTitle || "Unknown Scene"}
           </GeneratedButton>
         ))}
         <ButtonCreator onClick={handleFormToggle}>+</ButtonCreator>

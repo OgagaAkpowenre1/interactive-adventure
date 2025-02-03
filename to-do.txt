@@ -1,0 +1,4 @@
+Fix the story and scenes resetting on reload - Done (Saved scenes and story in local storage from context)
+Add toast to display error messages - Done
+Fix scene reader functionality - 
+Improve site styling

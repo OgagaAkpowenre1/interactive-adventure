@@ -7,6 +7,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useStoryContext } from "../contexts/storyContext";
 import axiosInstance from "../api";
 import NewStoryForm from "../components/NewStoryForm";
+import toast from "react-hot-toast";
 
 const Wrapper = styled.div`
   display: flex;
@@ -54,7 +55,7 @@ const GalleryWrapper = styled.div`
 
 const StoryDetails = () => {
   const location = useLocation()
-  const {selectedStory, setSelectedStory, scenes, setScenes} = useStoryContext()
+  const {selectedStory, setSelectedStory, scenes, setScenes, selectedScene} = useStoryContext()
   const navigate = useNavigate()
   const story = location.state || selectedStory  
   const [magnifiedImage, setMagnifiedImage] = React.useState(null);
@@ -91,6 +92,7 @@ const StoryDetails = () => {
       }
     } catch (error) {
       console.log(error);
+      toast.error("Failed to fetch scenes. Please try again.")
     } finally {
       setLoading(false);
     }
@@ -108,13 +110,17 @@ const StoryDetails = () => {
     try {
       // navigate(`/editor/${story._id}`)
       console.log(story._id)
+      
       const response = await axiosInstance.get(`/scenes/edit/${story._id}`);
+      
       // console.log(response.data)
       setScenes(response.data)
       // console.log(scenes)
       navigate(`/editor/${story._id}`)
+      toast.success("Editor opened successfully")
     } catch (error) {
       console.log(error)
+      toast.error("Failed to fetch scenes for editor")
     }
   }
 
@@ -124,6 +130,7 @@ const StoryDetails = () => {
     //   // navigate(`/editor/${story._id}`);
     // }
   }, [scenes, navigate]); 
+  
 
   if (!story) {
     return <p>No story details available.</p>;
@@ -144,11 +151,14 @@ const StoryDetails = () => {
   const deleteStory = async (story) => {
     try {
       console.log(story._id)
+      toast.loading("Deleting Story")
       const response = await axiosInstance.delete(`/stories/${story._id}/delete`, story._id)
       console.log(response)
+      toast.success("Story deleted successfully!")
       navigate('/stories')
     } catch (error) {
       console.log(error)
+      toast.error("Failed to delete story")
     }
   }
 

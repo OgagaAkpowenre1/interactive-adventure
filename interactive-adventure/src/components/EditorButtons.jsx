@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useStoryContext } from "../contexts/storyContext";
 import axiosInstance from "../api";
+import toast from "react-hot-toast";
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -155,8 +156,10 @@ const EditorButtons = ({formData}) => {
 
       console.log("Scene created:", response.data);
       fetchAllScenes()
+      toast.success("Scene saved successfully")
     } catch (error) {
       console.error("Error submitting scene:", error);
+      toast.error("Failed to create scene!")
     }
   };
 
@@ -175,8 +178,10 @@ const EditorButtons = ({formData}) => {
       console.log("scene updated", response.data)
       setSelectedScene(response.data)
       fetchAllScenes()
+      toast.success("Scene updated successfully")
     } catch (error) {
       console.error("Error updating scene", error)
+      toast.error("Failed to update scene")
     }
   }
 
@@ -185,9 +190,11 @@ const EditorButtons = ({formData}) => {
         await axiosInstance.delete(`/scenes/${selectedStory._id}/${sceneId}/delete?force=true`);
         // setScenes((prev) => prev.filter((scene) => scene._id !== sceneId));
         console.log("Scene deleted forcefully");
+        toast.success("Scene deleted forcefully")
         setSelectedScene(scenes[-1])
     } catch (error) {
         console.error("Error force-deleting scene", error);
+        toast.error("An error occurred!")
     }
 };
 
@@ -197,7 +204,9 @@ const EditorButtons = ({formData}) => {
       const response = await axiosInstance.delete(`/scenes/${selectedStory._id}/${selectedScene._id}/delete`)
       console.log("Deleted scene")
       fetchAllScenes()
+
       setSelectedScene(scenes[-1])
+      toast.success("Deleted scene successfully!")
     } catch (error) {
       if (error.response && error.response.status === 400 && error.response.data.referencedBy) {
           const confirmDelete = window.confirm(
@@ -209,6 +218,7 @@ const EditorButtons = ({formData}) => {
           }
       } else {
           console.error("Error deleting scene", error);
+          toast.error("Error deleting scene")
       }
   }
   }

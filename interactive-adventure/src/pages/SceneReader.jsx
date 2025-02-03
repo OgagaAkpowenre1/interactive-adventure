@@ -112,14 +112,31 @@ const SceneReader = () => {
 
   console.log(scene)
 
+  // useEffect(() => {
+  //   if (!scene) {
+  //     // Try to get scenes from localStorage if state is missing
+  //     const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
+  //     const foundScene = storedScenes.find(s => s._id === sceneId);
+
+  //     if (foundScene) {
+  //       setScene(foundScene);
+  //     }
+  //   }
+  // }, [scene, sceneId, storyId]);
+
   useEffect(() => {
     if (!scene) {
       // Try to get scenes from localStorage if state is missing
       const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
-      const foundScene = storedScenes.find(s => s._id === sceneId);
+      const firstScene = storedScenes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))[0];
 
-      if (foundScene) {
-        setScene(foundScene);
+      if (firstScene && sceneId === firstScene._id) {
+        setScene(firstScene);
+      } else {
+        const foundScene = storedScenes.find(s => s._id === sceneId);
+        if (foundScene) {
+          setScene(foundScene);
+        }
       }
     }
   }, [scene, sceneId, storyId]);

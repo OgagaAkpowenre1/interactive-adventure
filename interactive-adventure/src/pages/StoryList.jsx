@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import axiosInstance from "../api";
 import { useStoryContext } from "../contexts/storyContext";
+import toast from "react-hot-toast";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -96,7 +97,7 @@ const StoryList = () => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const {setSelectedStory} = useStoryContext()
+  const {selectedStory, setSelectedStory} = useStoryContext()
   useEffect(() => {
     // Fetch stories when component mounts
     const fetchStories = async () => {
@@ -106,12 +107,14 @@ const StoryList = () => {
         setStories(response.data);
       } catch (err) {
         setError(err.message);
+        toast.error("Failed to fetch stories")
       } finally {
         setLoading(false);
       }
     };
 
     fetchStories();
+    if (selectedStory) localStorage.setItem("selectedStory", JSON.stringify(selectedStory));
   }, []);
 
   // Handle loading and error states
