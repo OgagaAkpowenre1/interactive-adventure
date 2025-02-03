@@ -200,15 +200,15 @@ const updateScene = async () => {
 
         // Only append the image if a new one was uploaded
         if (formData.imageFile instanceof File) {
-            formDataToSend.append("image", formData.imageFile);
+            formDataToSend.append("imageFile", formData.imageFile);
         }
-
+        console.log(formDataToSend)
         const response = await axiosInstance.put(
             `/scenes/${selectedStory._id}/${selectedScene._id}/edit`, 
             formDataToSend, 
             { headers: { "Content-Type": "multipart/form-data" } }
         );
-
+        
         console.log("Scene updated:", response.data);
         setSelectedScene(response.data);
         fetchAllScenes();

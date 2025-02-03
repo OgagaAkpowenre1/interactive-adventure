@@ -271,6 +271,7 @@ const editScene = async (req, res) => {
       let imageUrl = scene.image; // Keep existing image if no new one is uploaded
 
       if (req.file) {
+        console.log("Found the file")
           try {
               imageUrl = await uploadSceneImage(req.file);
               console.log("Image uploaded successfully:", imageUrl);
@@ -278,6 +279,7 @@ const editScene = async (req, res) => {
               return res.status(500).json({ message: "Error uploading image" });
           }
       }
+      console.log("Image URL:", imageUrl);
 
       // Update the scene
       const updatedScene = await Scene.findByIdAndUpdate(
@@ -285,7 +287,7 @@ const editScene = async (req, res) => {
           { sceneTitle, sceneContent, options, image: imageUrl, isPlaceholder, isEnd },
           { new: true }
       );
-
+      console.log(updatedScene)
       return res.status(200).json(updatedScene);
   } catch (error) {
       console.error("Error editing scene:", error);
