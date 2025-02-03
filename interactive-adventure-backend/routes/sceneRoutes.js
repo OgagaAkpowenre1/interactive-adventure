@@ -65,7 +65,7 @@ router.use((req, res, next) => {
 
 // Route definitions
 router.post("/:storyId/createScene", upload, createScene);
-router.put("/:storyId/:sceneId/edit", editScene);
+router.put("/:storyId/:sceneId/edit", upload,  editScene);
 router.delete("/:storyId/:sceneId/delete", deleteScene);
 router.get("/:storyId/read", fetchInitialScenesForReader);
 router.get("/edit/:storyId", fetchScenesForEditor); // Specific route comes first

@@ -97,113 +97,179 @@ const createScene = async (req, res) => {
   }
 };
 
+// const editScene = async (req, res) => {
+//     try {
+//         console.log("Request recieved", req.body)
+//         const { storyId, sceneId } = req.params;
+//         console.log(sceneId)
+//         const { sceneTitle, sceneContent, options, image, isEnd = false } = req.body; // Default for isEnd
+
+//         if (!mongoose.Types.ObjectId.isValid(storyId)) {
+//             console.log("Invalid story ID format", storyId);
+//             return res.status(400).json({ message: "Invalid story ID format" });
+//         }
+
+//         console.log(req.body) 
+
+//         const story = await Story.findById(storyId);
+//         if (!story) {
+//             console.log("Story not found", storyId);
+//             return res.status(404).json({ message: "Story not found" });
+//         }
+
+//         console.log("Story found!")
+
+//         if (!mongoose.Types.ObjectId.isValid(sceneId)) {
+//             console.log("Invalid scene ID format", sceneId);
+//             return res.status(400).json({ message: "Invalid scene ID format" });
+//         }
+
+//         let scene = await Scene.findById(sceneId);
+//         if (!scene) {
+//             console.log("Scene not found", sceneId);
+//             return res.status(404).json({ message: "Scene not found" });
+//         }
+
+//          // Check if another scene in the same story already has the new sceneTitle
+//          const duplicateScene = await Scene.findOne({
+//           storyId,
+//           sceneTitle,
+//           _id: { $ne: sceneId }, // Exclude the current scene being updated
+//       });
+
+//       if (duplicateScene) {
+//           // Duplicate title found, prevent the update
+//           return res.status(409).json({ message: `A scene with the title "${sceneTitle}" already exists in this story.` });
+//       }
+
+//       console.log("Duplicate scene check:", duplicateScene); // Add this log to debug
+
+
+//         // Create placeholder scenes if needed
+//         if (!isEnd && options && options.length > 0) {
+//           for (let i = 0; i < options.length; i++) {
+//               const option = options[i];
+//               if (option.text) {
+//                   const nextSceneTitle = option.nextSceneTitle;
+                  
+//                   if (!nextSceneTitle) {
+//                       // If no nextSceneTitle is provided, create a placeholder
+//                       const placeholderScene = await Scene.findOne({
+//                           storyId,
+//                           sceneTitle: option.text,
+//                           isPlaceholder: true
+//                       });
+                      
+//                       if (!placeholderScene) {
+//                           const newPlaceholder = new Scene({
+//                               storyId,
+//                               sceneTitle: option.text,
+//                               sceneContent: "",
+//                               options: [],
+//                               image: "",
+//                               isPlaceholder: true
+//                           });
+//                           await newPlaceholder.save();
+//                           option.nextSceneTitle = newPlaceholder.sceneTitle; // Update the option with the new placeholder title
+//                           option.nextScene = newPlaceholder._id; // Optionally, store the ObjectId
+//                       } else {
+//                           option.nextSceneTitle = placeholderScene.sceneTitle;
+//                           option.nextScene = placeholderScene._id;
+//                       }
+//                   } else {
+//                       // Check if a scene with the nextSceneTitle exists in this story
+//                       const existingScene = await Scene.findOne({
+//                           storyId,
+//                           sceneTitle: nextSceneTitle
+//                       });
+                      
+//                       if (!existingScene) {
+//                           const placeholderScene = new Scene({
+//                               storyId,
+//                               sceneTitle: nextSceneTitle,
+//                               sceneContent: "",
+//                               options: [],
+//                               image: "",
+//                               isPlaceholder: true
+//                           });
+      
+//                           await placeholderScene.save();
+//                           option.nextSceneTitle = placeholderScene.sceneTitle;
+//                           option.nextScene = placeholderScene._id;
+//                       }
+//                   }
+//               }
+//           }
+//           scene.options = options; // Ensure options are updated
+//       }
+      
+//       let imageUrl = null;
+//       if (req.file) {
+//           try {
+//               imageUrl = await uploadSceneImage(req.file);
+//               console.log("Image uploaded successfully:", imageUrl);
+//           } catch (uploadError) {
+//               return res.status(500).json({ message: "Error uploading image" });
+//           }
+//       }
+
+
+//         // Update the scene
+//         const updatedScene = await Scene.findByIdAndUpdate(
+//             sceneId,
+//             { sceneTitle, sceneContent, options, image:imageUrl, isPlaceholder: false, isEnd },
+//             { new: true }
+//         );
+
+//         return res.status(200).json(updatedScene);
+        
+//     } catch (error) {
+//         console.error("Error editing scene:", error);
+//         return res.status(500).json({ message: "Internal server error" });
+//     }
+// };
+
 const editScene = async (req, res) => {
-    try {
-        console.log("Request recieved", req.body)
-        const { storyId, sceneId } = req.params;
-        console.log(sceneId)
-        const { sceneTitle, sceneContent, options, image, isEnd = false } = req.body; // Default for isEnd
+  try {
+      console.log("Request received", req.body);
+      const { storyId, sceneId } = req.params;
 
-        if (!mongoose.Types.ObjectId.isValid(storyId)) {
-            console.log("Invalid story ID format", storyId);
-            return res.status(400).json({ message: "Invalid story ID format" });
-        }
+      // Parse options since they are sent as a JSON string
+      const { sceneTitle, sceneContent, isEnd = false, isPlaceholder = false } = req.body;
+      const options = req.body.options ? JSON.parse(req.body.options) : [];
 
-        console.log(req.body) 
+      if (!mongoose.Types.ObjectId.isValid(storyId)) {
+          return res.status(400).json({ message: "Invalid story ID format" });
+      }
 
-        const story = await Story.findById(storyId);
-        if (!story) {
-            console.log("Story not found", storyId);
-            return res.status(404).json({ message: "Story not found" });
-        }
+      const story = await Story.findById(storyId);
+      if (!story) {
+          return res.status(404).json({ message: "Story not found" });
+      }
 
-        console.log("Story found!")
+      if (!mongoose.Types.ObjectId.isValid(sceneId)) {
+          return res.status(400).json({ message: "Invalid scene ID format" });
+      }
 
-        if (!mongoose.Types.ObjectId.isValid(sceneId)) {
-            console.log("Invalid scene ID format", sceneId);
-            return res.status(400).json({ message: "Invalid scene ID format" });
-        }
+      let scene = await Scene.findById(sceneId);
+      if (!scene) {
+          return res.status(404).json({ message: "Scene not found" });
+      }
 
-        let scene = await Scene.findById(sceneId);
-        if (!scene) {
-            console.log("Scene not found", sceneId);
-            return res.status(404).json({ message: "Scene not found" });
-        }
-
-         // Check if another scene in the same story already has the new sceneTitle
-         const duplicateScene = await Scene.findOne({
+      // Check for duplicate scene title
+      const duplicateScene = await Scene.findOne({
           storyId,
           sceneTitle,
-          _id: { $ne: sceneId }, // Exclude the current scene being updated
+          _id: { $ne: sceneId }
       });
 
       if (duplicateScene) {
-          // Duplicate title found, prevent the update
-          return res.status(409).json({ message: `A scene with the title "${sceneTitle}" already exists in this story.` });
+          return res.status(409).json({ message: `A scene with the title "${sceneTitle}" already exists.` });
       }
 
-      console.log("Duplicate scene check:", duplicateScene); // Add this log to debug
+      // Handle image upload
+      let imageUrl = scene.image; // Keep existing image if no new one is uploaded
 
-
-        // Create placeholder scenes if needed
-        if (!isEnd && options && options.length > 0) {
-          for (let i = 0; i < options.length; i++) {
-              const option = options[i];
-              if (option.text) {
-                  const nextSceneTitle = option.nextSceneTitle;
-                  
-                  if (!nextSceneTitle) {
-                      // If no nextSceneTitle is provided, create a placeholder
-                      const placeholderScene = await Scene.findOne({
-                          storyId,
-                          sceneTitle: option.text,
-                          isPlaceholder: true
-                      });
-                      
-                      if (!placeholderScene) {
-                          const newPlaceholder = new Scene({
-                              storyId,
-                              sceneTitle: option.text,
-                              sceneContent: "",
-                              options: [],
-                              image: "",
-                              isPlaceholder: true
-                          });
-                          await newPlaceholder.save();
-                          option.nextSceneTitle = newPlaceholder.sceneTitle; // Update the option with the new placeholder title
-                          option.nextScene = newPlaceholder._id; // Optionally, store the ObjectId
-                      } else {
-                          option.nextSceneTitle = placeholderScene.sceneTitle;
-                          option.nextScene = placeholderScene._id;
-                      }
-                  } else {
-                      // Check if a scene with the nextSceneTitle exists in this story
-                      const existingScene = await Scene.findOne({
-                          storyId,
-                          sceneTitle: nextSceneTitle
-                      });
-                      
-                      if (!existingScene) {
-                          const placeholderScene = new Scene({
-                              storyId,
-                              sceneTitle: nextSceneTitle,
-                              sceneContent: "",
-                              options: [],
-                              image: "",
-                              isPlaceholder: true
-                          });
-      
-                          await placeholderScene.save();
-                          option.nextSceneTitle = placeholderScene.sceneTitle;
-                          option.nextScene = placeholderScene._id;
-                      }
-                  }
-              }
-          }
-          scene.options = options; // Ensure options are updated
-      }
-      
-      let imageUrl = null;
       if (req.file) {
           try {
               imageUrl = await uploadSceneImage(req.file);
@@ -213,21 +279,20 @@ const editScene = async (req, res) => {
           }
       }
 
+      // Update the scene
+      const updatedScene = await Scene.findByIdAndUpdate(
+          sceneId,
+          { sceneTitle, sceneContent, options, image: imageUrl, isPlaceholder, isEnd },
+          { new: true }
+      );
 
-        // Update the scene
-        const updatedScene = await Scene.findByIdAndUpdate(
-            sceneId,
-            { sceneTitle, sceneContent, options, image:imageUrl, isPlaceholder: false, isEnd },
-            { new: true }
-        );
-
-        return res.status(200).json(updatedScene);
-        
-    } catch (error) {
-        console.error("Error editing scene:", error);
-        return res.status(500).json({ message: "Internal server error" });
-    }
+      return res.status(200).json(updatedScene);
+  } catch (error) {
+      console.error("Error editing scene:", error);
+      return res.status(500).json({ message: "Internal server error" });
+  }
 };
+
 
 
 // const deleteScene = async (req, res) => {
