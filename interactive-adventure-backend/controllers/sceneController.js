@@ -109,7 +109,7 @@ const editScene = async (req, res) => {
             return res.status(400).json({ message: "Invalid story ID format" });
         }
 
-        console.log(req.body)
+        console.log(req.body) 
 
         const story = await Story.findById(storyId);
         if (!story) {
