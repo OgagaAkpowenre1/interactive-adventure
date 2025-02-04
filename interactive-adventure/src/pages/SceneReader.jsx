@@ -124,22 +124,39 @@ const SceneReader = () => {
   //   }
   // }, [scene, sceneId, storyId]);
 
-  useEffect(() => {
-    if (!scene) {
-      // Try to get scenes from localStorage if state is missing
-      const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
-      const firstScene = storedScenes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))[0];
+  // useEffect(() => {
+  //   if (!scene) {
+  //     // Try to get scenes from localStorage if state is missing
+  //     const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
+  //     const firstScene = storedScenes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))[0];
 
-      if (firstScene && sceneId === firstScene._id) {
-        setScene(firstScene);
+  //     if (firstScene && sceneId === firstScene._id) {
+  //       setScene(firstScene);
+  //     } else {
+  //       const foundScene = storedScenes.find(s => s._id === sceneId);
+  //       if (foundScene) {
+  //         setScene(foundScene);
+  //       }
+  //     }
+  //   }
+  // }, [scene, sceneId, storyId]);
+
+  useEffect(() => {
+    const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
+    
+    if (!scene || scene._id !== sceneId) {
+      const foundScene = storedScenes.find(s => s._id === sceneId);
+      if (foundScene) {
+        setScene(foundScene);
       } else {
-        const foundScene = storedScenes.find(s => s._id === sceneId);
-        if (foundScene) {
-          setScene(foundScene);
-        }
+        // Fallback to the first scene if sceneId is invalid or missing
+        const firstScene = storedScenes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))[0];
+        if (firstScene) setScene(firstScene);
       }
     }
-  }, [scene, sceneId, storyId]);
+  }, [sceneId, storyId]);
+  
+
 
   if (!scene) return <p>Loading...</p>;
 
@@ -154,7 +171,7 @@ const SceneReader = () => {
           <Button key={index} buttonText={option.text} onClick={() => {
             console.log(`Navigating to scene: ${option._id}`);
             navigate(`/reader/${storyId}/${option._id}`, {
-              state: { scene: option._id }
+              state: { scene: option }
             });
           }} />
         ))}
