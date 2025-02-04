@@ -1,4 +1,5 @@
 const Story = require("../models/stories")
+const Scene = require("../models/scenes")
 const { default: mongoose } = require("mongoose");
 const {uploadImage} = require("./uploadImage")
 const multer = require("multer");
@@ -254,7 +255,8 @@ const deleteStory = async (req, res) => {
         }
 
         // Delete all scenes associated with the story
-        await Scene.deleteMany({ storyId: storyId });
+        const deletionResult = await Scene.deleteMany({ storyId: storyId });
+        console.log(`Deleted ${deletionResult.deletedCount} scenes associated with story ${storyId}`);
 
         // Delete the story itself
         const deletedStory = await Story.findByIdAndDelete(storyId);
