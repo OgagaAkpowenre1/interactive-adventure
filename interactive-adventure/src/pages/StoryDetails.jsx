@@ -80,7 +80,7 @@ const StoryDetails = () => {
       setLoading(true);
       const response = await axiosInstance.get(`/scenes/${story._id}/read`);
       setScenes(response.data);
-        console.log(scenes)
+      console.log(scenes)
       // Store scenes in localStorage
       localStorage.setItem(`scenes_${story._id}`, JSON.stringify(response.data));
   
@@ -97,14 +97,6 @@ const StoryDetails = () => {
       setLoading(false);
     }
   };  
-
-  const editStory = async () => {
-    try {
-      
-    } catch (error) {
-      console.error("Error editing story", error)
-    }
-  }
 
   const goToEditor = async () => {
     try {
@@ -159,14 +151,6 @@ const StoryDetails = () => {
     } catch (error) {
       console.log(error)
       toast.error("Failed to delete story")
-    }
-  }
-
-  const readStory = async (story) => {
-    try {
-      
-    } catch (error) {
-      console.log(error)
     }
   }
 

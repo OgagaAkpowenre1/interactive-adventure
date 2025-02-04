@@ -297,10 +297,22 @@ const LeftHalf = ({ formData, setFormData }) => {
         <ButtonCreator onClick={handleFormToggle}>+</ButtonCreator>
       </SceneButtonsWrapper>
 
-      <input type="checkbox" name="isPlaceholder" id="" checked={formData.isPlaceholder} />
-      <label htmlFor="isPlaceholder">Placeholder scene</label>
-      <input type="checkbox" name="isEnd" id="" checked={formData.isEnd}/>
-      <label htmlFor="isEnd">Ending scene</label>
+      <input 
+  type="checkbox" 
+  name="isPlaceholder" 
+  checked={!!formData.isPlaceholder} // Ensure boolean value
+  onChange={(e) => setFormData(prev => ({ ...prev, isPlaceholder: e.target.checked }))}
+/>
+<label htmlFor="isPlaceholder">Placeholder scene</label>
+
+<input 
+  type="checkbox" 
+  name="isEnd" 
+  checked={!!formData.isEnd} // Ensure boolean value
+  onChange={(e) => setFormData(prev => ({ ...prev, isEnd: e.target.checked }))}
+/>
+<label htmlFor="isEnd">Ending scene</label>
+
     </Wrapper>
   );
 };

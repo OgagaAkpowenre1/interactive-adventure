@@ -162,6 +162,7 @@ const SceneReader = () => {
 
   return (
     <Wrapper>
+      <h1>{scene.sceneTitle}</h1>
       <SceneImageComponent src={scene.image || "https://wallpapercave.com/wp/wp7135795.jpg"} alt="Scene Image" />
       <SceneTextWrapper>
         <SceneText>{scene.sceneContent}</SceneText>

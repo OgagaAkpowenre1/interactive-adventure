@@ -18,17 +18,28 @@ const createStory = async (req, res) => {
             }
           } else {
             console.log("No file received for cover")
+            return res.status(400).json({error: "Cover image is required"})
           }
 
         if(!title || !synopsis){
             return res.status(400).json({error : "title and synopsis are required"})
         }
 
+        let parsedGenres = [];
+     try {
+         parsedGenres = JSON.parse(genres);
+     } catch (e) {
+         console.error("Error parsing genres:", e);
+        return res.status(400).json({ error: "Invalid genres format" });
+     }
+      
+
+
         const newStory = new Story({
             title,
             synopsis,
             cover : coverUrl,
-            genres: genres  || [],
+            genres: parsedGenres  || [],
             readingTime : readingTime  || null,
             rating : rating  || 3,
             gallery : gallery  || []
@@ -229,26 +240,33 @@ const editStory = async (req, res) => {
 const deleteStory = async (req, res) => {
     try {
         console.log("Recieved request")
-        const {storyId} = req.params
+        const { storyId } = req.params;
 
-        if(!mongoose.Types.ObjectId.isValid(storyId)){
+        if (!mongoose.Types.ObjectId.isValid(storyId)) {
             console.log("Invalid story ID format", storyId)
             return res.status(400).json({ message: "Invalid story ID format" });
         }
 
-        const deletedStory = await Story.findByIdAndDelete(storyId)
-
-        if(!deletedStory){
-            return res.status(404).json({message: "Story not found"})
+        // Find the story to get the associated scene IDs
+        const story = await Story.findById(storyId);
+        if (!story) {
+            return res.status(404).json({ message: "Story not found" });
         }
 
-        res.status(200).json({message:"Story deleted successfully", deletedStory})
+        // Delete all scenes associated with the story
+        await Scene.deleteMany({ storyId: storyId });
 
-    } catch(error) {
-        console.error("Error deleting story", error)
-        res.status(500).json({error : "An error occurred while deleting the story"})
+        // Delete the story itself
+        const deletedStory = await Story.findByIdAndDelete(storyId);
+
+        res.status(200).json({ message: "Story and associated scenes deleted successfully", deletedStory });
+
+    } catch (error) {
+        console.error("Error deleting story and/or scenes", error);
+        res.status(500).json({ error: "An error occurred while deleting the story and/or scenes" });
     }
-}
+};
+
 
 const fetchStories = async (req, res) => {
     try {
