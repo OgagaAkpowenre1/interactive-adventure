@@ -43,28 +43,45 @@ const createScene = async (req, res) => {
           }
       }
 
-      if(parsedOptions && parsedOptions.length > 0){
-                    for(let i = 0; i < parsedOptions.length; i++){
-                        const option = parsedOptions[i]
-                        console.log(option)
-                        if(option.text && !mongoose.Types.ObjectId.isValid(option.nextScene)){
-                            console.log("Passed the condition")
-                            const placeholderScene = new Scene ({
-                                storyId, 
-                                sceneTitle : option.text,
-                                sceneContent: "",
-                                options : [],
-                                image : "",
-                                isPlaceholder: true
-                            })
-        
-                            await placeholderScene.save()
-                            console.log("Placeholder scene created", placeholderScene._id)
-                            option.nextScene = placeholderScene._id
-                            
-                        }
+      if (parsedOptions && parsedOptions.length > 0) {
+        for (let i = 0; i < parsedOptions.length; i++) {
+            const option = parsedOptions[i];
+    
+            if (option.text) {
+                if (mongoose.Types.ObjectId.isValid(option.nextScene)) {
+                    // ✅ If `nextScene` is a valid ObjectId, it means the user selected an existing scene
+                    console.log(`Linking to existing scene: ${option.nextScene}`);
+                } else {
+                    // ✅ Otherwise, the user is creating a new scene
+                    console.log(`Checking if a scene already exists for title: ${option.sceneTitle}`);
+    
+                    // Check if a scene with this title already exists in the story
+                    let existingScene = await Scene.findOne({ storyId, sceneTitle: option.sceneTitle });
+    
+                    if (existingScene) {
+                        console.log("Scene already exists, linking to it:", existingScene._id);
+                        option.nextScene = existingScene._id;
+                    } else {
+                        console.log("Creating a new placeholder scene...");
+    
+                        const placeholderScene = new Scene({
+                            storyId,
+                            sceneTitle: option.sceneTitle || option.text, // Fallback to button text if no title
+                            sceneContent: "",
+                            options: [],
+                            image: "",
+                            isPlaceholder: true
+                        });
+    
+                        await placeholderScene.save();
+                        console.log("Placeholder scene created:", placeholderScene._id);
+                        option.nextScene = placeholderScene._id;
                     }
                 }
+            }
+        }
+    }
+    
 
       // Upload image if present
       let imageUrl = null;
