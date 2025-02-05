@@ -522,6 +522,7 @@ const LeftHalf = ({ formData, setFormData }) => {
 
     setFormVisible(false);
     setCreatingNewScene(false)
+    setIsCreatingNewScene(false)
     setOptionData({ text: "", sceneTitle: "", nextScene: null });
   };
 
