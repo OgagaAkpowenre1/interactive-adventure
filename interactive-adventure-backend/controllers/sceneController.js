@@ -482,7 +482,7 @@ const fetchInitialScenesForReader = async (req, res) => {
     const scenes = await Scene.find(
       { storyId, isPlaceholder: false }, // Exclude placeholder scenes
       { sceneTitle: 1, _id: 1, options: 1, image: 1, createdAt: 1 } // Select required fields
-    ).sort({ createdAt: 1 }) // Sort by creation date (earliest first)
+    ).sort({ createdAt: -1 }) // Sort by creation date (earliest first)
      .limit(3); // Fetch only the first 3 scenes
 
     console.log("Fetched scenes:", scenes);
@@ -527,7 +527,7 @@ const fetchScenesForEditor = async (req, res) => {
   try {
       // Find all scenes for the specific story
       const scenes = await Scene.find({ storyId })
-          .select("sceneTitle _id options image isPlaceholder isEnd createdAt sceneContent") // Select fields you need
+          .select("sceneTitle _id options image isPlaceholder isEnd createdAt sceneContent createdAt") // Select fields you need
           .sort({ createdAt: 1 }) // Sort by creation date
           .populate({
               path: "options.nextScene", // Populate `nextScene` field in `options`

@@ -131,6 +131,11 @@ curl -X PUT "http://localhost:5000/api/scenes/678e3a91bed4549d5d955e6e/678e3b5ab
   "image": "y"
 }'
 
+curl -X GET "http://localhost:5000/api/scenes/67a2677b8c6813cbd5188e8a/read" \
+-H "Content-Type: application/json" \
+-d '{
+}'
+
 
 
 curl -X PUT "http://localhost:5000/api/scenes/678e3a91bed4549d5d955e6e/678e3fcb524b78fbd4a075cd/edit" \

@@ -109,7 +109,7 @@ const SceneReader = () => {
   const navigate = useNavigate()
   const { sceneId, storyId } = useParams(); // Get scene ID from URL
   const [scene, setScene] = useState(location.state?.scene || null);
-
+  const {scenes} = useStoryContext()
   console.log(scene)
 
   // useEffect(() => {
@@ -122,7 +122,7 @@ const SceneReader = () => {
   //       setScene(foundScene);
   //     }
   //   }
-  // }, [scene, sceneId, storyId]);
+  // }, [scene, sceneId, storyId]); 
 
   // useEffect(() => {
   //   if (!scene) {
@@ -171,6 +171,7 @@ const SceneReader = () => {
         {scene.options.map((option, index) => (
           <Button key={index} buttonText={option.text} onClick={() => {
             console.log(`Navigating to scene: ${option._id}`);
+            
             navigate(`/reader/${storyId}/${option._id}`, {
               state: { scene: option }
             });

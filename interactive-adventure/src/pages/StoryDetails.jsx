@@ -87,10 +87,10 @@ const StoryDetails = () => {
       // Navigate to the reader with the first scene in state
       if (response.data.length > 0) {
         navigate(`/reader/${selectedStory._id}/${response.data[0]._id}`, {
-          state: { scene: response.data[0] } // Pass first scene
+          state: { scene: scenes[0] } // Pass first scene
         });
       }
-    } catch (error) {
+    } catch (error) { 
       console.log(error);
       toast.error("Failed to fetch scenes. Please try again.")
     } finally {
