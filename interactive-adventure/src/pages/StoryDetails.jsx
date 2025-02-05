@@ -143,7 +143,6 @@ const StoryDetails = () => {
   const deleteStory = async (story) => {
     try {
       console.log(story._id)
-      toast.loading("Deleting Story")
       const response = await axiosInstance.delete(`/stories/${story._id}/delete`, story._id)
       console.log(response)
       toast.success("Story deleted successfully!")
