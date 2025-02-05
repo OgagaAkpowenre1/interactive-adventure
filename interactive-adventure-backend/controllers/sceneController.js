@@ -282,6 +282,45 @@ const editScene = async (req, res) => {
       }
       console.log("Image URL:", imageUrl);
 
+            // ✅ Generate placeholder scenes for options with missing `nextScene`
+            for (let i = 0; i < options.length; i++) {
+              const option = options[i];
+          
+              if (option.text) {
+                  if (mongoose.Types.ObjectId.isValid(option.nextScene)) {
+                      // ✅ If `nextScene` is a valid ObjectId, it means the user selected an existing scene
+                      console.log(`Linking to existing scene: ${option.nextScene}`);
+                  } else {
+                      // ✅ Otherwise, the user is creating a new scene
+                      console.log(`Creating placeholder for new scene: ${option.sceneTitle}`);
+          
+                      // Check if a scene with this title already exists in the story
+                      let existingScene = await Scene.findOne({ storyId, sceneTitle: option.sceneTitle });
+          
+                      if (existingScene) {
+                          console.log("Scene already exists, linking to it:", existingScene._id);
+                          option.nextScene = existingScene._id;
+                      } else {
+                          console.log("Creating a new placeholder scene...");
+          
+                          const placeholderScene = new Scene({
+                              storyId,
+                              sceneTitle: option.sceneTitle || option.text, // Fallback to button text if no title
+                              sceneContent: "",
+                              options: [],
+                              image: "",
+                              isPlaceholder: true
+                          });
+          
+                          await placeholderScene.save();
+                          console.log("Placeholder scene created:", placeholderScene._id);
+                          option.nextScene = placeholderScene._id;
+                      }
+                  }
+              }
+          }
+          
+
       // Update the scene
       const updatedScene = await Scene.findByIdAndUpdate(
           sceneId,

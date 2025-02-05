@@ -199,62 +199,349 @@ const SceneButtonsWrapper = styled.div`
 //   );
 // };
 
+// const LeftHalf = ({ formData, setFormData }) => {
+//   const [uploadedImage, setUploadedImage] = useState(null);
+//   const [formVisible, setFormVisible] = useState(false);
+//   const [optionData, setOptionData] = useState({ text: "", sceneTitle: "" });
+//   const {scenes, setScenes} = useStoryContext()
+//   const [availableScenes, setAvailableScenes] = useState([]);
+
+//     // When scene changes, update the displayed image
+//     useEffect(() => {
+//       if (formData.imageFile instanceof File) {
+//         // Show preview if a new image was uploaded
+//         setUploadedImage(URL.createObjectURL(formData.imageFile));
+//       } else {
+//         // Otherwise, show the scene's existing image
+//         setUploadedImage(formData.imageFile || null);
+//       }
+//     }, [formData.imageFile, formData.image]);
+
+
+// useEffect(() => {
+//   // const fetchScenes = async () => {
+//   //   try {
+//   //     const response = await fetch(`/stories/${formData.storyId}/scenes`);
+//   //     const data = await response.json();
+//   //     setAvailableScenes(data);
+//   //   } catch (error) {
+//   //     console.error("Error fetching scenes:", error);
+//   //   }
+//   // };
+//   // fetchScenes();
+//   setAvailableScenes(scenes)
+// }, []);
+
+//   const handleImageUpload = (event) => {
+//     const file = event.target.files[0];
+//     if (file) {
+//       const imageUrl = URL.createObjectURL(file);
+//       setUploadedImage(imageUrl);
+//       setFormData((prev) => ({ ...prev, imageFile: file }));
+//     }
+//   };
+
+//   const handleFormToggle = () => {
+//     setFormVisible(!formVisible);
+//   };
+
+//   // const handleOptionChange = (event) => {
+//   //   const { name, value } = event.target;
+//   //   setOptionData((prev) => ({ ...prev, [name]: value }));
+//   // };
+//   const handleOptionChange = (event) => {
+//     const { name, value } = event.target;
+    
+//     if (name === "sceneTitle") {
+//       const selectedScene = availableScenes.find(scene => scene.sceneTitle === value);
+//       setOptionData((prev) => ({
+//         ...prev,
+//         sceneTitle: value,
+//         nextScene: selectedScene ? selectedScene._id : null, // Use ID instead of title
+//       }));
+//     } else {
+//       setOptionData((prev) => ({ ...prev, [name]: value }));
+//     }
+//   };
+  
+
+//   const handleDeleteOption = (index) => {
+//     setFormData((prev) => ({
+//       ...prev,
+//       options: prev.options.filter((_, i) => i !== index),
+//     }));
+//   };
+  
+
+//   // const handleOptionSubmit = (event) => {
+//   //   event.preventDefault();
+
+//   //   if (!optionData.text || !optionData.sceneTitle) return;
+
+//   //   // Add the new option to the scene's options list
+//   //   setFormData((prev) => ({
+//   //     ...prev,
+//   //     options: [...prev.options, optionData], // Append new option
+//   //   }));
+
+//   //   setOptionData({ text: "", sceneTitle: "" });
+//   //   setFormVisible(false);
+//   // };
+//   const handleOptionSubmit = (event) => {
+//     event.preventDefault();
+  
+//     if (!optionData.text || !optionData.sceneTitle) return;
+  
+//     const selectedScene = availableScenes.find(scene => scene.sceneTitle === optionData.sceneTitle);
+  
+//     const newOption = {
+//       text: optionData.text,
+//       nextScene: selectedScene ? selectedScene._id : null,
+//       sceneTitle: optionData.sceneTitle,
+//     };
+  
+//     setFormData((prev) => ({
+//       ...prev,
+//       options: [...prev.options, newOption],
+//     }));
+  
+//     setOptionData({ text: "", sceneTitle: "" });
+//     setFormVisible(false);
+//   };
+  
+  
+
+  
+
+//   return (
+//     <Wrapper>
+//       <ImageUpload>
+//         {uploadedImage ? <img src={uploadedImage} alt="Uploaded preview" /> : <p>Click to upload an image</p>}
+//         <input type="file" accept="image/*" onChange={handleImageUpload} />
+//       </ImageUpload>
+
+//       <TextInput
+//         name="sceneContent"
+//         placeholder="Tell your story"
+//         value={formData.sceneContent || ""}
+//         onChange={(e) => setFormData({ ...formData, sceneContent: e.target.value })}
+//       />
+
+//       {formVisible && (
+//         <FormWrapper>
+//           {/* <label>
+//             Text:
+//             <input
+//               type="text"
+//               name="text"
+//               value={optionData.text}
+//               onChange={handleOptionChange}
+//               placeholder="Enter button text"
+//             />
+//           </label>
+//           <label>
+//             Scene Title:
+//             <input
+//               type="text"
+//               name="sceneTitle"
+//               value={optionData.sceneTitle}
+//               onChange={handleOptionChange}
+//               placeholder="Enter scene Title"
+//             />
+//           </label> */}
+
+// <label>
+//   Scene Title:
+//   <select
+//     name="sceneTitle"
+//     value={optionData.sceneTitle}
+//     onChange={handleOptionChange}
+//   >
+//     <option value="">Create New Scene</option>
+//     <label>
+//   Text:
+//   <input
+//     type="text"
+//     name="text"
+//     value={optionData.text}
+//     onChange={handleOptionChange}
+//     placeholder="Enter button text"
+//   />
+// </label>
+//     {availableScenes.map((scene) => (
+//       <option key={scene._id} value={scene.sceneTitle}>
+//         {scene.sceneTitle}
+//       </option>
+//     ))}
+//   </select>
+// </label>
+
+// {/* Show the manual input only when "Create New Scene" is selected */}
+// {!optionData.sceneTitle && (
+//   <FormWrapper><label>
+//   Text:
+//   <input
+//     type="text"
+//     name="text"
+//     value={optionData.text}
+//     onChange={handleOptionChange}
+//     placeholder="Enter button text"
+//   />
+// </label>
+// <label>
+//   Scene Title:
+//   <input
+//     type="text"
+//     name="sceneTitle"
+//     value={optionData.sceneTitle}
+//     onChange={handleOptionChange}
+//     placeholder="Enter scene Title"
+//   />
+//   </label>
+//   </FormWrapper>
+// )}
+
+
+//           <button onClick={handleOptionSubmit}>Save</button>
+//         </FormWrapper>
+//       )}
+
+//       <SceneButtonsWrapper>
+//         {formData.options.map((button, index) => (
+//           // <GeneratedButton key={index}>
+//           //   {button.text} → {button.nextScene?.sceneTitle || "Unknown Scene"}
+//           //   <i className="fa-trash"></i>
+//           // </GeneratedButton>
+//           <GeneratedButton key={index}>
+//   {button.text} → {button.nextScene ? availableScenes.find(s => s._id === button.nextScene)?.sceneTitle || "Unknown Scene" : "New Scene"}
+//   <i className="fas fa-trash" onClick={() => handleDeleteOption(index)} style={{ cursor: "pointer", marginLeft: "10px" }}></i>
+// </GeneratedButton>
+
+//         ))}
+//         <ButtonCreator onClick={handleFormToggle}>+</ButtonCreator>
+//       </SceneButtonsWrapper>
+
+//       <input 
+//   type="checkbox" 
+//   name="isPlaceholder" 
+//   checked={!!formData.isPlaceholder} // Ensure boolean value
+//   onChange={(e) => setFormData(prev => ({ ...prev, isPlaceholder: e.target.checked }))}
+// />
+// <label htmlFor="isPlaceholder">Placeholder scene</label>
+
+// <input 
+//   type="checkbox" 
+//   name="isEnd" 
+//   checked={!!formData.isEnd} // Ensure boolean value
+//   onChange={(e) => setFormData(prev => ({ ...prev, isEnd: e.target.checked }))}
+// />
+// <label htmlFor="isEnd">Ending scene</label>
+
+//     </Wrapper>
+//   );
+// };
+
+
+// export default LeftHalf;
 const LeftHalf = ({ formData, setFormData }) => {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [formVisible, setFormVisible] = useState(false);
-  const [optionData, setOptionData] = useState({ text: "", sceneTitle: "" });
+  const { scenes, setScenes } = useStoryContext();
+  const [optionData, setOptionData] = useState({ text: "", sceneTitle: "", nextScene: null });
+  const [creatingNewScene, setCreatingNewScene] = useState(false);
+  const [isCreatingNewScene, setIsCreatingNewScene] = useState(false);
 
-    // When scene changes, update the displayed image
-    useEffect(() => {
-      if (formData.imageFile instanceof File) {
-        // Show preview if a new image was uploaded
-        setUploadedImage(URL.createObjectURL(formData.imageFile));
-      } else {
-        // Otherwise, show the scene's existing image
-        setUploadedImage(formData.imageFile || null);
-      }
-    }, [formData.imageFile, formData.image]);
+  // Update the displayed image when scene changes
+  useEffect(() => {
+    if (formData.imageFile instanceof File) {
+      setUploadedImage(URL.createObjectURL(formData.imageFile));
+    } else {
+      setUploadedImage(formData.imageFile || null);
+    }
+  }, [formData.imageFile]);
 
+  // Handle image upload
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setUploadedImage(imageUrl);
+      setUploadedImage(URL.createObjectURL(file));
       setFormData((prev) => ({ ...prev, imageFile: file }));
     }
   };
 
+  // Handle form visibility toggle
   const handleFormToggle = () => {
     setFormVisible(!formVisible);
+    setCreatingNewScene(false); // Reset selection when reopening
+    setOptionData({ text: "", sceneTitle: "", nextScene: null });
   };
 
+  // Handle input changes for option text and scene selection
   const handleOptionChange = (event) => {
     const { name, value } = event.target;
-    setOptionData((prev) => ({ ...prev, [name]: value }));
+  
+    if (name === "sceneTitle") {
+      if (value === "NEW_SCENE") {
+        setIsCreatingNewScene(true);
+        setOptionData((prev) => ({
+          ...prev,
+          sceneTitle: "", // Keep empty so user can type
+          nextScene: null,
+        }));
+      } else if (!isCreatingNewScene) { 
+        // Only update if not creating a new scene
+        setIsCreatingNewScene(false);
+        const selectedScene = scenes.find(scene => scene.sceneTitle === value);
+        setOptionData((prev) => ({
+          ...prev,
+          sceneTitle: value,
+          nextScene: selectedScene ? selectedScene._id : null,
+        }));
+      }
+    } else {
+      setOptionData((prev) => ({ ...prev, [name]: value }));
+    }
   };
+  
 
+  // Handle option submission
   const handleOptionSubmit = (event) => {
     event.preventDefault();
+    if (!optionData.text || (!optionData.sceneTitle && !creatingNewScene)) return;
 
-    if (!optionData.text || !optionData.sceneTitle) return;
+    const newOption = {
+      text: optionData.text,
+      sceneTitle: optionData.sceneTitle,
+      nextScene: creatingNewScene ? null : optionData.nextScene, // If new scene, keep nextScene null for now
+    };
 
-    // Add the new option to the scene's options list
     setFormData((prev) => ({
       ...prev,
-      options: [...prev.options, optionData], // Append new option
+      options: [...prev.options, newOption],
     }));
 
-    setOptionData({ text: "", sceneTitle: "" });
     setFormVisible(false);
+    setCreatingNewScene(false)
+    setOptionData({ text: "", sceneTitle: "", nextScene: null });
+  };
+
+  // Handle option deletion
+  const handleDeleteOption = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      options: prev.options.filter((_, i) => i !== index),
+    }));
   };
 
   return (
     <Wrapper>
+      {/* Image Upload */}
       <ImageUpload>
         {uploadedImage ? <img src={uploadedImage} alt="Uploaded preview" /> : <p>Click to upload an image</p>}
         <input type="file" accept="image/*" onChange={handleImageUpload} />
       </ImageUpload>
 
+      {/* Scene Content Input */}
       <TextInput
         name="sceneContent"
         placeholder="Tell your story"
@@ -262,60 +549,76 @@ const LeftHalf = ({ formData, setFormData }) => {
         onChange={(e) => setFormData({ ...formData, sceneContent: e.target.value })}
       />
 
+      {/* Option Creation Form */}
       {formVisible && (
         <FormWrapper>
-          <label>
-            Text:
-            <input
-              type="text"
-              name="text"
-              value={optionData.text}
-              onChange={handleOptionChange}
-              placeholder="Enter button text"
-            />
-          </label>
-          <label>
-            Scene Title:
-            <input
-              type="text"
-              name="sceneTitle"
-              value={optionData.sceneTitle}
-              onChange={handleOptionChange}
-              placeholder="Enter scene Title"
-            />
-          </label>
+          {/* Button Text Input */}
+          <label>Option Text:</label>
+<input
+  type="text"
+  name="text"
+  value={optionData.text}
+  onChange={handleOptionChange}
+  placeholder="Enter button text"
+/>
+
+         {/* Scene Selection */}
+<label>Scene Title:</label>
+<select name="sceneTitle" value={isCreatingNewScene ? "NEW_SCENE" : optionData.sceneTitle} onChange={handleOptionChange}>
+  <option value="">Select a Scene</option>
+  <option value="NEW_SCENE">Create New Scene</option>
+  {scenes.map((scene) => (
+    <option key={scene._id} value={scene.sceneTitle}>
+      {scene.sceneTitle}
+    </option>
+  ))}
+</select>
+
+{/* Show text input only if creating a new scene */}
+{isCreatingNewScene && (
+  <input
+    type="text"
+    name="sceneTitle"
+    value={optionData.sceneTitle}
+    onChange={(e) => setOptionData(prev => ({ ...prev, sceneTitle: e.target.value }))}
+    placeholder="Enter new scene title"
+  />
+)}
+
+
           <button onClick={handleOptionSubmit}>Save</button>
         </FormWrapper>
       )}
 
+      {/* Option Buttons */}
       <SceneButtonsWrapper>
         {formData.options.map((button, index) => (
           <GeneratedButton key={index}>
-            {button.text} → {button.nextScene?.sceneTitle || "Unknown Scene"}
+            {button.text} → {button.nextScene ? scenes.find((s) => s._id === button.nextScene)?.sceneTitle || "Unknown Scene" : "New Scene"}
+            <i className="fas fa-trash" onClick={() => handleDeleteOption(index)} style={{ cursor: "pointer", marginLeft: "10px" }}></i>
           </GeneratedButton>
         ))}
         <ButtonCreator onClick={handleFormToggle}>+</ButtonCreator>
       </SceneButtonsWrapper>
 
-      <input 
-  type="checkbox" 
-  name="isPlaceholder" 
-  checked={!!formData.isPlaceholder} // Ensure boolean value
-  onChange={(e) => setFormData(prev => ({ ...prev, isPlaceholder: e.target.checked }))}
-/>
-<label htmlFor="isPlaceholder">Placeholder scene</label>
+      {/* Checkbox Inputs */}
+      <input
+        type="checkbox"
+        name="isPlaceholder"
+        checked={!!formData.isPlaceholder}
+        onChange={(e) => setFormData((prev) => ({ ...prev, isPlaceholder: e.target.checked }))}
+      />
+      <label htmlFor="isPlaceholder">Placeholder scene</label>
 
-<input 
-  type="checkbox" 
-  name="isEnd" 
-  checked={!!formData.isEnd} // Ensure boolean value
-  onChange={(e) => setFormData(prev => ({ ...prev, isEnd: e.target.checked }))}
-/>
-<label htmlFor="isEnd">Ending scene</label>
-
+      <input
+        type="checkbox"
+        name="isEnd"
+        checked={!!formData.isEnd}
+        onChange={(e) => setFormData((prev) => ({ ...prev, isEnd: e.target.checked }))}
+      />
+      <label htmlFor="isEnd">Ending scene</label>
     </Wrapper>
   );
 };
-
 
 export default LeftHalf;

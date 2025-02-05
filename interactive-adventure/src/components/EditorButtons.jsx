@@ -185,39 +185,43 @@ const EditorButtons = ({formData}) => {
   //   }
   // }
 
-const updateScene = async () => {
-    try {
-        console.log("Updating scene:", selectedScene);
+// const updateScene = async () => {
+//     try {
+//         console.log("Updating scene:", selectedScene);
 
-        const formDataToSend = new FormData();
-        formDataToSend.append("sceneTitle", formData.sceneTitle);
-        formDataToSend.append("sceneContent", formData.sceneContent);
-        formDataToSend.append("isEnd", formData.isEnd);
-        formDataToSend.append("isPlaceholder", formData.isPlaceholder);
+//         const formDataToSend = new FormData();
+//         formDataToSend.append("sceneTitle", formData.sceneTitle);
+//         formDataToSend.append("sceneContent", formData.sceneContent);
+//         formDataToSend.append("isEnd", formData.isEnd);
+//         formDataToSend.append("isPlaceholder", formData.isPlaceholder);
 
-        // Append options as a JSON string since FormData doesn't handle objects well
-        formDataToSend.append("options", JSON.stringify(formData.options));
+//         // Append options as a JSON string since FormData doesn't handle objects well
+//         formDataToSend.append("options", JSON.stringify(formData.options));
 
-        // Only append the image if a new one was uploaded
-        if (formData.imageFile instanceof File) {
-            formDataToSend.append("imageFile", formData.imageFile);
-        }
-        console.log(formDataToSend)
-        const response = await axiosInstance.put(
-            `/scenes/${selectedStory._id}/${selectedScene._id}/edit`, 
-            formDataToSend, 
-            { headers: { "Content-Type": "multipart/form-data" } }
-        );
+//         // Only append the image if a new one was uploaded
+//         if (formData.imageFile instanceof File) {
+//             formDataToSend.append("imageFile", formData.imageFile);
+//         }
+//         console.log(formDataToSend)
+//         const response = await axiosInstance.put(
+//             `/scenes/${selectedStory._id}/${selectedScene._id}/edit`, 
+//             formDataToSend, 
+//             { headers: { "Content-Type": "multipart/form-data" } }
+//         );
         
-        console.log("Scene updated:", response.data);
-        setSelectedScene(response.data);
-        fetchAllScenes();
-        toast.success("Scene updated successfully");
-    } catch (error) {
-        console.error("Error updating scene", error);
-        toast.error("Failed to update scene");
-    }
-};
+//         console.log("Scene updated:", response.data);
+//         setSelectedScene(response.data);
+//         fetchAllScenes();
+//         toast.success("Scene updated successfully");
+//     } catch (error) {
+//         console.error("Error updating scene", error);
+//         toast.error("Failed to update scene");
+//     }
+// };
+
+const updateScene = () => {
+  console.log(formData)
+}
 
   const forceDeleteScene = async (sceneId) => {
     try {
