@@ -78,7 +78,8 @@ const StoryDetails = () => {
   const fetchScenes = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`/scenes/${story._id}/read`);
+      // const response = await axiosInstance.get(`/scenes/${story._id}/read`);
+      // const response = await axiosInstance.get(`/scenes/edit/${story._id}`);
       setScenes(response.data);
       console.log(scenes)
       // Store scenes in localStorage
@@ -86,8 +87,12 @@ const StoryDetails = () => {
   
       // Navigate to the reader with the first scene in state
       if (response.data.length > 0) {
-        navigate(`/reader/${selectedStory._id}/${response.data[0]._id}`, {
-          state: { scene: scenes[0] } // Pass first scene
+        // Sort scenes by `createdAt` (if not already sorted by the backend)
+        const sortedScenes = response.data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+  
+        // Navigate to the first scene
+        navigate(`/reader/${story._id}/${sortedScenes[0]._id}`, {
+          state: { scene: sortedScenes[0] }, // Pass first scene
         });
       }
     } catch (error) { 

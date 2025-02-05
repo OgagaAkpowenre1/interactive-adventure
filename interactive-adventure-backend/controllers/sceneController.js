@@ -523,6 +523,32 @@ const deleteScene = async (req, res) => {
 //     }
 //   };
 
+// const fetchInitialScenesForReader = async (req, res) => {
+//   const { storyId } = req.params;
+//   console.log("Fetching scenes for storyId:", storyId);
+
+//   if (!mongoose.Types.ObjectId.isValid(storyId)) {
+//     return res.status(400).json({ message: "Invalid story ID format" });
+//   }
+
+//   try {
+//     console.log("Looking for scenes...");
+
+//     // Fetch scenes, filter out placeholders, and sort them
+//     const scenes = await Scene.find(
+//       { storyId, isPlaceholder: false }, // Exclude placeholder scenes
+//       { sceneTitle: 1, _id: 1, options: 1, image: 1, createdAt: 1 } // Select required fields
+//     ).sort({ createdAt: -1 }) // Sort by creation date (earliest first)
+//      .limit(3); // Fetch only the first 3 scenes
+
+//     console.log("Fetched scenes:", scenes);
+//     res.status(200).json(scenes);
+//   } catch (error) {
+//     console.error("Error fetching scenes for reader:", error);
+//     res.status(500).json({ message: "Failed to fetch scenes for reader." });
+//   }
+// };
+
 const fetchInitialScenesForReader = async (req, res) => {
   const { storyId } = req.params;
   console.log("Fetching scenes for storyId:", storyId);
@@ -534,20 +560,25 @@ const fetchInitialScenesForReader = async (req, res) => {
   try {
     console.log("Looking for scenes...");
 
-    // Fetch scenes, filter out placeholders, and sort them
+    // Fetch all scenes, filter out placeholders, and sort by creation date (ascending)
     const scenes = await Scene.find(
       { storyId, isPlaceholder: false }, // Exclude placeholder scenes
       { sceneTitle: 1, _id: 1, options: 1, image: 1, createdAt: 1 } // Select required fields
-    ).sort({ createdAt: -1 }) // Sort by creation date (earliest first)
-     .limit(3); // Fetch only the first 3 scenes
+    ).sort({ createdAt: 1 }); // Sort by creation date (oldest first)
 
     console.log("Fetched scenes:", scenes);
+    if (scenes.length === 0) {
+      return res.status(404).json({ message: "No scenes found for this story." });
+    }
+
+    // Return all scenes for the reader to navigate through
     res.status(200).json(scenes);
   } catch (error) {
     console.error("Error fetching scenes for reader:", error);
     res.status(500).json({ message: "Failed to fetch scenes for reader." });
   }
 };
+
 
   
 // const fetchScenesForEditor = async (req, res) => {

@@ -104,61 +104,129 @@ const SceneButtonsWrapper = styled(motion.div)`
 
 
 
-const SceneReader = () => {
-  const location = useLocation();
-  const navigate = useNavigate()
-  const { sceneId, storyId } = useParams(); // Get scene ID from URL
-  const [scene, setScene] = useState(location.state?.scene || null);
-  const {scenes} = useStoryContext()
-  console.log(scene)
+// const SceneReader = () => {
+//   const location = useLocation();
+//   const navigate = useNavigate()
+//   const { sceneId, storyId } = useParams(); // Get scene ID from URL
+//   const [scene, setScene] = useState(location.state?.scene || null);
+//   const {scenes} = useStoryContext()
+//   console.log(scene)
 
-  // useEffect(() => {
-  //   if (!scene) {
-  //     // Try to get scenes from localStorage if state is missing
-  //     const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
-  //     const foundScene = storedScenes.find(s => s._id === sceneId);
+//   // useEffect(() => {
+//   //   if (!scene) {
+//   //     // Try to get scenes from localStorage if state is missing
+//   //     const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
+//   //     const foundScene = storedScenes.find(s => s._id === sceneId);
 
-  //     if (foundScene) {
-  //       setScene(foundScene);
-  //     }
-  //   }
-  // }, [scene, sceneId, storyId]); 
+//   //     if (foundScene) {
+//   //       setScene(foundScene);
+//   //     }
+//   //   }
+//   // }, [scene, sceneId, storyId]); 
 
-  // useEffect(() => {
-  //   if (!scene) {
-  //     // Try to get scenes from localStorage if state is missing
-  //     const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
-  //     const firstScene = storedScenes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))[0];
+//   // useEffect(() => {
+//   //   if (!scene) {
+//   //     // Try to get scenes from localStorage if state is missing
+//   //     const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
+//   //     const firstScene = storedScenes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))[0];
 
-  //     if (firstScene && sceneId === firstScene._id) {
-  //       setScene(firstScene);
-  //     } else {
-  //       const foundScene = storedScenes.find(s => s._id === sceneId);
-  //       if (foundScene) {
-  //         setScene(foundScene);
-  //       }
-  //     }
-  //   }
-  // }, [scene, sceneId, storyId]);
+//   //     if (firstScene && sceneId === firstScene._id) {
+//   //       setScene(firstScene);
+//   //     } else {
+//   //       const foundScene = storedScenes.find(s => s._id === sceneId);
+//   //       if (foundScene) {
+//   //         setScene(foundScene);
+//   //       }
+//   //     }
+//   //   }
+//   // }, [scene, sceneId, storyId]);
 
-  useEffect(() => {
-    const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
+//   useEffect(() => {
+//     const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
     
-    if (!scene || scene._id !== sceneId) {
-      const foundScene = storedScenes.find(s => s._id === sceneId);
-      if (foundScene) {
-        setScene(foundScene);
-      } else {
-        // Fallback to the first scene if sceneId is invalid or missing
-        const firstScene = storedScenes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))[0];
-        if (firstScene) setScene(firstScene);
-      }
-    }
-  }, [sceneId, storyId]);
+//     if (!scene || scene._id !== sceneId) {
+//       const foundScene = storedScenes.find(s => s._id === sceneId);
+//       if (foundScene) {
+//         setScene(foundScene);
+//       } else {
+//         // Fallback to the first scene if sceneId is invalid or missing
+//         const firstScene = storedScenes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))[0];
+//         if (firstScene) setScene(firstScene);
+//       }
+//     }
+//   }, [sceneId, storyId]);
   
 
 
-  if (!scene) return <p>Loading...</p>;
+//   if (!scene) return <p>Loading...</p>;
+
+//   return (
+//     <Wrapper>
+//       <h1>{scene.sceneTitle}</h1>
+//       <SceneImageComponent src={scene.image || "https://wallpapercave.com/wp/wp7135795.jpg"} alt="Scene Image" />
+//       <SceneTextWrapper>
+//         <SceneText>{scene.sceneContent}</SceneText>
+//       </SceneTextWrapper>
+//       <SceneButtonsWrapper>
+//         {scene.options.map((option, index) => (
+//           <Button key={index} buttonText={option.text} onClick={() => {
+//             console.log(`Navigating to scene: ${option._id}`);
+            
+//             navigate(`/reader/${storyId}/${option._id}`, {
+//               state: { scene: option }
+//             });
+//           }} />
+//         ))}
+//       </SceneButtonsWrapper>
+//     </Wrapper>
+//   );
+// };
+
+const SceneReader = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { sceneId, storyId } = useParams();
+  const [scene, setScene] = useState(location.state?.scene || null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const loadScene = async () => {
+      setLoading(true);
+      try {
+        const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
+
+        let foundScene = storedScenes.find(s => s._id === sceneId);
+
+        if (!foundScene) {
+          // Fallback to first scene if invalid sceneId
+          foundScene = storedScenes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))[0];
+        }
+
+        if (foundScene) {
+          setScene(foundScene);
+        } else {
+          toast.error("Scene not found.");
+          navigate(`/story/${storyId}`); // Redirect if no valid scene
+        }
+      } catch (error) {
+        console.error("Error loading scene:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadScene();
+  }, [sceneId, storyId, navigate]);
+
+  const handleOptionClick = (nextSceneId) => {
+    console.log(`Navigating to scene: ${nextSceneId}`);
+    navigate(`/reader/${storyId}/${nextSceneId}`, {
+      state: { scene: null }, // Reset to force a fresh load
+    });
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (!scene) return <p>No scene found.</p>;
 
   return (
     <Wrapper>
@@ -169,17 +237,12 @@ const SceneReader = () => {
       </SceneTextWrapper>
       <SceneButtonsWrapper>
         {scene.options.map((option, index) => (
-          <Button key={index} buttonText={option.text} onClick={() => {
-            console.log(`Navigating to scene: ${option._id}`);
-            
-            navigate(`/reader/${storyId}/${option._id}`, {
-              state: { scene: option }
-            });
-          }} />
+          <Button key={index} buttonText={option.text} onClick={() => handleOptionClick(option.nextScene)} />
         ))}
       </SceneButtonsWrapper>
     </Wrapper>
   );
 };
+
 
 export default SceneReader;
