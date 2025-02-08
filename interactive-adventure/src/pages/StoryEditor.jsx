@@ -55,7 +55,8 @@ const StoryEditor = () => {
     options: scenes[0]?.options || [],
     imageFile: scenes[0]?.image || null,
     isPlaceholder: false,
-    isEnd: false
+    isEnd: false,
+    isStartingScene: false
   });
   // setSelectedScene(scenes[0])
 

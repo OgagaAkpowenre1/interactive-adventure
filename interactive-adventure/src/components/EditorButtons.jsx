@@ -145,6 +145,10 @@ const EditorButtons = ({formData}) => {
       sceneFormData.append("sceneTitle", formData.sceneTitle);
       sceneFormData.append("sceneContent", formData.sceneContent);
       sceneFormData.append("options", JSON.stringify(formData.options));
+      sceneFormData.append("isEnd", formData.isEnd);
+      sceneFormData.append("isPlaceholder", formData.isPlaceholder);
+      sceneFormData.append("isStartingScene", formData.isStartingScene)
+      
 
       if (formData.imageFile) {
         sceneFormData.append("imageFile", formData.imageFile);
@@ -194,6 +198,7 @@ const updateScene = async () => {
         formDataToSend.append("sceneContent", formData.sceneContent);
         formDataToSend.append("isEnd", formData.isEnd);
         formDataToSend.append("isPlaceholder", formData.isPlaceholder);
+        formDataToSend.append("isStartingScene", formData.isStartingScene)
 
         // Append options as a JSON string since FormData doesn't handle objects well
         formDataToSend.append("options", JSON.stringify(formData.options));

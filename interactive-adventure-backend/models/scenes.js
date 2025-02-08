@@ -11,7 +11,8 @@ const sceneSchema = new mongoose.Schema(
     }],
     image: { type: String }, // URL or file path for image if applicable
     isPlaceholder: { type: Boolean, default: false },
-    isEnd : { type : Boolean, default: false }
+    isEnd : { type : Boolean, default: false },
+    isStartingScene: { type: Boolean, default: false }
   },
   { timestamps: true }
 );

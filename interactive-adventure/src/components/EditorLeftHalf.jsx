@@ -618,6 +618,14 @@ const LeftHalf = ({ formData, setFormData }) => {
         onChange={(e) => setFormData((prev) => ({ ...prev, isEnd: e.target.checked }))}
       />
       <label htmlFor="isEnd">Ending scene</label>
+
+      <input 
+      type="checkbox"
+      name="isStart"
+      checked={!!formData.isStartingScene}
+      onChange={(e) => setFormData((prev) => ({ ...prev, isStartingScene: e.target.checked }))}
+    />
+    <label htmlFor="isStart">Starting scene</label>
     </Wrapper>
   );
 };
