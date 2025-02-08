@@ -3,6 +3,7 @@ const Scene = require("../models/scenes")
 const { default: mongoose } = require("mongoose");
 const {uploadImage} = require("./uploadImage")
 const multer = require("multer");
+const cloudinary = require("../cloudinary");
    
 //Create a new story 
 const createStory = async (req, res) => {
