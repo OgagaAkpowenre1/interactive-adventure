@@ -78,30 +78,37 @@ const StoryDetails = () => {
   const fetchScenes = async () => {
     try {
       setLoading(true);
-      // const response = await axiosInstance.get(`/scenes/${story._id}/read`);
-      // const response = await axiosInstance.get(`/scenes/edit/${story._id}`);
+      const response = await axiosInstance.get(`/scenes/${story._id}/read`);
       setScenes(response.data);
-      console.log(scenes)
-      // Store scenes in localStorage
+      console.log("Fetched scenes:", response.data);
+  
+      // Store scenes in localStorage for later
       localStorage.setItem(`scenes_${story._id}`, JSON.stringify(response.data));
   
-      // Navigate to the reader with the first scene in state
-      if (response.data.length > 0) {
-        // Sort scenes by `createdAt` (if not already sorted by the backend)
-        const sortedScenes = response.data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      // Ensure sorting happens after fetching the data
+      const sortedScenes = response.data
+        .filter(scene => !scene.isPlaceholder)  // Ensure no placeholder scenes are included
+        .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)); // Sort by creation date (ascending)
   
+      console.log("Sorted scenes by createdAt:", sortedScenes);
+  
+      if (sortedScenes.length > 0) {
         // Navigate to the first scene
-        navigate(`/reader/${story._id}/${sortedScenes[0]._id}`, {
-          state: { scene: sortedScenes[0] }, // Pass first scene
+        const firstScene = sortedScenes[0];
+        console.log("Navigating to first scene:", firstScene);
+  
+        navigate(`/reader/${story._id}/${firstScene._id}`, {
+          state: { scene: firstScene }, // Pass first scene
         });
       }
-    } catch (error) { 
+    } catch (error) {
       console.log(error);
-      toast.error("Failed to fetch scenes. Please try again.")
+      toast.error("Failed to fetch scenes. Please try again.");
     } finally {
       setLoading(false);
     }
-  };  
+  };
+  
 
   const goToEditor = async () => {
     try {
