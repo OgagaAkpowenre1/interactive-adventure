@@ -663,7 +663,7 @@ const fetchScenesForEditor = async (req, res) => {
     try {
       const scene = await Scene.findOne(
         { _id: sceneId, storyId },
-        { sceneTitle: 1, sceneContent: 1, options: 1 }
+        { sceneTitle: 1, sceneContent: 1, options: 1, image: 1 }
       );
   
       if (!scene) {

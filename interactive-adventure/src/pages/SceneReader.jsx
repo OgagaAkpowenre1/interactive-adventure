@@ -7,10 +7,12 @@ import { useNavigate } from "react-router-dom";
 import { useStoryContext } from "../contexts/storyContext";
 import { useLocation, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import axiosInstance from "../api";
+import toast from "react-hot-toast";
 
 const PageWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column; 
   min-height: 100vh;
   width: 100%;
 `;
@@ -190,39 +192,27 @@ const SceneReader = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const loadScene = async () => {
+    const fetchScene = async () => {
       setLoading(true);
       try {
-        const storedScenes = JSON.parse(localStorage.getItem(`scenes_${storyId}`)) || [];
-
-        let foundScene = storedScenes.find(s => s._id === sceneId);
-
-        if (!foundScene) {
-          // Fallback to first scene if invalid sceneId
-          foundScene = storedScenes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))[0];
-        }
-
-        if (foundScene) {
-          setScene(foundScene);
-        } else {
-          toast.error("Scene not found.");
-          navigate(`/story/${storyId}`); // Redirect if no valid scene
-        }
+        const response = await axiosInstance.get(`/scenes/${storyId}/${sceneId}`);
+        setScene(response.data);
       } catch (error) {
-        console.error("Error loading scene:", error);
+        console.error("Error fetching scene:", error);
+        toast.error("Scene not found.");
+        navigate(`/story/${storyId}`); // Redirect if no valid scene
       } finally {
         setLoading(false);
       }
     };
 
-    loadScene();
-  }, [sceneId, storyId, navigate]);
+    fetchScene();
+  }, [sceneId, storyId,]);
 
-  const handleOptionClick = (nextSceneId) => {
+
+    const handleOptionClick = (nextSceneId) => {
     console.log(`Navigating to scene: ${nextSceneId}`);
-    navigate(`/reader/${storyId}/${nextSceneId}`, {
-      state: { scene: null }, // Reset to force a fresh load
-    });
+    navigate(`/reader/${storyId}/${nextSceneId}`); // No need to pass scene state anymore
   };
 
   if (loading) return <p>Loading...</p>;

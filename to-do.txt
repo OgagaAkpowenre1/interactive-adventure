@@ -2,5 +2,6 @@ Fix the story and scenes resetting on reload - Done (Saved scenes and story in l
 Add toast to display error messages - Done
 Fix scene reader functionality - 
 Create placeholder scenes when updating scenes - Done
-Link scenes from frontend and backend - Donre
+Link scenes from frontend and backend - Done
 Improve site styling - 
+Delete images from cloudinary when deleting scene or story - 
