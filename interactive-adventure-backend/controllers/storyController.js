@@ -255,8 +255,36 @@ const deleteStory = async (req, res) => {
         }
 
         // Delete all scenes associated with the story
-        const deletionResult = await Scene.deleteMany({ storyId: storyId });
-        console.log(`Deleted ${deletionResult.deletedCount} scenes associated with story ${storyId}`);
+        // const deletionResult = await Scene.deleteMany({ storyId: storyId });
+        // console.log(`Deleted ${deletionResult.deletedCount} scenes associated with story ${storyId}`);
+
+               // Find all scenes associated with the story
+               const scenes = await Scene.find({ storyId });
+
+               // Delete images from Cloudinary (including scene and cover images)
+               for (const scene of scenes) {
+                   if (scene.image) {
+                       const publicId = scene.image
+                         .split("/")
+                         .slice(-2)
+                         .join("/")
+                         .split(".")[0]; // Extract folder + publicId
+                       await cloudinary.uploader.destroy(publicId);
+                       console.log("Deleted scene image from Cloudinary:", publicId);
+                   }
+               }
+       
+               // Delete story cover image if it exists
+               if (story.coverImage) {
+                   const publicId = story.coverImage
+                     .split("/")
+                     .slice(-2)
+                     .join("/")
+                     .split(".")[0]; // Extract folder + publicId
+                   await cloudinary.uploader.destroy(publicId);
+                   console.log("Deleted story cover image from Cloudinary:", publicId);
+               }
+
 
         // Delete the story itself
         const deletedStory = await Story.findByIdAndDelete(storyId);

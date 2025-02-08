@@ -481,6 +481,33 @@ const deleteScene = async (req, res) => {
           );
       }
 
+                   // Find all scenes associated with the story
+        const scenes = await Scene.find({ storyId });
+
+        // Delete images from Cloudinary (including scene and cover images)
+        for (const scene of scenes) {
+            if (scene.image) {
+                const publicId = scene.image
+                  .split("/")
+                  .slice(-2)
+                  .join("/")
+                  .split(".")[0]; // Extract folder + publicId
+                await cloudinary.uploader.destroy(publicId);
+                console.log("Deleted scene image from Cloudinary:", publicId);
+            }
+        }
+
+        // Delete story cover image if it exists
+        if (story.coverImage) {
+            const publicId = story.coverImage
+              .split("/")
+              .slice(-2)
+              .join("/")
+              .split(".")[0]; // Extract folder + publicId
+            await cloudinary.uploader.destroy(publicId);
+            console.log("Deleted story cover image from Cloudinary:", publicId);
+        }
+
       // Delete the scene
       await Scene.findByIdAndDelete(sceneId);
       console.log("Scene deleted successfully", sceneId);

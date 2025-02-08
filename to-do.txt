@@ -1,6 +1,6 @@
 Fix the story and scenes resetting on reload - Done (Saved scenes and story in local storage from context)
 Add toast to display error messages - Done
-Fix scene reader functionality - 
+Fix scene reader functionality - Done
 Create placeholder scenes when updating scenes - Done
 Link scenes from frontend and backend - Done
 Improve site styling - 
