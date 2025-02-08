@@ -591,7 +591,7 @@ const fetchInitialScenesForReader = async (req, res) => {
   console.log("Fetching scenes for storyId:", storyId);
 
   try {
-    const firstScene = await Scene.findOne({ storyId, isStart: true });
+    const firstScene = await Scene.findOne({ storyId, isStartingScene: true });
     
     if (!firstScene) {
       return res.status(404).json({ message: "No starting scene found." });
