@@ -21,23 +21,27 @@ const createScene = async (req, res) => {
       const { storyId }= req.params;
       const { sceneTitle, sceneContent, options, isEnd = false, isStartingScene = false } = req.body;
       
+      console.log("Checking title and content")
       if (!sceneTitle || !sceneContent) {
           return res.status(400).json({ message: "Scene title and content are required" });
       }
 
+      console.log("Checking story")
       if (!mongoose.Types.ObjectId.isValid(storyId)) {
           return res.status(400).json({ message: "Invalid story ID format" });
       }
 
       const story = await Story.findById(storyId);
+      
       if (!story) {
           return res.status(404).json({ message: "Story not found" });
       }
-
+      console.log("Story found")
       let parsedOptions = [];
       if (options) {
           try {
               parsedOptions = JSON.parse(options); // ✅ Prevents crashing if options is undefined
+              console.log("Options parsed")
           } catch (error) {
               return res.status(400).json({ message: "Invalid options format" });
           }
