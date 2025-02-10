@@ -18,7 +18,7 @@ const createStory = async (req, res) => {
             } catch (uploadError) {
               return res.status(500).json({ error: uploadError.message });
             }
-          } else {
+          } else { 
             console.log("No file received for cover")
             return res.status(400).json({error: "Cover image is required"})
           }
