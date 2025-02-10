@@ -19,6 +19,7 @@ const createScene = async (req, res) => {
       console.log("Incoming file:", req.file);
 
       const { storyId }= req.params;
+      console.log("Story id", storyId)
       const { sceneTitle, sceneContent, options, isEnd = false, isStartingScene = false } = req.body;
       
       console.log("Checking title and content")
