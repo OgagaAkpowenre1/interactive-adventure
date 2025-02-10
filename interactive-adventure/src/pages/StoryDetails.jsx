@@ -99,8 +99,8 @@ const StoryDetails = () => {
   
       
       // }
-      navigate(`/reader/${story._id}/${scenes._id}`, {
-        state: { scene: scenes || response.data }, // Pass first scene
+      navigate(`/reader/${story._id}/${response.data._id}`, {
+        state: { scene: response.data }, // Pass first scene
       });
     } catch (error) {
       console.log(error);

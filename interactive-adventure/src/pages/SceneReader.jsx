@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useStoryContext } from "../contexts/storyContext";
 import { useLocation, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axiosInstance from "../api";
 import toast from "react-hot-toast";
 
@@ -191,12 +191,21 @@ const SceneReader = () => {
   const [scene, setScene] = useState(location.state?.scene || null);
   const [loading, setLoading] = useState(false);
 
+    // Keep track of scene history
+    const historyStack = useRef([]);
+
   useEffect(() => {
     const fetchScene = async () => {
       setLoading(true);
       try {
         const response = await axiosInstance.get(`/scenes/${storyId}/${sceneId}`);
         setScene(response.data);
+
+        // Push previous sceneId to historyStack if not empty
+        if (historyStack.current.length === 0 || historyStack.current[historyStack.current.length - 1] !== sceneId) {
+          historyStack.current.push(sceneId);
+        }
+
       } catch (error) {
         console.error("Error fetching scene:", error);
         toast.error("Scene not found.");
@@ -215,6 +224,16 @@ const SceneReader = () => {
     navigate(`/reader/${storyId}/${nextSceneId}`); // No need to pass scene state anymore
   };
 
+  const handleGoBack = () => {
+    if (historyStack.current.length > 1) {
+      historyStack.current.pop(); // Remove current scene
+      const previousSceneId = historyStack.current.pop(); // Get the previous scene
+      navigate(`/reader/${storyId}/${previousSceneId}`);
+    } else {
+      navigate(`/story/${storyId}`); // Go back to story page if no previous scene
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
   if (!scene) return <p>No scene found.</p>;
 
@@ -226,7 +245,8 @@ const SceneReader = () => {
         <SceneText>{scene.sceneContent}</SceneText>
       </SceneTextWrapper>
       <SceneButtonsWrapper>
-        {scene.options.map((option, index) => (
+      <Button buttonText="Back" onClick={handleGoBack} />
+        {scene?.options.map((option, index) => (
           <Button key={index} buttonText={option.text} onClick={() => handleOptionClick(option.nextScene)} />
         ))}
       </SceneButtonsWrapper>
